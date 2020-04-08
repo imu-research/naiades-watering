@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'naiades_watering.middleware.AuthRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'naiades_watering.urls'
@@ -134,3 +136,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
+# Login
+LOGIN_URL = '/login'
+
+LOGIN_REDIRECT_URL = '/'
+
+APPEND_SLASH = True

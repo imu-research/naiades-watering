@@ -17,8 +17,16 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
+import django.contrib.auth.views as auth_views
+from naiades_watering import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
+    # auth
+    path('login/', auth_views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+
+    # app
     path('', include('watering.urls')),
 ]
