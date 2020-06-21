@@ -12,7 +12,10 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="{% static 'js/site.min.js' %}"></script>
     <!-- Custom Fonts -->
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <!--<link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">-->
+
+    {% block css %}
+    {% endblock %}
   </head>
   <body>
     <div class="docs-header header--noBackground">
@@ -36,6 +39,8 @@
               <li><a class="nav-link" href="color-picker.html">Color Picker</a></li>
             </ul> -->
               <ul class="nav navbar-nav navbar-right">
+                    <li><a class="nav-link" href="getting-started.html">Carte</a></li>
+                    <li><a class="nav-link" href="documentation.html">Liste</a></li>
                     <!-- /.dropdown -->
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -100,5 +105,8 @@
       ga('send', 'pageview');
 
     </script>
+
+    {% block js %}
+    {% endblock %}
   </body>
 </html>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% block content %}
+    <form action="." method="POST">
+        {% csrf_token %}
+
+        <h2>{% trans "New Box setup - Info" %}</h2>
+
+        {% include "util/form-fields.html" %}
+
+        <button class="btn btn-primary" type="submit">
+            {% trans "Next" %}
+        </button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $('.form-group input, .form-group select, .form-group textarea').addClass('form-control')
+    </script>
+{% endblock %}

@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-    <div style="margin: 100px 0; text-align: center;">
-        CONTENT GOES HERE
-    </div>
+    {% if not boxes %}
+        <div id="no-boxes-placeholder">
+            <div class="empty-message">{% trans "You have not setup any watering boxes"%}</div>
+
+            <a href="{% url 'box-create' %}" class="btn btn-primary">{% trans "Setup a new box" %}</a>
+        </div>
+    {% else %}
+    {% endif %}
 {% endblock %}

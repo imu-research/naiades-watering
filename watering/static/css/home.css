@@ -1,0 +1,19 @@
+#no-boxes-placeholder {
+    margin: 100px 0;
+    text-align: center;
+}
+
+#no-boxes-placeholder > * {
+    text-align: center;
+}
+
+#no-boxes-placeholder > div.empty-message {
+    font-size: 32px;
+    color: #aaa;
+}
+
+#no-boxes-placeholder > a.btn {
+    margin: 40px auto;
+    font-size: 32px;
+    padding: 10px 20px;
+}
