@@ -142,9 +142,10 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-# Login
+# Login & Logout
 LOGIN_URL = '/watering/login'
-
 LOGIN_REDIRECT_URL = '/watering/'
+LOGOUT_URL = '/watering/logout'
+ADMIN_URL = '/watering/admin'
 
 APPEND_SLASH = True

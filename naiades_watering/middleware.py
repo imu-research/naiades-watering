@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 
+from naiades_watering.settings import LOGIN_URL, LOGOUT_URL, ADMIN_URL
+
 
 class AuthRequiredMiddleware(object):
 
@@ -12,21 +14,21 @@ class AuthRequiredMiddleware(object):
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        if request.path == '/login/':
+        if request.path.startswith(LOGIN_URL):
             return self.get_response(request)
 
-        if request.path.startswith('/admin'):
+        if request.path.startswith(ADMIN_URL):
             return self.get_response(request)
 
         if not request.user.is_authenticated:
-            return redirect('/login/')
+            return redirect(LOGIN_URL)
 
         response = self.get_response(request)
 
-        if request.path.startswith('/logout'):
-            return redirect('/login/')
+        if request.path.startswith(LOGOUT_URL):
+            return redirect(LOGIN_URL)
 
         if not request.user.is_authenticated:
-            return redirect(f'/login/?next={request.get_full_path()}')
+            return redirect(f'{LOGIN_URL}/?next={request.get_full_path()}')
 
         return response
