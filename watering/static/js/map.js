@@ -84,8 +84,11 @@ $(function () {
                 NaiadesMap.marker.remove();
             }
 
+            // get map
+            const map = NaiadesMap.map;
+
             // Add marker to map at click location; add popup window
-            const marker = new L.marker(latlng, {draggable:'true'}).addTo(NaiadesMap.map);
+            const marker = new L.marker(latlng, {draggable:'true'}).addTo(map);
 
             // Make marker draggable
             marker.on('dragend', function(){

@@ -26,8 +26,9 @@
 {% block js %}
     <script>
         $('#id_address, #id_latitude, #id_longitude')
-            .closest('.form-group')
-            .css('display', 'none');
+            .attr('disabled', 'disabled');
+            {#.closest('.form-group')#}
+            {#.css('display', 'none');#}
 
         $('.form-group input, .form-group select, .form-group textarea').
             addClass('form-control');
