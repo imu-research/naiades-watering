@@ -1,0 +1,15 @@
+#mapid {
+    height: 480px;
+    margin-bottom: 20px;
+}
+
+input.address-search {
+    width: calc(100% - 135px);
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.location-btn {
+    display: inline-block;
+    vertical-align: top;
+}

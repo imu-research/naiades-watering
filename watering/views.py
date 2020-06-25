@@ -30,3 +30,16 @@ def box_create(request):
     return render(request, 'watering/create.html', {
         'form': form,
     })
+
+def list_view(request):
+    # get mode (map or list, defautls to map)
+    mode = request.GET.get("mode", "map")
+
+    # get boxes for this user
+    boxes = []
+
+    # render
+    return render(request, 'watering/list.html', {
+        'boxes': boxes,
+        'mode': mode,
+    })

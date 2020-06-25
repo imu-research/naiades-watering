@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <form action="." method="POST">
         {% csrf_token %}
@@ -8,6 +14,8 @@
         <h2>{% trans "New Box setup - Info" %}</h2>
 
         {% include "util/form-fields.html" %}
+
+        <div id="mapid"></div>
 
         <button class="btn btn-primary" type="submit">
             {% trans "Next" %}
@@ -17,6 +25,13 @@
 
 {% block js %}
     <script>
-        $('.form-group input, .form-group select, .form-group textarea').addClass('form-control')
+        $('#id_address, #id_latitude, #id_longitude')
+            .closest('.form-group')
+            .css('display', 'none');
+
+        $('.form-group input, .form-group select, .form-group textarea').
+            addClass('form-control');
     </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
+    <script src="{% static 'js/map.js' %}"></script>
 {% endblock %}

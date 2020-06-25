@@ -28,5 +28,5 @@ urlpatterns = [
     path('watering/logout/', views.logout, name='logout'),
 
     # app
-    path('watering', include('watering.urls')),
+    path('watering/', include('watering.urls')),
 ]

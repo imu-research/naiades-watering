@@ -1,5 +1,5 @@
 from django.forms import Form
-from django.forms.fields import CharField, DateField, ChoiceField
+from django.forms.fields import CharField, DateField, ChoiceField, DecimalField
 
 from django.utils.translation import gettext as _
 
@@ -13,3 +13,8 @@ class BoxSetupForm(Form):
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
     installed_at = DateField(required=True, label=_('Installation date'))
     size = CharField(required=True, label=_('Box size'))
+
+    # location information
+    address = CharField(required=True)
+    latitude = DecimalField()
+    longitude = DecimalField()
