@@ -12,4 +12,7 @@ urlpatterns = [
 
     #List View
     path('list/', views.list_view, name='box-list'),
+
+    #Box Details
+    path('details/', views.box_details, name='box-details'),
 ]

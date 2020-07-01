@@ -43,3 +43,12 @@ def list_view(request):
         'boxes': boxes,
         'mode': mode,
     })
+
+def box_details(request):
+    # get box id
+    id = request.GET.get("id")
+
+    # render
+    return render(request, 'watering/details.html', {
+        'id': id,
+    })

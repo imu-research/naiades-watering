@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block css %}
-    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +30,7 @@
                 </div>
           </div>
            <div class="col-md-3">
-                <button type="button" class="btn btn-primary btn-block">Add new Box</button>
+                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'">Add new Box</button>
            </div>
     </div>
     <div class="col-md-12">
@@ -46,7 +46,7 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Box 1</td>
+                      <td> <a href="#">Box 1</a></td>
                     <td>25%</td>
                     <td>0.3 lt</td>
                     <td><button type="button" class="btn btn-success btn-sm">
@@ -55,20 +55,17 @@
                         <span class="glyphicon glyphicon-pencil"></span></button></td>
                   </tr>
                   <tr>
-                    <td>Box 2</td>
+                      <td><a href="#"> Box 2</a></td>
                     <td>22%</td>
                     <td>0.4 lt</td>
                     <td><button type="button" class="btn btn-danger btn-sm">
                         <span class="glyphicon glyphicon-ok"></span></button>
                         <button type="button" class="btn btn-primary btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span></button>
-                        <a href="#">
-                          <span class="glyphicon glyphicon-chevron-right"></span>
-                        </a>
                     </td>
                   </tr>
                   <tr>
-                    <td>Box 3</td>
+                      <td><a href="#">Box 3</a></td>
                     <td>20%</td>
                     <td>0.2 lt</td>
                     <td><button type="button" class="btn btn-success btn-sm">
@@ -77,7 +74,7 @@
                         <span class="glyphicon glyphicon-pencil"></span></button></td>
                   </tr>
                   <tr>
-                    <td>Box 4</td>
+                      <td><a href="#">Box 4</a></td>
                     <td>25%</td>
                     <td>0.3 lt</td>
                     <td><button type="button" class="btn btn-success btn-sm">
@@ -86,20 +83,17 @@
                         <span class="glyphicon glyphicon-pencil"></span></button></td>
                   </tr>
                   <tr>
-                    <td>Box 5</td>
+                      <td><a href="#">Box 5</a></td>
                     <td>22%</td>
                     <td>0.4 lt</td>
                     <td><button type="button" class="btn btn-danger btn-sm">
                         <span class="glyphicon glyphicon-ok"></span></button>
                         <button type="button" class="btn btn-primary btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span></button>
-                        <a href="#">
-                          <span class="glyphicon glyphicon-chevron-right"></span>
-                        </a>
                     </td>
                   </tr>
                   <tr>
-                    <td>Box 6</td>
+                      <td><a href="#">Box 6</a></td>
                     <td>20%</td>
                     <td>0.2 lt</td>
                     <td><button type="button" class="btn btn-success btn-sm">
