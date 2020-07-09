@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{% trans "Box Near Carouge Grand Place" %}</h2>
+    <h2 style="margin-bottom:5%;margin-left:10%;">{% trans "Box Near Carouge Grand Place" %}</h2>
     <div class="row" style="margin: 10px;">
         <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
@@ -19,11 +19,116 @@
     </div>
     <div id="chart-history" style="width:100%;height: 400px;"></div>
     <div id="chart-prediction" style="width:100%;height: 400px;"></div>
-    <div class="row" style="margin: 10px;">
+    <div class="row" style="margin: 20px;">
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_box_id">Box ID:</label>
+                <input type="text" name="box_id" required="" id="id_box_id" class="form-control">
+            </div>
+        </div>
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_soil_type">Type of soil:</label>
+
+                <select name="soil_type" id="id_soil_type" class="form-control">
+  <option value="SOIL_TYPE_1">Soil Type 1</option>
+
+  <option value="SOIL_TYPE_2">Soil Type 2</option>
+
+</select>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_flowers_type">Type of flowers:</label>
+
+                    <span class="o-red">*</span>
+
+                <select name="flowers_type" id="id_flowers_type" class="form-control">
+  <option value="FLOWER_TYPE_1">Flower Type 1</option>
+
+  <option value="FLOWER_TYPE_2">Flower Type 2</option>
+
+</select>
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_sun_exposure">Exposure to sun:</label>
+
+                <select name="sun_exposure" id="id_sun_exposure" class="form-control">
+  <option value="SUN_EXPOSURE_TYPE_1">Sun Exposure Type 1</option>
+
+  <option value="SUN_EXPOSURE_TYPE_2">Sun Exposure Type 2</option>
+
+</select>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_installed_at">Installation date:</label>
+
+                <input type="text" name="installed_at" required="" id="id_installed_at" class="form-control">
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_size">Box size:</label>
+                <input type="text" name="size" required="" id="id_size" class="form-control">
+
+
+            </div>
+        </div>
+    </div>
 
     </div>
     <div class="row" style="margin: 10px;">
-
+         <div class="col-md-12">
+            <div class="panel panel-primary">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Amount of watering</th>
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                      <td> <a href="#">20/03/2020 15:30</a></td>
+                    <td>0.3 lt</td>
+                    <td>Comments</td>
+                  </tr>
+                  <tr>
+                      <td><a href="#">21/03/2020 15:30</a></td>
+                    <td>0.4 lt</td>
+                    <td>Comments</td>
+                  </tr>
+                  <tr>
+                      <td><a href="#">22/03/2020 15:30</a></td>
+                    <td>0.2 lt</td>
+                      <td>Comments</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
     </div>
 
 

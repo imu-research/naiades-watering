@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h2>{% trans "Report a problem" %}</h2>
+    <div class="row">
+          <label for="report_type">Box ID:</label>
+		  <div class="col-md-3">
+			<div class="selecter  cover closed" tabindex="0"><select name="selecter_basic" class="selecter_3 selecter-element" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="-1">
+				<option value="1">One</option>
+				<option value="2">Two</option>
+				<option value="3">Three</option>
+				<option value="4">Four</option>
+				<option value="5">Five</option>
+			</select><span class="selecter-selected">One</span><div class="selecter-options"><span class="selecter-item selected" data-value="1">One</span><span class="selecter-item" data-value="2">Two</span><span class="selecter-item" data-value="3">Three</span><span class="selecter-item" data-value="4">Four</span><span class="selecter-item" data-value="5">Five</span></div></div>
+		  </div>
+		</div>
+
+{% endblock %}

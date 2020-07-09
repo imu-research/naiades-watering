@@ -24,6 +24,16 @@ def box_create(request):
         # check if valid & create box
         if form.is_valid():
             pass
+            #Create FlowerBed post API
+            # get boxes for this user
+            boxes = []
+
+            return render(request, 'watering/map.html', {
+                'boxes': boxes,
+                'mode': "map",
+            })
+
+
     else:
         form = BoxSetupForm()
 
@@ -51,4 +61,17 @@ def box_details(request):
     # render
     return render(request, 'watering/details.html', {
         'id': id,
+    })
+
+def map_view(request):
+    # get mode (map or list, defautls to map)
+    mode = request.GET.get("mode", "map")
+
+    # get boxes for this user
+    boxes = []
+
+    # render
+    return render(request, 'watering/map.html', {
+        'boxes': boxes,
+        'mode': mode,
     })

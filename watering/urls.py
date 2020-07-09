@@ -15,4 +15,7 @@ urlpatterns = [
 
     #Box Details
     path('details/', views.box_details, name='box-details'),
+
+    #Map View
+    path('map/', views.map_view, name='box-map'),
 ]
