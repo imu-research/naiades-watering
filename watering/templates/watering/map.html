@@ -5,6 +5,7 @@
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
+     <link href="{% static 'css/map.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -47,5 +48,5 @@
 
 {% block js %}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
-    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'js/load-map.js' %}"></script>
 {% endblock %}

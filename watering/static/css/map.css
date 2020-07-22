@@ -1,0 +1,47 @@
+#mapid {
+    height: 480px;
+}
+
+.popup-content .consumption {
+    font-weight: 600;
+}
+
+.popup-content .prop-label,
+.popup-content .prop-value {
+    display: inline-block;
+}
+
+.popup-content .prop-label {
+    color: #aaa;
+    margin-right: 5px;
+}
+
+.popup-content .prop-label.consumption-label {
+    margin-bottom: 10px;
+}
+
+.popup-content .action {
+    margin-top: 4px;
+    display: block;
+}
+
+.popup-content .action.btn--first {
+    margin-top: 10px;
+}
+
+.popup-content .action.btn {
+    width: 100%;
+}
+
+#home-chart-container {
+    height: 500px;
+}
+
+/* Filters */
+#dashboard-filters {
+    padding: 20px 12px;
+}
+
+#dashboard-filters select {
+    margin-left: 10px;
+}

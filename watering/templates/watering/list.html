@@ -45,62 +45,21 @@
                   </tr>
                 </thead>
                 <tbody>
+                {% for box in boxes %}
                   <tr>
-                      <td> <a href="/watering/details">Box 1</a></td>
+                      <td> <a href="/watering/details/?id={{ box.box_id }}">Box #{{ box.box_id }}</a></td>
                     <td>25%</td>
                     <td>0.3 lt</td>
                     <td><button type="button" class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="location.href='{% url 'box-report' %}'">
                         <span class="glyphicon glyphicon-pencil"></span></button></td>
                   </tr>
-                  <tr>
-                      <td><a href="/watering/details"> Box 2</a></td>
-                    <td>22%</td>
-                    <td>0.4 lt</td>
-                    <td><button type="button" class="btn btn-danger btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span></button>
-                    </td>
-                  </tr>
-                  <tr>
-                      <td><a href="/watering/details">Box 3</a></td>
-                    <td>20%</td>
-                    <td>0.2 lt</td>
-                    <td><button type="button" class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span></button></td>
-                  </tr>
-                  <tr>
-                      <td><a href="/watering/details">Box 4</a></td>
-                    <td>25%</td>
-                    <td>0.3 lt</td>
-                    <td><button type="button" class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span></button></td>
-                  </tr>
-                  <tr>
-                      <td><a href="/watering/details">Box 5</a></td>
-                    <td>22%</td>
-                    <td>0.4 lt</td>
-                    <td><button type="button" class="btn btn-danger btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span></button>
-                    </td>
-                  </tr>
-                  <tr>
-                      <td><a href="/watering/details">Box 6</a></td>
-                    <td>20%</td>
-                    <td>0.2 lt</td>
-                    <td><button type="button" class="btn btn-success btn-sm">
-                        <span class="glyphicon glyphicon-ok"></span></button>
-                        <button type="button" class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span></button></td>
-                  </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No boxes installed yet.</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
               </table>
             </div>

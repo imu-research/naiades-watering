@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from watering.forms import BoxSetupForm
+from watering.models import WateringBox
 
 
 def home(request):
@@ -8,7 +11,10 @@ def home(request):
     mode = request.GET.get("mode", "map")
 
     # get boxes for this user
-    boxes = []
+    boxes = WateringBox.list()
+
+    if boxes:
+        return redirect(reverse('box-list'))
 
     # render
     return render(request, 'watering/index.html', {
@@ -23,16 +29,16 @@ def box_create(request):
 
         # check if valid & create box
         if form.is_valid():
-            pass
-            #Create FlowerBed post API
+            # TODO migrate to using API
+            WateringBox.post(form)
+
             # get boxes for this user
-            boxes = []
+            boxes = WateringBox.list()
 
             return render(request, 'watering/map.html', {
                 'boxes': boxes,
                 'mode': "map",
             })
-
 
     else:
         form = BoxSetupForm()
@@ -41,12 +47,19 @@ def box_create(request):
         'form': form,
     })
 
+
+def box_api_list(request):
+    return JsonResponse({
+        "boxes": WateringBox.list()
+    })
+
+
 def list_view(request):
     # get mode (map or list, defautls to map)
     mode = request.GET.get("mode", "map")
 
     # get boxes for this user
-    boxes = []
+    boxes = WateringBox.list()
 
     # render
     return render(request, 'watering/list.html', {
@@ -54,24 +67,39 @@ def list_view(request):
         'mode': mode,
     })
 
+
 def box_details(request):
     # get box id
-    id = request.GET.get("id")
+    box_id = request.GET.get("id")
 
     # render
     return render(request, 'watering/details.html', {
         'id': id,
+        'box': WateringBox.get(box_id)
     })
+
 
 def map_view(request):
     # get mode (map or list, defautls to map)
     mode = request.GET.get("mode", "map")
 
     # get boxes for this user
-    boxes = []
+    boxes = WateringBox.list()
 
     # render
     return render(request, 'watering/map.html', {
         'boxes': boxes,
         'mode': mode,
+    })
+
+
+def report(request):
+    # get mode (map or list, defautls to map)
+    # box_id = request.GET.get("id")
+
+    # get boxes for this user
+    boxes = WateringBox.list()
+
+    # render
+    return render(request, 'watering/report.html', {
     })

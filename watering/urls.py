@@ -10,12 +10,18 @@ urlpatterns = [
     # box
     path('boxes/create/', views.box_create, name='box-create'),
 
-    #List View
+    # List View
     path('list/', views.list_view, name='box-list'),
 
-    #Box Details
+    # Box Details
     path('details/', views.box_details, name='box-details'),
 
-    #Map View
+    # Map View
     path('map/', views.map_view, name='box-map'),
+
+    # Report
+    path('report/', views.report, name='box-report'),
+
+    # Boxes list API
+    path('api/boxes/list', views.box_api_list, name='box-api-list'),
 ]
