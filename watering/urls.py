@@ -24,4 +24,7 @@ urlpatterns = [
 
     # Boxes list API
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
+
+    # List View
+    path('route/', views.view_route, name='route'),
 ]

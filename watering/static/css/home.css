@@ -17,3 +17,8 @@
     font-size: 32px;
     padding: 10px 20px;
 }
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #fff;
+    background-color: #50c1e9; !important;
+}

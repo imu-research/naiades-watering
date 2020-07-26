@@ -74,7 +74,7 @@ def box_details(request):
 
     # render
     return render(request, 'watering/details.html', {
-        'id': id,
+        'id': box_id,
         'box': WateringBox.get(box_id)
     })
 
@@ -102,4 +102,14 @@ def report(request):
 
     # render
     return render(request, 'watering/report.html', {
+    })
+
+def view_route(request):
+
+    # get boxes for this user
+    boxes = WateringBox.list()
+
+    # render
+    return render(request, 'watering/route.html', {
+        'boxes': boxes,
     })

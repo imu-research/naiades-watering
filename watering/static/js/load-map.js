@@ -124,7 +124,7 @@ $(function () {
                 //.append($(`<a href="#" class="action">More Details</a>`))
                 .append($(`<button class="btn btn-primary btn-sm action btn--first">More Details</button>`)
                     .on("click", function() {
-                        location.href='/watering/details'
+                        location.href=`/watering/details?id=${meter.box_id}`
                     })
                 )
                 .append($(`<button class="btn btn-default btn-sm action">Report Problem</button>`)
