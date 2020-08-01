@@ -106,17 +106,20 @@ $(function () {
             this.showData();
         },
 
-        getPopupContent: function(meter, consumption) {
+        getPopupContent: function(meter) {
             const that = this;
 
             return $("<div />")
                 .addClass("popup-content")
-                .append($(`<div class="prop-label">Box Name:</div><div class="prop-value">${meter.box_id}</></div><br>`))
-                .append($(`<div class="prop-label">Type of soil:</div><div class="prop-value"> ${meter.box_soil_type}</div><br>`))
-                .append($(`<div class="prop-label">Type of flowers:</div><div class="prop-value">${meter.box_flower_type}</div><br>`))
-                .append($(`<div class="prop-label">Exposure of sun:</div><div class="prop-value"> ${meter.box_sun_exposure}</div><br>`))
-                .append($(`<div class="prop-label">Date of box installation:</div><div class="prop-value">${meter.dateInstallation}</div><br>`))
-                .append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.box_size}</div><br>`))
+                .append($(`<div class="prop-label">Box ID:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                .append($(`<div class="prop-label">Last watering:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Next watering:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Soil type:</div><div class="prop-value"> ${meter.soilType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Flower type:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Sun exposure:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
+                // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
                 //.append($('<div class="prop-label consumption-label">Amount of water:</div>'))
                 //.append($(`<div class="consumption">${consumption} m<sup>3</sup></div>`))
                 //.append($('<div class="prop-label">Box Id:</div>'))
@@ -124,7 +127,7 @@ $(function () {
                 //.append($(`<a href="#" class="action">More Details</a>`))
                 .append($(`<button class="btn btn-primary btn-sm action btn--first">More Details</button>`)
                     .on("click", function() {
-                        location.href=`/watering/details?id=${meter.box_id}`
+                        location.href=`/watering/details?id=${meter.boxId}`
                     })
                 )
                 .append($(`<button class="btn btn-default btn-sm action">Report Problem</button>`)
@@ -151,19 +154,16 @@ $(function () {
                 const color = '#8EC760';
 
                 // create point
-                measurement.point = L.circle([measurement.address.location.latitude, measurement.address.location.longitude], {
+                measurement.point = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
                     color: color,
                     fillColor: color,
                     fillOpacity: 0.5,
                     radius: 20
                 }).addTo(map).on("click", function(e) {
                     const clickedCircle = e.target;
-                    const consumption = measurement
-                        .watering_amount_recomendation
-                        .toLocaleString('en-US', {maximumFractionDigits:0});
 
                     clickedCircle
-                        .bindPopup(that.getPopupContent(measurement, consumption))
+                        .bindPopup(that.getPopupContent(measurement))
                         .openPopup();
                 });
 

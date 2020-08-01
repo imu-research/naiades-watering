@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <h2 style="margin-bottom:5%;margin-left:10%;">{% trans "Box #" %}{{ box.box_id }}</h2>
+    <h2 style="margin-bottom:5%;margin-left:10%;">{% trans "Box #" %}{{ box.id }}</h2>
     <div class="row" style="margin: 10px;">
         <div class="col-md-6">
                 <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
@@ -19,86 +19,14 @@
     </div>
     <div id="chart-history" style="width:100%;height: 400px;"></div>
     <div id="chart-prediction" style="width:100%;height: 400px;"></div>
-    <div class="row" style="margin: 20px;">
-    <div class="row">
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_box_id">Box ID:</label>
-                <input type="text" name="box_id" required="" id="id_box_id" class="form-control" value="{{ box.box_id }}">
-            </div>
-        </div>
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_soil_type">Type of soil:</label>
 
-                <select name="soil_type" id="id_soil_type" class="form-control">
-  <option value="SOIL_TYPE_1" {% if box.box_soil_type == "SOIL_TYPE_1" %}selected{% endif %}>Soil Type 1</option>
+    <form action="/watering/details/?id={{ box.id }}" method="post">
+        {% csrf_token %}
 
-  <option value="SOIL_TYPE_2" {% if box.box_soil_type == "SOIL_TYPE_2" %}selected{% endif %}>Soil Type 2</option>
+        {% include 'watering/form.html' %}
 
-</select>
+    </form>
 
-
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_flowers_type">Type of flowers:</label>
-
-                    <span class="o-red">*</span>
-
-                <select name="flowers_type" id="id_flowers_type" class="form-control">
-  <option value="FLOWER_TYPE_1" {% if box.box_flower_type == "FLOWER_TYPE_1" %}selected{% endif %}>Flower Type 1</option>
-
-  <option value="FLOWER_TYPE_2" {% if box.box_flower_type == "FLOWER_TYPE_2" %}selected{% endif %}>Flower Type 2</option>
-
-</select>
-
-
-            </div>
-        </div>
-
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_sun_exposure">Exposure to sun:</label>
-
-                <select name="sun_exposure" id="id_sun_exposure" class="form-control">
-  <option value="SUN_EXPOSURE_TYPE_1" {% if box.box_sun_exposure == "SUN_EXPOSURE_TYPE_1" %}selected{% endif %}>Sun Exposure Type 1</option>
-
-  <option value="SUN_EXPOSURE_TYPE_2" {% if box.box_sun_exposure == "SUN_EXPOSURE_TYPE_1" %}selected{% endif %}>Sun Exposure Type 2</option>
-
-</select>
-
-
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_installed_at">Installation date:</label>
-
-                <input type="text" name="installed_at" required="" id="id_installed_at" class="form-control" value="{{ box.dateInstallation }}">
-
-
-            </div>
-        </div>
-
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_size">Box size:</label>
-                <input type="text" name="size" required="" id="id_size" class="form-control" value="{{ box.box_size }}">
-
-
-            </div>
-        </div>
-    </div>
-
-    </div>
     <div class="row" style="margin: 10px;">
          <div class="col-md-12">
             <div class="panel panel-primary">

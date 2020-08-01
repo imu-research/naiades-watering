@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from watering.forms import BoxSetupForm
+from watering.forms import BoxSetupForm, BoxForm
 from watering.models import WateringBox
 
 
@@ -29,8 +29,8 @@ def box_create(request):
 
         # check if valid & create box
         if form.is_valid():
-            # TODO migrate to using API
-            WateringBox.post(form)
+            # post to API
+            WateringBox.post(box_id=None, form=form)
 
             # get boxes for this user
             boxes = WateringBox.list()
@@ -50,7 +50,7 @@ def box_create(request):
 
 def box_api_list(request):
     return JsonResponse({
-        "boxes": WateringBox.list()
+        "boxes": [box.data for box in WateringBox.list()]
     })
 
 
@@ -72,10 +72,28 @@ def box_details(request):
     # get box id
     box_id = request.GET.get("id")
 
+    # find box
+    box = WateringBox.get(box_id)
+
+    if request.method == "POST":
+        form = BoxForm(request.POST)
+
+        # check if valid & create box
+        if form.is_valid():
+            # update box
+            WateringBox.post(
+                box_id=box.data["id"],
+                data=form.as_box()
+            )
+
+    else:
+        form = BoxForm.from_box(box=box)
+
     # render
     return render(request, 'watering/details.html', {
         'id': box_id,
-        'box': WateringBox.get(box_id)
+        'box': box,
+        'form': form,
     })
 
 
@@ -103,6 +121,7 @@ def report(request):
     # render
     return render(request, 'watering/report.html', {
     })
+
 
 def view_route(request):
 
