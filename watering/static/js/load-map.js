@@ -90,6 +90,45 @@ $(function () {
                 url: '/watering/api/boxes/list',
                 success: function(response) {
                     const boxes = response.boxes;
+                    const today = new Date();
+
+                    $.each(boxes, function(idx, box) {
+                        // check if setup
+                        box.isSetup = that.isSetup(box);
+
+                        // set next watering
+                        box.nextWatering = 'UNKNOWN';
+                        if (!box.nextWateringDeadline) {
+                            return
+                        }
+
+                        const parts = box.nextWateringDeadline.split('T')[0].split('-');
+
+                        // get watering
+                        const nextWateringDate = new Date(
+                            Number.parseInt(parts[0]),
+                            Number.parseInt(parts[1]) - 1,
+                            Number.parseInt(parts[2])
+                        );
+
+                        // same date?
+                        if ((nextWateringDate.getFullYear() === today.getFullYear()) &&
+                            (nextWateringDate.getMonth() === today.getMonth()) &&
+                            (nextWateringDate.getDate() === today.getDate())) {
+                            box.nextWatering = 'TODAY';
+                        }
+
+                        // in the past?
+                        else if (nextWateringDate < today) {
+                            box.nextWatering = 'UNKNOWN';
+                        }
+                        else {
+                            // just future
+                            box.nextWatering = 'FUTURE';
+                        }
+                        // next day?
+                        // TODO implement
+                    });
 
                     that.fetchedMeasurements = boxes;
                     that.measurements = boxes;
@@ -102,12 +141,45 @@ $(function () {
 
         showFilteredMeasurements: function() {
 
+            // get selection
+            const nextWatering = $('#next-watering').val();
+
+            // clear all
+            $.each(this.measurements, function(idx, measurement) {
+                if (measurement.point) {
+                    measurement.point.remove();
+                }
+            });
+
+            // filter
+            const measurements = this.measurements
+                .filter(box => nextWatering === "" || box.nextWatering === nextWatering);
+
             // show on map
-            this.showData();
+            this.showData(measurements);
+        },
+
+        isSetup: function(meter) {
+            if ((!meter.soilType) || (!meter.flowerType) || (!meter.sunExposure) || (!meter.boxSize)) {
+                return false;
+            }
+
+            return true;
         },
 
         getPopupContent: function(meter) {
             const that = this;
+            if (!meter.isSetup) {
+                return $("<div />")
+                    .addClass("popup-content")
+                    .append($(`<div class="prop-label">Box ID:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                    .append($(`<button class="btn btn-block btn-sm action btn--first">Set up the box</button>`)
+                        .on("click", function () {
+                            location.href = `/watering/details?id=${meter.boxId}`
+                        })
+                    )
+                    .get(0);
+            }
 
             return $("<div />")
                 .addClass("popup-content")
@@ -139,19 +211,38 @@ $(function () {
                 .get(0)
         },
 
-        showData: function() {
+        getMeterColor: function(meter) {
+            if (!meter.isSetup) {
+                return '#AAB2BD';
+            }
+
+            // need watering today
+            if (meter.nextWatering === 'TODAY') {
+                return '#E9573F';
+            }
+
+            // unknown next watering (e.g empty or day in past)
+            if (meter.nextWatering === 'UNKNOWN') {
+                return '#F6BB42';
+
+            }
+            // green - no watering needed
+            return '#8EC760';
+        },
+
+        showData: function(measurements) {
             const map = this.map;
 
             // get max consumption
             //const maxConsumption = this.getMaxConsumption();
 
             const that = this;
-            $.each(this.measurements, function(idx, measurement) {
+            $.each(measurements, function(idx, measurement) {
                 //const meter = measurement.box_id;
 
                 // calculate color
                 //const color = getGreenRedScaleColor(measurement.totalConsumption / maxConsumption);
-                const color = '#8EC760';
+                const color = that.getMeterColor(measurement);
 
                 // create point
                 measurement.point = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
@@ -185,4 +276,9 @@ $(function () {
 
     // run map component
     NaiadesMap.load();
+
+    // attach reload on watering type change
+    $('#next-watering').on('change', function() {
+        NaiadesMap.showFilteredMeasurements();
+    })
 });

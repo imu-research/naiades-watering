@@ -11,12 +11,20 @@
 {% block content %}
      <div class="row" style="margin: 10px;">
          <div class="col-md-6">
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-primary">Today</button>
-                      <button type="button" class="btn btn-primary">Tomorrow</button>
-                      <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-align-right"></i></button>
-                    </div>
-                  </div>
+{#                    <div class="btn-group">#}
+{#                      <button type="button" class="btn btn-primary">Today</button>#}
+{#                      <button type="button" class="btn btn-primary">Tomorrow</button>#}
+{#                      <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-align-right"></i></button>#}
+{#                    </div>#}
+             Next watering
+             <select id="next-watering">
+                <option value="">All</option>
+                <option value="TODAY">Today</option>
+                <option value="TOMORROW">Tomorrow</option>
+                <option value="FUTURE">Later in the future</option>
+                <option value="UNKNOWN">Unknown</option>
+             </select>
+         </div>
          <div class="col-md-3">
          </div>
          <div class="col-md-3">
@@ -26,16 +34,16 @@
 
     <div class="row" style="margin: 10px;">
          <div class="col-md-4">
-                <div class="checkbox">
-                  <div class="icheckbox_flat" style="position: relative;"><input type="checkbox" id="flat-checkbox-1" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                  <label for="flat-checkbox-1" class="">Need Watering</label>
-                </div>
+{#                <div class="checkbox">#}
+{#                  <div class="icheckbox_flat" style="position: relative;"><input type="checkbox" id="flat-checkbox-1" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>#}
+{#                  <label for="flat-checkbox-1" class="">Need Watering</label>#}
+{#                </div>#}
          </div>
           <div class="col-md-4">
-                <div class="checkbox">
-                  <div class="icheckbox_flat checked" style="position: relative;"><input type="checkbox" id="flat-checkbox-2" checked="" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
-                  <label for="flat-checkbox-2" class="">Water OK</label>
-                </div>
+{#                <div class="checkbox">#}
+{#                  <div class="icheckbox_flat checked" style="position: relative;"><input type="checkbox" id="flat-checkbox-2" checked="" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>#}
+{#                  <label for="flat-checkbox-2" class="">Water OK</label>#}
+{#                </div>#}
           </div>
           <div class="col-md-2">
          </div>

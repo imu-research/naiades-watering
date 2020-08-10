@@ -50,8 +50,14 @@
                       <td> <a href="/watering/details/?id={{ box.id }}">Box #{{ box.id }}</a></td>
                     <td>25%</td>
                     <td>0.3 lt</td>
-                    <td><button type="button" class="btn btn-success btn-sm">
+                    <td>
+                        {% if box.id == 4 %}
+                        <button type="button" class="btn btn-danger btn-sm">
                         <span class="glyphicon glyphicon-ok"></span></button>
+                        {% else %}
+                        <button type="button" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-ok"></span></button>
+                        {% endif %}
                         <button type="button" class="btn btn-primary btn-sm" onclick="location.href='{% url 'box-report' %}'">
                         <span class="glyphicon glyphicon-pencil"></span></button>
                         </td>

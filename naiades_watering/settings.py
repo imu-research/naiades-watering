@@ -149,3 +149,7 @@ LOGOUT_URL = '/watering/logout'
 ADMIN_URL = '/watering/admin'
 
 APPEND_SLASH = True
+
+if os.environ.get("ENVIRONMENT") == "PRODUCTION":
+    import django_heroku
+    django_heroku.settings(locals())
