@@ -163,6 +163,10 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+    MIDDLEWARE.append(
+        'whitenoise.middleware.WhiteNoiseMiddleware',
+    )
+
     # SSl settings
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
