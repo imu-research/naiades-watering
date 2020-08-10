@@ -430,7 +430,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 .carbon-poweredby {
 	float: right;
 	text-align:center;
-	color:#999
+	color:#999;
 	text-decoration:none !important;
 	font-size:11px !important
 }

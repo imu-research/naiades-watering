@@ -161,7 +161,7 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     ALLOWED_HOSTS = ['*']
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+    # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     # SSl settings
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
