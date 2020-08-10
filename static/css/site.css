@@ -22,11 +22,6 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 /* ----------------------------------
  * icons
  * ---------------------------------- */
-@font-face {
-  font-family: "angularicons";
-  src: url("../angularicons/angularicons.eot");
-  src: url("../angularicons/angularicons.eot?#iefix") format("embedded-opentype"), url("../angularicons/angularicons.woff") format("woff"), url("../angularicons/angularicons.ttf") format("truetype"), url("../angularicons/angularicons.svg") format("svg");
-}
 .icon {
   display: inline-block;
   font-family: "angularicons";
