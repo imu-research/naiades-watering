@@ -151,5 +151,18 @@ ADMIN_URL = '/watering/admin'
 APPEND_SLASH = True
 
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
-    import django_heroku
-    django_heroku.settings(locals())
+    import dj_database_url
+
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
+    DATABASES['default']['CONN_MAX_AGE'] = 500
+
+    ALLOWED_HOSTS = ['*']
+
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+    # SSl settings
+    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
