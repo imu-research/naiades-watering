@@ -1,10 +1,6 @@
-import json
-
-from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.utils.deprecation import MiddlewareMixin
 
-from naiades_watering.settings import LOGIN_URL, LOGOUT_URL, ADMIN_URL
+from naiades_watering.settings import LOGIN_URL, LOGOUT_URL, ADMIN_URL, STATIC_URL
 
 
 class AuthRequiredMiddleware(object):
@@ -18,6 +14,9 @@ class AuthRequiredMiddleware(object):
             return self.get_response(request)
 
         if request.path.startswith(ADMIN_URL):
+            return self.get_response(request)
+
+        if request.path.startswith(STATIC_URL):
             return self.get_response(request)
 
         if not request.user.is_authenticated:
