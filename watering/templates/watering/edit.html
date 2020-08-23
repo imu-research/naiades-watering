@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h2 style="margin-bottom:5%;">{% trans "Box #" %}{{ box.id }}</h2>
+
+     <form action="/watering/details/?id={{ box.id }}" method="post">
+        {% csrf_token %}
+
+        {% include 'watering/form.html' %}
+
+    </form>
+
+{% endblock %}

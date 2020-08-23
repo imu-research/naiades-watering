@@ -132,3 +132,31 @@ def view_route(request):
     return render(request, 'watering/route.html', {
         'boxes': boxes,
     })
+
+def box_edit(request):
+    # get box id
+    box_id = request.GET.get("id")
+
+    # find box
+    box = WateringBox.get(box_id)
+
+    if request.method == "POST":
+        form = BoxForm(request.POST)
+
+        # check if valid & create box
+        if form.is_valid():
+            # update box
+            WateringBox.post(
+                box_id=box.data["id"],
+                data=form.as_box()
+            )
+
+    else:
+        form = BoxForm.from_box(box=box)
+
+    # render
+    return render(request, 'watering/edit.html', {
+        'id': box_id,
+        'box': box,
+        'form': form,
+    })

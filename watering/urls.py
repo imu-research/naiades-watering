@@ -27,4 +27,7 @@ urlpatterns = [
 
     # List View
     path('route/', views.view_route, name='route'),
+
+    # Box Edit
+    path('edit/', views.box_edit, name='box-edit'),
 ]

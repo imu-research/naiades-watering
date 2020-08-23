@@ -48,8 +48,8 @@
                 {% for box in boxes %}
                   <tr>
                       <td> <a href="/watering/details/?id={{ box.id }}">Box #{{ box.id }}</a></td>
-                    <td>25%</td>
-                    <td>0.3 lt</td>
+                    <td>{{ box.data.soilMoisture|floatformat }}</td>
+                    <td>{{ box.data.nextWateringAmountRecommendation }} lt</td>
                     <td>
                         {% if box.id == 4 %}
                         <button type="button" class="btn btn-danger btn-sm">

@@ -17,8 +17,8 @@
                 <label for="id_soil_type">Type of soil:</label>
                 <select name="soil_type" id="id_soil_type" class="form-control">
                   <option value="" {% if not form.data.soil_type %}selected{% endif %}></option>
-                  <option value="SOIL_TYPE_1" {% if form.data.soil_type == "SOIL_TYPE_1" %}selected{% endif %}>Soil Type 1</option>
-                  <option value="SOIL_TYPE_2" {% if form.data.soil_type == "SOIL_TYPE_2" %}selected{% endif %}>Soil Type 2</option>
+                  <option value="Terreau" {% if form.data.soil_type == "Terreau" %}selected{% endif %}>Terreau</option>
+                  <!--<option value="SOIL_TYPE_2" {% if form.data.soil_type == "SOIL_TYPE_2" %}selected{% endif %}>Soil Type 2</option>-->
                 </select>
                 {% if form.errors.soil_type %}
                     <span class="o-red">{{ form.errors.soil_type }}</span>
@@ -33,8 +33,8 @@
                 <label for="id_flowers_type">Type of flowers:</label>
                 <select name="flowers_type" id="id_flowers_type" class="form-control">
                   <option value="" {% if not form.data.flowers_type %}selected{% endif %}></option>
-                  <option value="FLOWER_TYPE_1" {% if form.data.flowers_type == "FLOWER_TYPE_1" %}selected{% endif %}>Flower Type 1</option>
-                  <option value="FLOWER_TYPE_2" {% if form.data.flowers_type == "FLOWER_TYPE_2" %}selected{% endif %}>Flower Type 2</option>
+                  <option value="Νeed more water" {% if form.data.flowers_type == "Νeed more water" %}selected{% endif %}>Νeed more water</option>
+                  <option value="Νeed less water" {% if form.data.flowers_type == "Νeed less water" %}selected{% endif %}>Νeed less water</option>
                 </select>
                 {% if form.errors.flowers_type %}
                     <span class="o-red">{{ form.errors.flowers_type }}</span>
@@ -48,8 +48,9 @@
 
                 <select name="sun_exposure" id="id_sun_exposure" class="form-control">
                   <option value="" {% if not form.data.sun_exposure %}selected{% endif %}></option>
-                  <option value="SUN_EXPOSURE_TYPE_1" {% if form.data.sun_exposure == "SUN_EXPOSURE_TYPE_1" %}selected{% endif %}>Sun Exposure Type 1</option>
-                  <option value="SUN_EXPOSURE_TYPE_2" {% if form.data.sun_exposure == "SUN_EXPOSURE_TYPE_2" %}selected{% endif %}>Sun Exposure Type 2</option>
+                  <option value="Sunny" {% if form.data.sun_exposure == "Sunny" %}selected{% endif %}>Sunny</option>
+                  <option value="Mid shadow" {% if form.data.sun_exposure == "Mid shadow" %}selected{% endif %}>Mid shadow</option>
+                  <option value="None" {% if form.data.sun_exposure == "None" %}selected{% endif %}>None</option>
                 </select>
                 {% if form.errors.sun_exposure %}
                     <span class="o-red">{{ form.errors.sun_exposure }}</span>

@@ -175,7 +175,7 @@ $(function () {
                     .append($(`<div class="prop-label">Box ID:</div><div class="prop-value">${meter.boxId}</></div><br>`))
                     .append($(`<button class="btn btn-block btn-sm action btn--first">Set up the box</button>`)
                         .on("click", function () {
-                            location.href = `/watering/details?id=${meter.boxId}`
+                            location.href = `/watering/edit?id=${meter.boxId}`
                         })
                     )
                     .get(0);
@@ -192,6 +192,7 @@ $(function () {
                 // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))
                 .append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
                 .append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
+                .append($(`<div class="prop-label">Humidity:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
                 //.append($('<div class="prop-label consumption-label">Amount of water:</div>'))
                 //.append($(`<div class="consumption">${consumption} m<sup>3</sup></div>`))
                 //.append($('<div class="prop-label">Box Id:</div>'))
