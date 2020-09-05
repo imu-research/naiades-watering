@@ -1,3 +1,5 @@
+import datetime
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -54,20 +56,6 @@ def box_api_list(request):
     })
 
 
-def list_view(request):
-    # get mode (map or list, defautls to map)
-    mode = request.GET.get("mode", "map")
-
-    # get boxes for this user
-    boxes = WateringBox.list()
-
-    # render
-    return render(request, 'watering/list.html', {
-        'boxes': boxes,
-        'mode': mode,
-    })
-
-
 def box_details(request):
     # get box id
     box_id = request.GET.get("id")
@@ -97,18 +85,23 @@ def box_details(request):
     })
 
 
-def map_view(request):
-    # get mode (map or list, defautls to map)
-    mode = request.GET.get("mode", "map")
-
+def show_watering_points(request, mode):
     # get boxes for this user
     boxes = WateringBox.list()
 
     # render
-    return render(request, 'watering/map.html', {
+    return render(request, 'watering/view.html', {
         'boxes': boxes,
         'mode': mode,
     })
+
+
+def map_view(request):
+    return show_watering_points(request, mode='map')
+
+
+def list_view(request):
+    return show_watering_points(request, mode='list')
 
 
 def report(request):

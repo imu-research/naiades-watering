@@ -5,7 +5,7 @@
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
-     <link href="{% static 'css/map.css' %}" rel="stylesheet">
+    <link href="{% static 'css/view.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -51,10 +51,18 @@
                 <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'">Add new Box</button>
            </div>
     </div>
-     <div id="mapid" style="height: 500px;"></div>
+    <div class="row" style="margin: 10px;">
+        <div class="col-xs-12">
+             <div id="container" style="height: 500px;"></div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block js %}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
-    <script src="{% static 'js/load-map.js' %}"></script>
+    <script>
+        window.RENDERING_MODE = "{{ mode }}";
+    </script>
+    <script src="{% static 'js/render.js' %}"></script>
+    <script src="{% static 'js/load-data.js' %}"></script>
 {% endblock %}

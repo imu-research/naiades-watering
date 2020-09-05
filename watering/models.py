@@ -24,7 +24,7 @@ class OrionEntity(object):
     def list(self, service):
         # list entities
         response = requests.get(
-            f'http://{self.endpoint}/v2/entities?options=keyValues',
+            f'http://{self.endpoint}/v2/entities?options=keyValues&type=FlowerBed',
             headers=self.get_headers(service=service)
         )
 
