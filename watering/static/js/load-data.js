@@ -107,6 +107,14 @@ $(function () {
                             box.nextWatering = 'TODAY';
                         }
 
+                        // next date?
+                        // TODO improve check - this fails for the last day of the month
+                        else if ((nextWateringDate.getFullYear() === today.getFullYear()) &&
+                            (nextWateringDate.getMonth() === today.getMonth()) &&
+                            (nextWateringDate.getDate() - 1 === today.getDate())) {
+                            box.nextWatering = 'TOMORROW';
+                        }
+
                         // in the past?
                         else if (nextWateringDate < today) {
                             box.nextWatering = 'UNKNOWN';
@@ -115,8 +123,7 @@ $(function () {
                             // just future
                             box.nextWatering = 'FUTURE';
                         }
-                        // next day?
-                        // TODO implement
+
                     });
 
                     that.fetchedMeasurements = boxes;
