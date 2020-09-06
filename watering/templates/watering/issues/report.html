@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h2 style="margin-bottom: 20px;">{% trans "Report a problem" %}</h2>
+
+    <div class="panel">
+        <div class="panel-body">
+            <form class="row" style="padding: 40px; margin: 20px 0;" action="." method="POST">
+                {% csrf_token %}
+
+                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
+                  <div class="col-md-12" style="text-align: right">
+                      <a href="{% url 'list-issues' box_id=box_id %}" class="btn btn-sm btn-default">
+                          Back to Box #{{ box_id }} issues
+                      </a>
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
+                  <div class="col-md-12">
+                      <label for="report_type">Issue type:</label>
+                  </div>
+                  <div class="col-md-12">
+                    <select class="selecter_3 selecter-element" name="issue_type">
+                        <option value="Broken sensor" selected>Broken sensor</option>
+                        <option value="Wrong data">Wrong data</option>
+                        <option value="Problem with the box">Problem with the box</option>
+                        <option value="Flowers destroyed">Flowers destroyed</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <!--<div class="selecter  cover closed" tabindex="0"><select name="selecter_basic" class="selecter_3 selecter-element" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="-1">
+                        <option value="1" selected>Broken sensor</option>
+                        <option value="2">Wrong data</option>
+                        <option value="3">Problem with the box</option>
+                        <option value="4">Flowers destroyed</option>
+                        <option value="5">Other</option>
+                    </select>-->
+                        <!--<span class="selecter-selected">Broken sensor</span><div class="selecter-options"><span class="selecter-item selected" data-value="1">One</span><span class="selecter-item" data-value="2">Two</span><span class="selecter-item" data-value="3">Three</span><span class="selecter-item" data-value="4">Four</span><span class="selecter-item" data-value="5">Five</span></div></div>
+                  -->
+                  </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                  <div class="col-md-12">
+                      <label for="report">Description:</label>
+                  </div>
+                   <div class="col-md-12">
+                      <textarea class="form-control" rows="5" name="description"></textarea>
+                  </div>
+
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                  <div class="col-md-12" style="text-align: right">
+                    <button class="btn btn-warning" type="submit" style="min-width: 200px;">
+                        {% trans "Report" %}
+                    </button>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

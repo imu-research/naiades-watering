@@ -3,9 +3,10 @@ import datetime
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.timezone import now
 
-from watering.forms import BoxSetupForm, BoxForm
-from watering.models import WateringBox
+from watering.forms import BoxSetupForm, BoxForm, IssueForm
+from watering.models import WateringBox, Issue
 
 
 def home(request):
@@ -85,6 +86,44 @@ def box_details(request):
     })
 
 
+def list_issues(request, box_id):
+    # get issues
+    # sort newest first
+    issues = Issue.objects.filter(box_id=box_id).order_by('-created')
+
+    # show issue list
+    return render(request, 'watering/issues/index.html', {
+        "box_id": box_id,
+        "issues": issues,
+    })
+
+
+def report_issue(request, box_id):
+    if request.method == "POST":
+        form = IssueForm(request.POST, instance=None)
+
+        if form.is_valid():
+            # create new issue
+            issue = form.save(commit=False)
+
+            # fill in context
+            issue.box_id = box_id
+            issue.submitted_by = request.user
+
+            # save
+            issue.save()
+
+            # return to issue list
+            return redirect(reverse('list-issues', kwargs={"box_id": box_id}))
+    else:
+        form = IssueForm()
+
+    return render(request, 'watering/issues/report.html', {
+        "box_id": box_id,
+        "form": form,
+    })
+
+
 def show_watering_points(request, mode):
     # get boxes for this user
     boxes = WateringBox.list()
@@ -104,18 +143,6 @@ def list_view(request):
     return show_watering_points(request, mode='list')
 
 
-def report(request):
-    # get mode (map or list, defautls to map)
-    # box_id = request.GET.get("id")
-
-    # get boxes for this user
-    boxes = WateringBox.list()
-
-    # render
-    return render(request, 'watering/report.html', {
-    })
-
-
 def view_route(request):
 
     # get boxes for this user
@@ -125,6 +152,7 @@ def view_route(request):
     return render(request, 'watering/route.html', {
         'boxes': boxes,
     })
+
 
 def box_edit(request):
     # get box id

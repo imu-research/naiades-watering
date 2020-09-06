@@ -1,7 +1,7 @@
 import requests
 
 from django.contrib.postgres.fields import JSONField
-from django.db.models import Model, CharField
+from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField
 
 
 class OrionError(ValueError):
@@ -104,3 +104,16 @@ class WateringBox(Model):
             entity_id=box_id,
             data=data
         )
+
+
+class Issue(Model):
+    """
+    Issue reported about a specific box
+    """
+    box_id = CharField(max_length=16, db_index=True)
+    issue_type = CharField(max_length=1024)
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
+    resolved = BooleanField(default=False)
+    submitted_by = ForeignKey('auth.User', on_delete=SET_NULL, blank=True, null=True)
+    description = TextField()

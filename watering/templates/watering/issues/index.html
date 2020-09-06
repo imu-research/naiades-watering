@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+    <h2 style="margin-bottom:5%;">{% trans "Box #" %}{{ box_id }} - Issues</h2>
+
+    <div style="text-align: right; margin-bottom: 20px;">
+        <a href="{% url 'report-issue' box_id=box_id %}" class="btn btn-warning">
+            Report issue
+        </a>
+    </div>
+
+    <div class="panel">
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Description</th>
+                        <th>Posted By</th>
+                        <th>Posted At</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for issue in issues %}
+                        <tr>
+                            <td>
+                                {{ issue.issue_type }}
+                            </td>
+                            <td>
+                                {{ issue.description|linebreaksbr }}
+                            </td>
+                            <td>
+                                {{ issue.submitted_by.username }}
+                            </td>
+                            <td>
+                                {{ issue.created|timesince }} ago
+                            </td>
+                            <td>
+                                {% if issue.resolved %}
+                                    Resolved
+                                {% else %}
+                                    Open
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 20px; text-align: center; color: #777;">
+                                No issues reported for Box #{{ box_id }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}

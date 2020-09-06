@@ -195,7 +195,7 @@ $(function () {
                         $('<td />')
                             .append(
                                 $('<a />')
-                                    .attr('href', '#')
+                                    .attr('href', `/watering/box/${meter.boxId}/issues/`)
                                     .addClass('btn btn-sm btn-primary')
                                     .attr('title', 'List problems')
                                     .css('margin-right', '5px')
@@ -203,7 +203,7 @@ $(function () {
                             )
                             .append(
                                 $('<a />')
-                                    .attr('href', '/watering/report/')
+                                    .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
                                     .addClass('btn btn-sm btn-warning')
                                     .attr('title', 'Report new problem')
                                     .append($('<i class="glyphicon glyphicon-plus"></i>'))

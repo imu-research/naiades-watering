@@ -1,8 +1,9 @@
-from django.forms import Form
+from django.forms import Form, ModelForm
 from django.forms.fields import CharField, DateField, ChoiceField, DecimalField
 
 from django.utils.translation import gettext as _
 
+from watering.models import Issue
 from .lists import *
 
 
@@ -42,3 +43,9 @@ class BoxSetupForm(BoxForm):
     address = CharField(required=True)
     latitude = DecimalField()
     longitude = DecimalField()
+
+
+class IssueForm(ModelForm):
+    class Meta:
+        model = Issue
+        fields = ("issue_type", "description", )

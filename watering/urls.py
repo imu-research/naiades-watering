@@ -19,8 +19,9 @@ urlpatterns = [
     # Map View
     path('map/', views.map_view, name='box-map'),
 
-    # Report
-    path('report/', views.report, name='box-report'),
+    # Report issues
+    path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
+    path('box/<str:box_id>/issues/', views.list_issues, name='list-issues'),
 
     # Boxes list API
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
