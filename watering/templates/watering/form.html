@@ -73,7 +73,11 @@
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_size">Box size:</label>
-                <input type="text" name="size" required="" id="id_size" class="form-control" value="{{ form.data.size|default:"" }}">
+                <select name="size" id="id_size" class="form-control">
+                  <option value="" {% if not form.data.size %}selected{% endif %}></option>
+                  <option value="Small" {% if form.data.size == "Small" %}selected{% endif %}>Small</option>
+                  <option value="Large" {% if form.data.size == "Large" %}selected{% endif %}>Large</option>
+                </select>
                 {% if form.errors.size %}
                     <span class="o-red">{{ form.errors.size }}</span>
                 {% endif %}

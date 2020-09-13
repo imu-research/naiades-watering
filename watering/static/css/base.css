@@ -1,0 +1,12 @@
+ul.errorlist {
+    list-style: none;
+    padding: 0;
+}
+
+.o-red {
+    color: #E9573F;
+}
+
+.navbar-custom .navbar-brand {
+    width: auto !important;
+}

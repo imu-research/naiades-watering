@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block content %}
-    <h2 style="margin-bottom:5%;">{% trans "Box #" %}{{ box_id }} - Issues</h2>
+    <h3 style="margin-top:0%;">{% trans "Box #" %}{{ box_id }} - Issues</h3>
 
     <div style="text-align: right; margin-bottom: 20px;">
         <a href="{% url 'report-issue' box_id=box_id %}" class="btn btn-warning">

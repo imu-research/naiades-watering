@@ -17,3 +17,8 @@ SUN_EXPOSURE_OPTIONS = (
     ("Mid shadow", _("Mid shadow")),
     ("None", _("None")),
 )
+
+BOX_SIZES = (
+    ("Small", _("Small")),
+    ("Large", _("Large")),
+)

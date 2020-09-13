@@ -8,11 +8,11 @@
 {% endblock %}
 
 {% block content %}
-    <h2 style="margin-bottom:5%;margin-left:10%;">{% trans "Box #" %}{{ box.id }}</h2>
+    <h3 style="margin-top:0%;margin-left:3%;">{% trans "Box #" %}{{ box.id }}</h3>
     <div class="row" style="margin: 10px;">
-        <div class="col-md-6">
+        <!--<div class="col-md-6">
                 <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
-              </div>
+              </div> -->
            <div class="col-md-3">
                 <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">{% trans "Start Watering" %}</button>
            </div>
@@ -29,6 +29,7 @@
 
     <div class="row" style="margin: 10px;">
          <div class="col-md-12">
+             <h4>Watering logs</h4>
             <div class="panel panel-primary">
               <table class="table">
                 <thead>

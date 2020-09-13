@@ -12,7 +12,7 @@ class BoxForm(Form):
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
     installed_at = CharField(required=True, label=_('Installation date'))
-    size = CharField(required=True, label=_('Box size'))
+    size = ChoiceField(required=True, label=_('Box size'), choices=BOX_SIZES)
 
     @staticmethod
     def from_box(box):

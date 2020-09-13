@@ -27,7 +27,7 @@ $(function () {
                 '                    <th>Humidity Level</th>\n' +
                 '                    <th>Amount of watering</th>\n' +
                 '                    <th>Next watering</th>\n' +
-                '                    <th>Problems</th>\n' +
+                '                    <th>Issues & Notes</th>\n' +
                 '                  </tr>\n' +
                 '                </thead>\n' +
                 '                <tbody></tbody>' +

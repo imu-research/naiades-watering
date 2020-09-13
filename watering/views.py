@@ -33,7 +33,7 @@ def box_create(request):
         # check if valid & create box
         if form.is_valid():
             # post to API
-            WateringBox.post(box_id=None, form=form)
+            WateringBox.post(box_id=None, data=form.data)
 
             # get boxes for this user
             boxes = WateringBox.list()
