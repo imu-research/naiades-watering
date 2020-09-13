@@ -47,13 +47,27 @@
 }
 
 /* List */
-#StatusTable {
+#StatusTable > .entry {
     background: white;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
 }
 
-.next-watering-label {
+#StatusTable > .entry .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#StatusTable > .entry .actions {
+    text-align: right;
+    margin-top: 10px;
+}
+
+#StatusTable > .entry .next-watering-label {
     display: inline-block;
     padding: 2px 5px;
     color: white;
     border-radius: 4px;
+    margin-top: 10px;
 }

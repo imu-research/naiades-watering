@@ -10,3 +10,7 @@ ul.errorlist {
 .navbar-custom .navbar-brand {
     width: auto !important;
 }
+
+.site-footer {
+    padding: 20px !important;
+}

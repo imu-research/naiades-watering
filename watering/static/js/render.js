@@ -20,19 +20,7 @@ $(function () {
 
         initializeList: function() {
             // TODO initialize table
-            this.$table = $('<table class="table" id="StatusTable">\n' +
-                '                <thead>\n' +
-                '                  <tr>\n' +
-                '                    <th>Name</th>\n' +
-                '                    <th>Humidity Level</th>\n' +
-                '                    <th>Amount of watering</th>\n' +
-                '                    <th>Next watering</th>\n' +
-                '                    <th>Issues & Notes</th>\n' +
-                '                  </tr>\n' +
-                '                </thead>\n' +
-                '                <tbody></tbody>' +
-                '             </table>'
-            );
+            this.$table = $('<div id="StatusTable" />');
 
             // add table to container
             $(`#${this.containerId}`).append(this.$table);
@@ -119,6 +107,24 @@ $(function () {
                 .get(0)
         },
 
+        getIcon: function(color) {
+            const colorCode = {
+                '#F6BB42': 'orange',
+                '#E9573F': 'red',
+                '#AAB2BD': 'grey',
+                '#8EC760': 'green',
+            }[color];
+
+            return new L.Icon({
+                iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${colorCode}.png`,
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+        },
+
         renderMap: function(measurements) {
             const map = this.map;
 
@@ -134,10 +140,10 @@ $(function () {
 
                 // create point
                 const point = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
-                    color: color,
+                    color: '#555',
                     fillColor: color,
-                    fillOpacity: 0.5,
-                    radius: 20
+                    fillOpacity: 0.8,
+                    radius: 30
                 }).addTo(map).on("click", function(e) {
                     const clickedCircle = e.target;
 
@@ -168,31 +174,38 @@ $(function () {
                 const color = that.getMeterColor(meter);
 
                 // create row
-                const $row = $('<tr />')
+                const $entry = $('<div />')
+                    .addClass("entry")
                     .append(
-                        $('<td />').append(
-                            $('<a />')
-                                .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                .text(`Box #${meter.boxId}`)
-                        )
+                        $('<div />').
+                            addClass("title").
+                            append(
+                                $('<a />')
+                                    .attr('href', `/watering/details/?id=${meter.boxId}`)
+                                    .text(`Box #${meter.boxId}`)
+                            )
                     )
                     .append(
-                        $('<td />').text(`${meter.soilMoisture.toFixed(2) || '-'}`)
+                        $('<div />').text(`Humidity Level: ${meter.soilMoisture.toFixed(2) || '-'}`)
                     )
                     .append(
-                        $('<td />').html(`${meter.nextWateringAmountRecommendation} m<sup>3</sup>`)
+                        $('<div />').html(`Watering amount: ${meter.nextWateringAmountRecommendation} m<sup>3</sup>`)
                     )
                     .append(
-                        $('<td />').append($('<div />')
-                            .addClass('next-watering-label')
-                            .css('background-color', color)
-                            .text(nextWateringMessages[meter.nextWatering] + (
-                                meter.isSetup ? '' : ' - Setup Box'
-                            ))
-                        )
+                        $('<div />')
+                            .append($('<span />').text("Next watering: "))
+                            .append(
+                                $('<div />')
+                                    .addClass('next-watering-label')
+                                    .css('background-color', color)
+                                    .text(nextWateringMessages[meter.nextWatering] + (
+                                        meter.isSetup ? '' : ' - Setup Box'
+                                    ))
+                            )
                     )
                     .append(
-                        $('<td />')
+                        $('<div />')
+                            .addClass("actions")
                             .append(
                                 $('<a />')
                                     .attr('href', `/watering/box/${meter.boxId}/issues/`)
@@ -211,10 +224,10 @@ $(function () {
                     );
 
                 // add to items
-                that.items.push($row);
+                that.items.push($entry);
 
                 // show
-                that.$table.find('tbody').append($row);
+                that.$table.append($entry);
             });
         },
 
