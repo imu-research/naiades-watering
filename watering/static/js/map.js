@@ -57,13 +57,15 @@ $(function () {
             const map = L.map('mapid').setView([NaiadesMap.center.lat, NaiadesMap.center.lng], 15);
 
             L.tileLayer(
-                'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                //'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+                    //attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                     maxZoom: 18,
-                    id: 'mapbox/streets-v11',
+                    //id: 'mapbox/streets-v11',
                     tileSize: 512,
                     zoomOffset: -1,
-                    accessToken: 'pk.eyJ1IjoiZXZhbmdlbGllOTAiLCJhIjoiY2thanU1YzFrMGU5MDJ6anVtY3FpdDQwaiJ9.G5trmcJe4LgebhQxVzgVMw'
+                    subdomains:['mt0','mt1','mt2','mt3']
+                    //accessToken: 'pk.eyJ1IjoiZXZhbmdlbGllOTAiLCJhIjoiY2thanU1YzFrMGU5MDJ6anVtY3FpdDQwaiJ9.G5trmcJe4LgebhQxVzgVMw'
                 }
             ).addTo(map);
 

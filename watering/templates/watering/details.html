@@ -27,6 +27,9 @@
 
     </form>
 
+    <pre>
+        {{ history }}
+    </pre>
     <div class="row" style="margin: 10px;">
          <div class="col-md-12">
              <h4>Watering logs</h4>
@@ -73,7 +76,9 @@
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
-
+    <script type="text/javascript">
+        const history = {{history |safe}};
+    </script>
     <script src="{% static 'js/box-details-graphs.js' %}"></script>
 
 

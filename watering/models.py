@@ -10,6 +10,7 @@ class OrionError(ValueError):
 
 class OrionEntity(object):
     endpoint = '5.53.108.182:1026'
+    history_endpoint = '5.53.108.182:8668'
 
     def get_headers(self, service):
         headers = {}
@@ -45,6 +46,23 @@ class OrionEntity(object):
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
             raise OrionError(response.content)
+
+    def history(self, service, entity_id):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/soilMoistureVwc/value',
+            headers={
+                    'Fiware-Service': 'carouge',
+                    'Fiware-ServicePath': '/Watering',
+                    'Accept': 'application/json'}
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            raise OrionError(response.content)
+
+        # return list
+        return response.json()
 
 
 class WateringBox(Model):
@@ -104,6 +122,26 @@ class WateringBox(Model):
             entity_id=box_id,
             data=data
         )
+
+    @staticmethod
+    def history(box_id):
+        # get humidity history of box id
+        try:
+            response = OrionEntity().history(
+                service=WateringBox.service,
+                entity_id=box_id
+            )
+        except OrionError:
+            return []
+
+        results = []
+        for idx, index in enumerate(response["index"]):
+            results.append({
+                "date": index,
+                "value": response["values"][idx],
+            })
+
+        return results
 
 
 class Issue(Model):

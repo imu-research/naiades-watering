@@ -12,6 +12,30 @@
         </a>
     </div>
 
+    <div class="col-xs-12">
+    <div id="container">
+
+    <div id="StatusTable">
+        {% for issue in issues %}
+            <div class="entry">
+                <div class="title">
+                     {{ issue.issue_type }}
+                </div>
+                <div>
+                    {{ issue.description|linebreaksbr }}
+                </div>
+                <div>
+                    Posted by: {{ issue.submitted_by.username }} at  {{ issue.created|timesince }} ago
+                </div>
+                <div>
+                    Status:
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+    </div>
+
     <div class="panel">
         <div class="panel-body">
             <table class="table">

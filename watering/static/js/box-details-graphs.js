@@ -1,3 +1,4 @@
+console.log(history);
 var chart = AmCharts.makeChart("chart-history", {
     "type": "serial",
     "hideCredits":true,
@@ -6,7 +7,7 @@ var chart = AmCharts.makeChart("chart-history", {
     "marginLeft": 40,
     "autoMarginOffset": 20,
     "mouseWheelZoomEnabled":true,
-    "dataDateFormat": "YYYY-MM-DD",
+    "dataDateFormat": "YYYY-MM-DDTJJ:NN:SS.QQQ",
     "titles": [
                     {
                         "id": "Title-1",
@@ -83,9 +84,10 @@ var chart = AmCharts.makeChart("chart-history", {
         "enabled": true,
         "menu":[],
     },
-    "dataProvider": [{
-        "date": "2012-07-27",
-        "value": 13
+    "dataProvider": history
+    /*: [{
+        "date": "2017-03-31T08:00:00.000",
+        "value": 13.95}]
     }, {
         "date": "2012-07-28",
         "value": 11
@@ -647,7 +649,7 @@ var chart = AmCharts.makeChart("chart-history", {
     }, {
         "date": "2013-01-30",
         "value": 81
-    }]
+    }]*/
 });
 
 chart.addListener("rendered", zoomChart);

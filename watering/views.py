@@ -64,6 +64,9 @@ def box_details(request):
     # find box
     box = WateringBox.get(box_id)
 
+    # get humidity historic data
+    history = box_history(box_id)
+
     if request.method == "POST":
         form = BoxForm(request.POST)
 
@@ -83,6 +86,7 @@ def box_details(request):
         'id': box_id,
         'box': box,
         'form': form,
+        'history': history,
     })
 
 
@@ -181,3 +185,14 @@ def box_edit(request):
         'box': box,
         'form': form,
     })
+
+def box_history(box_id):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.history(
+        box_id=box.data["id"]
+    )
+
+    # render
+    return historic_data
