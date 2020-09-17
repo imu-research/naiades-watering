@@ -3,6 +3,11 @@
 {% load i18n %}
 {% load static %}
 
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+    <link href="{% static 'css/view.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <h3 style="margin-top:0%;">{% trans "Box #" %}{{ box_id }} - Issues</h3>
 
@@ -12,76 +17,42 @@
         </a>
     </div>
 
-    <div class="col-xs-12">
-    <div id="container">
+     <div class="row">
+        <div class="col-xs-12">
+            <div id="container">
 
-    <div id="StatusTable">
-        {% for issue in issues %}
-            <div class="entry">
-                <div class="title">
-                     {{ issue.issue_type }}
-                </div>
-                <div>
-                    {{ issue.description|linebreaksbr }}
-                </div>
-                <div>
-                    Posted by: {{ issue.submitted_by.username }} at  {{ issue.created|timesince }} ago
-                </div>
-                <div>
-                    Status:
+                <div id="StatusTable">
+                    {% for issue in issues %}
+                        <div class="entry">
+                            <div class="title">
+                                 {{ issue.issue_type }}
+                            </div>
+                            <div>
+                                {{ issue.description|linebreaksbr }}
+                            </div>
+                            <div>
+                                Posted by: {{ issue.submitted_by.username }} at  {{ issue.created|timesince }} ago
+                            </div>
+                            <div>
+                                Status: {% if issue.resolved %}
+                                                Resolved
+                                            {% else %}
+                                                Open
+                                            {% endif %}
+                            </div>
+                            <div class="actions"></div>
+                        </div>
+                         {% empty %}
+                                <div class="entry">
+                                    <p colspan="5" style="padding: 20px; text-align: center; color: #777;">
+                                        No issues reported for Box #{{ box_id }}
+
+                                    </p>
+                                </div>
+                    {% endfor %}
                 </div>
             </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-
-    <div class="panel">
-        <div class="panel-body">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Issue</th>
-                        <th>Description</th>
-                        <th>Posted By</th>
-                        <th>Posted At</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for issue in issues %}
-                        <tr>
-                            <td>
-                                {{ issue.issue_type }}
-                            </td>
-                            <td>
-                                {{ issue.description|linebreaksbr }}
-                            </td>
-                            <td>
-                                {{ issue.submitted_by.username }}
-                            </td>
-                            <td>
-                                {{ issue.created|timesince }} ago
-                            </td>
-                            <td>
-                                {% if issue.resolved %}
-                                    Resolved
-                                {% else %}
-                                    Open
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="5" style="padding: 20px; text-align: center; color: #777;">
-                                No issues reported for Box #{{ box_id }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
         </div>
     </div>
-
 
 {% endblock %}
