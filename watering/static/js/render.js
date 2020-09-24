@@ -142,6 +142,7 @@ $(function () {
 
                 // create point
                 const point = L.marker([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
+                    icon: that.getIcon(color),
                     color: '#555',
                     fillColor: color,
                     fillOpacity: 0.8,
