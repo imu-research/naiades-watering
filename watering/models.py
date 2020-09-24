@@ -99,9 +99,10 @@ class WateringBox(Model):
 
         # create WateringBox instances
         boxes = []
+
         for flowerbed in flowerbeds:
             # get entity id
-            box_id = flowerbed["boxId"] or flowerbed["id"].split("urn:ngsi-ld:FlowerBed:FlowerBed-")[1]
+            box_id = flowerbed.get("boxId") or flowerbed["id"].split("urn:ngsi-ld:FlowerBed:FlowerBed-")[1]
 
             # update in flowerbed
             flowerbed["boxId"] = box_id

@@ -141,17 +141,18 @@ $(function () {
                 const color = that.getMeterColor(measurement);
 
                 // create point
-                const point = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
+                const point = L.marker([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
                     color: '#555',
                     fillColor: color,
                     fillOpacity: 0.8,
                     radius: 30
                 }).addTo(map).on("click", function(e) {
                     const clickedCircle = e.target;
-
-                    clickedCircle
-                        .bindPopup(that.getPopupContent(measurement))
-                        .openPopup();
+                    if (!clickedCircle._popup) {
+                        clickedCircle
+                            .bindPopup(that.getPopupContent(measurement))
+                            .openPopup();
+                    }
                 });
 
                 // add to items
@@ -191,11 +192,11 @@ $(function () {
                         $('<div />').text(`Humidity Level: ${meter.soilMoisture.toFixed(2) || '-'}`)
                     )
                     .append(
-                        $('<div />').html(`Watering amount: ${meter.nextWateringAmountRecommendation} m<sup>3</sup>`)
+                        $('<div />').html(`Suggested watering amount: ${meter.nextWateringAmountRecommendation} m<sup>3</sup>`)
                     )
                     .append(
                         $('<div />')
-                            .append($('<span />').text("Next watering: "))
+                            .append($('<span />').text("Suggested watering date: "))
                             .append(
                                 $('<div />')
                                     .addClass('next-watering-label')
@@ -214,14 +215,14 @@ $(function () {
                                     .addClass('btn btn-sm btn-primary')
                                     .attr('title', 'List problems')
                                     .css('margin-right', '5px')
-                                    .append($('<i class="glyphicon glyphicon-list"></i>'))
+                                    .append($('<i class="glyphicon glyphicon-list"> List</i>'))
                             )
                             .append(
                                 $('<a />')
                                     .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
                                     .addClass('btn btn-sm btn-warning')
                                     .attr('title', 'Report new problem')
-                                    .append($('<i class="glyphicon glyphicon-plus"></i>'))
+                                    .append($('<i class="glyphicon glyphicon-plus"> Report</i>'))
                             )
                     );
 

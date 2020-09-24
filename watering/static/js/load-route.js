@@ -20,7 +20,7 @@ function initMap() {
 
 function displayRoute(waypoints) {
     //const waypoints = loadData();
-    console.log(waypoints)
+    console.log(waypoints);
     var pointA = new google.maps.LatLng(46.1844399,6.1403968),
     pointB = new google.maps.LatLng(46.1844509,6.1404972),
     //w1 = new google.maps.LatLng(46.1842538, 6.1378354),
@@ -37,22 +37,39 @@ function displayRoute(waypoints) {
     directionsDisplay = new google.maps.DirectionsRenderer({
       map: map
     });
-    /*markerA = new google.maps.Marker({
-      position: pointA,
-      title: "point A",
-      label: "A",
-      map: map
-    }),
-    markerB = new google.maps.Marker({
-      position: pointB,
-      title: "point B",
-      label: "B",
-      map: map
-    });*/
 
 
-  // get route from A to B
-  calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB,waypointsArray);
+  // get route from current position to point B
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+          function (position) {
+              var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+              //Find destination the farthest box from current position
+              var destination = findDestination(pos,waypointsArray);
+              //Remove destination from waypoints
+              var index = waypointsArray.indexOf({'location':destination, 'stopover':true});
+              if(index) {
+                     waypointsArray.splice(index, 1);
+              }
+              // get route from current position to destination
+              calculateAndDisplayRoute(directionsService, directionsDisplay, pos, destination, waypointsArray);
+          }
+      );
+  }
+  else {
+        var posit = new google.maps.LatLng(46.1844399,6.1403968);
+        //Find destination the farthest box from posit
+        var destination = findDestination(posit,waypointsArray);
+        //Remove destination from waypoints
+        var index = waypointsArray.indexOf({'location':destination, 'stopover':true});
+        if(index) {
+            waypointsArray.splice(index, 1);
+        }
+        // get route from current position to destination
+        calculateAndDisplayRoute(directionsService, directionsDisplay, posit, destination, waypointsArray);
+    }
+
+  //calculateAndDisplayRoute(directionsService, directionsDisplay, pos, pointB,waypointsArray);
 
 
 }
@@ -74,6 +91,50 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, 
     }
   });
 }
+
+function findDestination(origin, waypoints) {
+     if (waypoints.length == 0 ){
+        //no route
+    }
+    else if(waypoints.length == 1 ){
+        var destination = waypoints[0].location;
+        return destination
+    }
+    else if(waypoints.length > 1){
+        var destination=waypoints[0].location;
+        var farthest_distance=distance(destination,origin);
+        //var dist = google.maps.geometry.spherical.computeDistanceBetween(from, to);
+        for(var i=1;i<waypoints.length;i++) {
+            if (distance(waypoints[i].location, origin) > farthest_distance) {
+                farthest_distance = distance(waypoints[i].location, origin);
+                destination = waypoints[i].location;
+                return destination
+            }
+        }
+
+    }
+
+}
+
+function distance(position1,position2){
+    var lat1=position1.lat();
+    var lat2=position2.lat();
+    var lon1=position1.lng();
+    var lon2=position2.lng();
+    var R = 6371; // Radius of the earth in km
+    var dLat = toRadians(lat2-lat1);  // deg2rad below
+    var dLon = toRadians(lon2-lon1);
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c; // Distance in km
+    return d;
+}
+
+function toRadians(Value) {
+    /** Converts numeric degrees to radians */
+    return Value * Math.PI / 180;
+}
+
 
 function loadData() {
     const that = this;
@@ -135,7 +196,10 @@ function loadData() {
             console.log(waypoints)
             //return waypoints;
             //that.showFilteredMeasurements();
-            displayRoute(waypoints);
+            if(waypoints.length >0) {
+                displayRoute(waypoints);
+            }
+            return waypoints;
         }
     })
 }
@@ -185,6 +249,21 @@ function clear(items) {
 }
 // attach reload on watering type change
     $('#next-watering').on('change', function() {
-        loadData();
-    })
-initMap();
+        const waypoints =loadData();
+        if(waypoints === undefined || waypoints.length == 0) {
+            $('.added').remove();
+            $( "#mapid" ).append( "<h1 class='added' style='font-size: 32px;\n" +
+                "    color: #aaa;text-align: center'>No route - No box needs water</h1>" );
+        }else {
+            initMap();
+        };
+    });
+waypoints = loadData();
+if(waypoints === undefined || waypoints.length == 0) {
+    $('.added').remove();
+    $( "#mapid" ).append( "<h1 class='added' style='font-size: 32px;\n" +
+        "    color: #aaa;text-align: center'>No route - No box needs water</h1>" );
+}else {
+    initMap();
+};
+//initMap();

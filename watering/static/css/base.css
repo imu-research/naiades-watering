@@ -14,3 +14,8 @@ ul.errorlist {
 .site-footer {
     padding: 20px !important;
 }
+
+.nav-tabs>li>a.active {
+    background-color: #f5f7fa;
+    border: none;
+}
