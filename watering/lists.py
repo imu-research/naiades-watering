@@ -7,7 +7,7 @@ SOIL_TYPES = (
 
 
 FLOWER_TYPES = (
-    ("Νeed more water", _("Νeed more water")),
+    ("Need more water", _("Need more water")),
     ("Need less water", _("Need less water")),
 )
 

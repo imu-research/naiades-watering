@@ -33,41 +33,45 @@
                  <div class="form-group">
                      <label for="next-watering">Suggested watering day </label>
                      <select id="next-watering" class="form-control">
-                        <option value="">All</option>
-                        <option value="TODAY">Today</option>
-                        <option value="TOMORROW">Tomorrow</option>
-                        <option value="FUTURE">Later in the future</option>
-                        <option value="UNKNOWN">Unknown</option>
+                         {% if mode != "route" %}
+                             <option value="">All</option>
+                         {% endif %}
+
+                         <option value="TODAY">Today</option>
+                         <option value="TOMORROW">Tomorrow</option>
+
+                         {% if mode != "route" %}
+                             <option value="FUTURE">Later in the future</option>
+                             <option value="UNKNOWN">Unknown</option>
+                         {% endif %}
                      </select>
                  </div>
              </form>
          </div>
          <div class="col-md-3">
          </div>
-         <div class="col-md-3">
-            <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'"><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span> Configure a new Box</button>
-         </div>
+
+         {% if mode != "route" %}
+             <div class="col-md-3">
+                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'"><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span> Configure a new Box</button>
+             </div>
+         {% endif %}
      </div>
 
-    <div class="row" style="margin: 10px;">
-         <div class="col-md-4">
-{#                <div class="checkbox">#}
-{#                  <div class="icheckbox_flat" style="position: relative;"><input type="checkbox" id="flat-checkbox-1" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>#}
-{#                  <label for="flat-checkbox-1" class="">Need Watering</label>#}
-{#                </div>#}
-         </div>
-          <div class="col-md-2">
-{#                <div class="checkbox">#}
-{#                  <div class="icheckbox_flat checked" style="position: relative;"><input type="checkbox" id="flat-checkbox-2" checked="" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>#}
-{#                  <label for="flat-checkbox-2" class="">Water OK</label>#}
-{#                </div>#}
-          </div>
-          <div class="col-md-2">
-         </div>
-           <div class="col-md-4">
-                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">View suggested route for visiting boxes</button>
-           </div>
-    </div>
+    {% if mode != "route" %}
+        <div class="row" style="margin: 10px;">
+             <div class="col-md-4">
+             </div>
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-2">
+             </div>
+               <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">View suggested route for visiting boxes</button>
+               </div>
+        </div>
+    {% endif %}
+
     <div class="row" style="margin: 10px;">
         <div class="col-xs-12">
              <div id="container" style="min-height: 500px;"></div>
@@ -77,11 +81,13 @@
 {% endblock %}
 
 {% block js %}
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
-    <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places&v=3.2&sensor=false"></script>
     <script>
         window.RENDERING_MODE = "{{ mode }}";
     </script>
     <script src="{% static 'js/render.js' %}"></script>
+    {% if mode == "route" %}
+        <script src="{% static 'js/show-route.js' %}"></script>
+    {% endif %}
     <script src="{% static 'js/load-data.js' %}"></script>
 {% endblock %}

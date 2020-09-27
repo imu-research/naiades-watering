@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
 
     # List View
-    path('route/', views.view_route, name='route'),
+    path('route/', views.route_view, name='route'),
 
     # Box Edit
     path('edit/', views.box_edit, name='box-edit'),

@@ -53,6 +53,11 @@
     border-bottom: 1px solid #eee;
 }
 
+#StatusTable > .entry.last {
+    border-bottom-color: #aaa;
+    margin-bottom: 10px;
+}
+
 #StatusTable > .entry .title {
     font-size: 18px;
     font-weight: 600;
@@ -70,6 +75,7 @@
     color: white;
     border-radius: 4px;
     margin-top: 10px;
+    margin-left: 5px;
 }
 
 #main-container{

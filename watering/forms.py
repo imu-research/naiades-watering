@@ -8,7 +8,7 @@ from .lists import *
 
 
 class BoxForm(Form):
-    soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
+    #soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
     installed_at = CharField(required=True, label=_('Installation date'))
@@ -19,20 +19,20 @@ class BoxForm(Form):
         data = box.data
 
         return BoxForm({
-            "soil_type": data["soilType"],
+            #"soil_type": data["soilType"],
             "flowers_type": data["flowerType"],
             "sun_exposure": data["sunExposure"],
-            "installed_at": data["installationDate"],
-            "size": data["boxSize"],
+            #"installed_at": data["installationDate"],
+            #"size": data["boxSize"],
         })
 
     def as_box(self):
         return {
-            "soilType": self.data["soil_type"],
+            #"soilType": self.data["soil_type"],
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
-            "installationDate": self.data["installed_at"],
-            "boxSize": self.data["size"],
+            #"installationDate": self.data["installed_at"],
+            #"boxSize": self.data["size"],
         }
 
 

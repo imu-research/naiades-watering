@@ -171,73 +171,90 @@ $(function () {
                 "UNKNOWN": "Unknown"
             };
 
-            $.each(measurements, function(idx, meter) {
-                //const meter = measurement.box_id;
+            // for each next watering indication
+            $.each(["TODAY", "TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
+                // select measurements with this next watering indication
+                const filteredMeasurements = measurements.
+                    filter(meter => meter.nextWatering === nextWatering);
 
-                // calculate color
-                const color = that.getMeterColor(meter);
+                $.each(filteredMeasurements, function(idx, meter) {
+                    //const meter = measurement.box_id;
 
-                // create row
-                const $entry = $('<div />')
-                    .addClass("entry")
-                    .append(
-                        $('<div />').
-                            addClass("title").
-                            append(
-                                $('<a />')
-                                    .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                    .text(`Box #${meter.boxId}`)
-                            )
-                    )
-                    .append(
-                        $('<div />').text(`Humidity Level: ${meter.soilMoisture.toFixed(2) || '-'}`)
-                    )
-                    .append(
-                        $('<div />').html(`Suggested watering amount: ${meter.nextWateringAmountRecommendation} m<sup>3</sup>`)
-                    )
-                    .append(
-                        $('<div />')
-                            .append($('<span />').text("Suggested watering date: "))
-                            .append(
-                                $('<div />')
-                                    .addClass('next-watering-label')
-                                    .css('background-color', color)
-                                    .text(nextWateringMessages[meter.nextWatering] + (
-                                        meter.isSetup ? '' : ' - Setup Box'
-                                    ))
-                            )
-                    )
-                    .append(
-                        $('<div />')
-                            .addClass("actions")
-                            .append(
-                                $('<a />')
-                                    .attr('href', `/watering/box/${meter.boxId}/issues/`)
-                                    .addClass('btn btn-sm btn-primary')
-                                    .attr('title', 'List problems')
-                                    .css('margin-right', '5px')
-                                    .append($('<i class="glyphicon glyphicon-list"> List</i>'))
-                            )
-                            .append(
-                                $('<a />')
-                                    .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
-                                    .addClass('btn btn-sm btn-warning')
-                                    .attr('title', 'Report new problem')
-                                    .append($('<i class="glyphicon glyphicon-plus"> Report</i>'))
-                            )
-                    );
+                    // calculate color
+                    const color = that.getMeterColor(meter);
 
-                // add to items
-                that.items.push($entry);
+                    // create row
+                    const $entry = $('<div />')
+                        .addClass("entry")
+                        .addClass((idx === filteredMeasurements.length - 1) && "last")
+                        .append(
+                            $('<div />').
+                                addClass("title").
+                                append(
+                                    $('<a />')
+                                        .attr('href', `/watering/details/?id=${meter.boxId}`)
+                                        .text(`Box #${meter.boxId}`)
+                                )
+                        )
+                        .append(
+                            $('<div />').text(`Humidity Level: ${meter.soilMoisture.toFixed(2) || '-'}`)
+                        )
+                        .append(
+                            $('<div />')
+                                .append($('<span />').text("Suggested watering date: "))
+                                .append(
+                                    ['TODAY', 'TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
+                                    $('<span />').text(meter.nextWateringDeadline.split("T")[0] || "-")
+                                )
+                                .append(
+                                    $('<div />')
+                                        .addClass('next-watering-label')
+                                        .css('background-color', color)
+                                        .text(nextWateringMessages[meter.nextWatering] + (
+                                            meter.isSetup ? '' : ' - Setup Box'
+                                        ))
+                                )
+                        )
+                        .append(
+                            $('<div />')
+                                .addClass("actions")
+                                .append($('<div />')
+                                    .addClass('btn-group')
+                                    .append(
+                                        $('<a />')
+                                            .attr('href', `/watering/box/${meter.boxId}/issues/`)
+                                            .addClass('btn btn-sm btn-default')
+                                            .attr('title', 'List problems')
+                                            .append($('<i class="glyphicon glyphicon-list" />'))
+                                            .append($('<span />').text('Issues').css('margin-left', 5))
+                                    )
+                                    .append(
+                                        $('<a />')
+                                            .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
+                                            .addClass('btn btn-sm btn-default')
+                                            .attr('title', 'Report new problem')
+                                            .append($('<i class="glyphicon glyphicon-plus" />'))
+                                            .append($('<span />').text('Report new issue').css('margin-left', 5))
+                                    )
+                                )
+                        );
 
-                // show
-                that.$table.append($entry);
+                    // add to items
+                    that.items.push($entry);
+
+                    // show
+                    that.$table.append($entry);
+                });
             });
         },
 
         render: function(measurements) {
             if (this.mode === "map") {
                 return this.renderMap(measurements);
+            }
+
+            if (this.mode === "route") {
+                return window.NaiadesRouter.renderRoute(measurements);
             }
 
             return this.renderList(measurements);
