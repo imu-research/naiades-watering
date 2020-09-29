@@ -79,11 +79,11 @@ $(function () {
             window.NaiadesRender.clear();
 
             // filter
-            const measurements = this.measurements
+            this.filteredMeasurements = this.measurements
                 .filter(box => nextWatering === "" || box.nextWatering === nextWatering);
 
             // show points
-            window.NaiadesRender.render(measurements);
+            window.NaiadesRender.render(this.filteredMeasurements);
         },
 
         isSetup: function(meter) {

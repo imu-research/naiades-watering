@@ -18,6 +18,11 @@ $(function () {
                     //accessToken: 'pk.eyJ1IjoiZXZhbmdlbGllOTAiLCJhIjoiY2thanU1YzFrMGU5MDJ6anVtY3FpdDQwaiJ9.G5trmcJe4LgebhQxVzgVMw'
                 }
             ).addTo(this.map);
+
+            // on map click, capture position
+            this.map.on('click', function(e){
+                console.log(e.latlng);
+            });
         },
 
         initializeList: function() {

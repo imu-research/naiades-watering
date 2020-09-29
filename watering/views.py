@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.timezone import now
 
+from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
 from watering.models import WateringBox, Issue
 
@@ -136,6 +137,7 @@ def show_watering_points(request, mode):
     return render(request, 'watering/view.html', {
         'boxes': boxes,
         'mode': mode,
+        'TESTING': DEBUG,
     })
 
 

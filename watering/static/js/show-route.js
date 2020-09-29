@@ -69,55 +69,34 @@ $(function() {
             });
         },
 
-        displayRoute: function(waypoints) {
-            //const waypoints = loadData();
-            const that = this;
-
+        displayRoute: function(startPosition, waypoints) {
             var pointA = new google.maps.LatLng(46.1844399,6.1403968),
-            pointB = new google.maps.LatLng(46.1844509,6.1404972),
-            //w1 = new google.maps.LatLng(46.1842538, 6.1378354),
-            //w2 = new google.maps.LatLng(46.184193, 6.13911),
-            //waypointsArray = [{location:w1, stopover:true}, {location:w2, stopover:true}],
-            waypointsArray = waypoints,
-            myOptions = {
-              zoom: 7,
-              center: pointA
-            },
-            map = new google.maps.Map(document.getElementById(NaiadesRender.containerId), myOptions),
-            // Instantiate a directions service.
-            directionsService = new google.maps.DirectionsService,
-            directionsDisplay = new google.maps.DirectionsRenderer({
-              map: map
-            });
+                waypointsArray = waypoints,
+                myOptions = {
+                  zoom: 7,
+                  center: pointA
+                },
+                map = new google.maps.Map(document.getElementById(NaiadesRender.containerId), myOptions),
+                // Instantiate a directions service.
+                directionsService = new google.maps.DirectionsService,
+                directionsDisplay = new google.maps.DirectionsRenderer({
+                  map: map
+                });
 
+            const startLatLng = new google.maps.LatLng(startPosition.lat, startPosition.lng);
 
-          // get route from current position to point B
-          if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(
-                  function (position) {
-                      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                      //Find destination the farthest box from current position
-                      var destination = that.findDestination(pos,waypointsArray);
+            //Find destination the farthest box from posit
+            const destination = this.findDestination(startLatLng, waypointsArray);
 
-                      if (!destination) {
-                          return
-                      }
-                      // get route from current position to destination
-                      that.calculateAndDisplayRoute(directionsService, directionsDisplay, pos, destination.final, destination.waypoints);
-                  }
-              );
-          }
-          else {
-              var posit = new google.maps.LatLng(46.1844399,6.1403968);
-              //Find destination the farthest box from posit
-              var destination = this.findDestination(posit,waypointsArray);
-              //Remove destination from waypoints
-              if (!destination) {
-                  return
-              }
-              // get route from current position to destination
-              this.calculateAndDisplayRoute(directionsService, directionsDisplay, posit, destination.final, destination.waypoints);
+            //Remove destination from waypoints
+            if (!destination) {
+                return
             }
+
+            // get route from current position to destination
+            this.calculateAndDisplayRoute(
+                directionsService, directionsDisplay, startLatLng, destination.final, destination.waypoints
+            );
         },
 
         renderRoute: function(meters) {
@@ -131,7 +110,7 @@ $(function() {
                 });
             });
 
-            this.displayRoute(waypoints);
+            this.displayRoute(LocationManager.devLocations[0], waypoints);
         }
     };
 });
