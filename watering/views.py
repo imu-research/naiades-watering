@@ -7,7 +7,7 @@ from django.utils.timezone import now
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
-from watering.models import WateringBox, Issue
+from watering.models import WateringBox, Issue, Sensor
 
 
 def home(request):
@@ -28,6 +28,7 @@ def home(request):
 
 
 def box_create(request):
+
     if request.method == "POST":
         form = BoxSetupForm(request.POST)
 
@@ -45,10 +46,23 @@ def box_create(request):
             })
 
     else:
+        # get sensors
+        sensors = Sensor.list()
+        #Get connected sensors
+        connected_sensors = WateringBox.sensors_list()
+
+        available_sensors = []
+
+        for sensor in sensors:
+            if sensor["serialNumber"] not in connected_sensors:
+                available_sensors.append(sensor)
+
+
         form = BoxSetupForm()
 
     return render(request, 'watering/create.html', {
         'form': form,
+        'sensors': available_sensors,
     })
 
 

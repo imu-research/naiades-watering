@@ -107,6 +107,34 @@ $(function() {
 
             // move to next location
             this.devLocationsIdx = (this.devLocationsIdx + 1) % this.devLocations.length;
-        }
+        },
+
+        getDistance: function(position1, position2){
+            const lat1 = position1.lat;
+            const lat2 = position2.lat;
+            const lon1 = position1.lng;
+            const lon2 = position2.lng;
+
+            var R = 6371; // Radius of the earth in km
+            var dLat = this.toRadians(lat2-lat1);  // deg2rad below
+            var dLon = this.toRadians(lon2-lon1);
+            var a = (
+                Math.sin(dLat/2) *
+                Math.sin(dLat/2)
+            ) + (
+                Math.cos(this.toRadians(lat1)) *
+                Math.cos(this.toRadians(lat2)) *
+                Math.sin(dLon/2) *
+                Math.sin(dLon/2)
+            );
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            var d = R * c; // Distance in km
+            return d;
+        },
+
+        toRadians: function(Value) {
+            /** Converts numeric degrees to radians */
+            return Value * Math.PI / 180;
+        },
     };
 });

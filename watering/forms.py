@@ -24,6 +24,7 @@ class BoxForm(Form):
             "sun_exposure": data["sunExposure"],
             #"installed_at": data["installationDate"],
             #"size": data["boxSize"],
+
         })
 
     def as_box(self):
@@ -33,11 +34,15 @@ class BoxForm(Form):
             "sunExposure": self.data["sun_exposure"],
             #"installationDate": self.data["installed_at"],
             #"boxSize": self.data["size"],
+            "refDevice": self.data["sensor"],
         }
 
 
 class BoxSetupForm(BoxForm):
     box_id = CharField(required=True, label=_('Box ID'))
+
+    #Sensor id
+    sensor = ChoiceField(required=True, label=_('Sensor ID'))
 
     # location information
     address = CharField(required=True)

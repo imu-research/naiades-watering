@@ -32,6 +32,17 @@
 
         $('.form-group input, .form-group select, .form-group textarea').
             addClass('form-control');
+
+        var sensors = {{ sensors|safe }};
+        var myOptions = {};
+        for(var i=0;i<sensors.length;i++){
+            myOptions[sensors[i].serialNumber] = sensors[i].serialNumber+' ('+sensors[i].name+')';
+        }
+        myOptions[""] = "No sensor";
+
+        $.each(myOptions, function(val, text) {
+            $('#id_sensor').append( new Option(text,val) );
+        });
     </script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
     <script src="{% static 'js/map.js' %}"></script>

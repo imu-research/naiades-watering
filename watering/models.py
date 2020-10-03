@@ -50,11 +50,25 @@ class OrionEntity(object):
     def history(self, service, entity_id):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/soilMoistureVwc/value',
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/soilMoisture/value?lastN=100',
             headers={
                     'Fiware-Service': 'carouge',
-                    'Fiware-ServicePath': '/Watering',
-                    'Accept': 'application/json'}
+                    'Fiware-ServicePath': '/',
+                    }
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            raise OrionError(response.content)
+
+        # return list
+        return response.json()
+
+    def sensor_list(self, service):
+        # list entities
+        response = requests.get(
+            f'http://{self.endpoint}/v2/entities/?type=Device&options=keyValues',
+            headers=self.get_headers(service=service)
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -144,6 +158,28 @@ class WateringBox(Model):
 
         return results
 
+    @staticmethod
+    def sensors_list():
+        # list flowerbeds in Orion
+        # filter only flowerbed entities
+        flowerbeds = [
+            entity
+            for entity in OrionEntity().list(service=WateringBox.service)
+            if entity["type"] == WateringBox.type
+        ]
+
+        # create WateringBox instances
+        sensors = []
+
+        for flowerbed in flowerbeds:
+            # get sensor Id
+            refDevice = flowerbed.get("refDevice")
+
+            if refDevice or refDevice == 0:
+                sensors.append(refDevice)
+
+        return sensors
+
 
 class Issue(Model):
     """
@@ -156,3 +192,36 @@ class Issue(Model):
     resolved = BooleanField(default=False)
     submitted_by = ForeignKey('auth.User', on_delete=SET_NULL, blank=True, null=True)
     description = TextField()
+
+
+class Sensor(Model):
+    """
+    Information about a sensor, saved locally
+    TODO migrate to API
+    """
+    id = CharField(max_length=16, primary_key=True, db_index=True)
+    data = JSONField(blank=True, default=dict)
+
+    service = 'carouge'
+
+    @staticmethod
+    def get(sensor_id):
+        try:
+            return [
+                sensor
+                for sensor in Sensor.list()
+                if sensor.id == sensor_id
+            ][0]
+        except IndexError:
+            raise Sensor.DoesNotExist()
+
+    @staticmethod
+    def list():
+        # list flowerbeds in Orion
+        # filter only flowerbed entities
+        sensors = [
+            entity
+            for entity in OrionEntity().sensor_list(service=Sensor.service)
+        ]
+
+        return sensors

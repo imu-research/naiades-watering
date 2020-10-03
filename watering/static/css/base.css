@@ -19,3 +19,32 @@ ul.errorlist {
     background-color: #f5f7fa;
     border: none;
 }
+
+/* Geofencing */
+#geofencing-notification-container {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    bottom: 0;
+}
+
+#geofencing-notification-container .notification {
+    padding: 10px 20px;
+    margin: 20px;
+    background: #0b859c;
+    color: white;
+    position: relative
+}
+
+#geofencing-notification-container .notification .message {
+    margin-bottom: 10px;
+}
+
+#geofencing-notification-container .notification .btn {
+    padding: 0 10px;
+}
+
+#geofencing-notification-container .notification .btn.btn-danger {
+    position: absolute;
+    right: 20px;
+}

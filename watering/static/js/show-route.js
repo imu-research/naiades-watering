@@ -10,7 +10,7 @@ $(function() {
             let maxDistanceIdx = -1;
             const that = this;
             $.each(waypoints, function(idx, waypoint) {
-                const distance = that.distance(waypoint.location, origin);
+                const distance = that.getDistance(waypoint.location, origin);
 
                 if (distance > maxDistance) {
                     maxDistance = distance;
@@ -26,31 +26,14 @@ $(function() {
             };
         },
 
-        distance: function(position1,position2){
-            var lat1=position1.lat();
-            var lat2=position2.lat();
-            var lon1=position1.lng();
-            var lon2=position2.lng();
-            var R = 6371; // Radius of the earth in km
-            var dLat = this.toRadians(lat2-lat1);  // deg2rad below
-            var dLon = this.toRadians(lon2-lon1);
-            var a = (
-                Math.sin(dLat/2) *
-                Math.sin(dLat/2)
-            ) + (
-                Math.cos(this.toRadians(lat1)) *
-                Math.cos(this.toRadians(lat2)) *
-                Math.sin(dLon/2) *
-                Math.sin(dLon/2)
-            );
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            var d = R * c; // Distance in km
-            return d;
-        },
-
-        toRadians: function(Value) {
-            /** Converts numeric degrees to radians */
-            return Value * Math.PI / 180;
+        getDistance: function(position1, position2) {
+            return LocationManager.getDistance({
+                lat: position1.lat(),
+                lng: position1.lng()
+            }, {
+                lat: position2.lat(),
+                lng: position2.lng()
+            })
         },
 
         calculateAndDisplayRoute: function(directionsService, directionsDisplay, pointA, pointB,waypointsArray) {
@@ -70,18 +53,21 @@ $(function() {
         },
 
         displayRoute: function(startPosition, waypoints) {
-            var pointA = new google.maps.LatLng(46.1844399,6.1403968),
-                waypointsArray = waypoints,
-                myOptions = {
-                  zoom: 7,
-                  center: pointA
-                },
-                map = new google.maps.Map(document.getElementById(NaiadesRender.containerId), myOptions),
-                // Instantiate a directions service.
-                directionsService = new google.maps.DirectionsService,
-                directionsDisplay = new google.maps.DirectionsRenderer({
-                  map: map
-                });
+
+            const pointA = new google.maps.LatLng(46.1844399,6.1403968);
+            const waypointsArray = waypoints;
+            const myOptions = {
+                zoom: 7,
+                center: pointA
+            };
+
+            this.map = new google.maps.Map(document.getElementById(NaiadesRender.containerId), myOptions);
+
+            // Instantiate a directions service.
+            const directionsService = new google.maps.DirectionsService;
+            const directionsDisplay = new google.maps.DirectionsRenderer({
+                map: this.map
+            });
 
             const startLatLng = new google.maps.LatLng(startPosition.lat, startPosition.lng);
 
@@ -97,6 +83,20 @@ $(function() {
             this.calculateAndDisplayRoute(
                 directionsService, directionsDisplay, startLatLng, destination.final, destination.waypoints
             );
+        },
+
+        setCurrentPositionMarker(position) {
+            const mapsPosition = new google.maps.LatLng(position.lat, position.lng);
+
+            if (!this.currentPositionMarker) {
+                this.currentPositionMarker = new google.maps.Marker({
+                    position: mapsPosition,
+                    title: 'Your current location',
+                    map: this.map,
+                });
+            } else {
+                this.currentPositionMarker.setPosition(mapsPosition);
+            }
         },
 
         renderRoute: function(meters) {

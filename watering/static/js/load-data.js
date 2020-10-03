@@ -17,6 +17,13 @@ $(function () {
                     const today = new Date();
 
                     $.each(boxes, function(idx, box) {
+
+                        // set position
+                        box.location.position = {
+                            lat: box.location.coordinates[1],
+                            lng: box.location.coordinates[0]
+                        };
+
                         // check if setup
                         box.isSetup = that.isSetup(box);
 
@@ -100,7 +107,7 @@ $(function () {
 
     };
 
-    // run map component
+    // run data component
     NaiadesWateringData.load();
 
     // attach reload on watering type change

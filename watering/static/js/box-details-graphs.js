@@ -7,7 +7,7 @@ var chart = AmCharts.makeChart("chart-history", {
     "marginLeft": 40,
     "autoMarginOffset": 20,
     "mouseWheelZoomEnabled":true,
-    "dataDateFormat": "YYYY-MM-DDTJJ:NN:SS.QQQ",
+    "dataDateFormat": "YYYY-MM-DD"+'T'+"JJ:NN:SS.QQQ",
     "titles": [
                     {
                         "id": "Title-1",
@@ -59,8 +59,10 @@ var chart = AmCharts.makeChart("chart-history", {
         "autoGridCount":true,
         "color":"#AAAAAA"*/
     },
-    /*"chartCursor": {
-        "pan": true,
+    "chartCursor": {
+        "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
+        "cursorPosition": "mouse",
+        //"pan": true,
         "valueLineEnabled": true,
         "valueLineBalloonEnabled": true,
         "cursorAlpha":1,
@@ -69,7 +71,7 @@ var chart = AmCharts.makeChart("chart-history", {
         "valueLineAlpha":0.2,
         "valueZoomable":true
     },
-    "valueScrollbar":{
+    /*"valueScrollbar":{
       "oppositeAxis":false,
       "offset":50,
       "scrollbarHeight":10
@@ -77,8 +79,9 @@ var chart = AmCharts.makeChart("chart-history", {
     "categoryField": "date",
     "categoryAxis": {
         "parseDates": true,
-        "dashLength": 1,
-        "minorGridEnabled": true
+        //"dashLength": 1,
+        //"minorGridEnabled": true,
+        "minPeriod": "mm",
     },
     "export": {
         "enabled": true,
