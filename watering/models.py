@@ -36,6 +36,17 @@ class OrionEntity(object):
         # return list
         return response.json()
 
+    def create(self, service, data):
+        response = requests.patch(
+            f'http://{self.endpoint}/v2/entities/?options=keyValues',
+            headers=self.get_headers(service=service),
+            json=data,
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            raise OrionError(response.content)
+
     def update(self, service, entity_id, data):
         response = requests.patch(
             f'http://{self.endpoint}/v2/entities/{entity_id}/attrs?options=keyValues',
@@ -131,6 +142,12 @@ class WateringBox(Model):
 
     @staticmethod
     def post(box_id, data):
+        if not box_id:
+            return OrionEntity().create(
+                service=WateringBox.service,
+                data=data
+            )
+
         # update box id
         OrionEntity().update(
             service=WateringBox.service,

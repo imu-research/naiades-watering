@@ -1,4 +1,5 @@
 from django.forms import Form, ModelForm
+from django.forms.widgets import Select
 from django.forms.fields import CharField, DateField, ChoiceField, DecimalField
 
 from django.utils.translation import gettext as _
@@ -35,7 +36,7 @@ class BoxForm(Form):
             "sunExposure": self.data["sun_exposure"],
             #"installationDate": self.data["installed_at"],
             #"boxSize": self.data["size"],
-            "refDevice": self.data["sensor"],
+            "refDevice": self.data["sensor"] if self.data["sensor"] != "none" else None,
         }
 
 
@@ -43,12 +44,32 @@ class BoxSetupForm(BoxForm):
     box_id = CharField(required=True, label=_('Box ID'))
 
     #Sensor id
-    sensor = ChoiceField(required=True, label=_('Sensor ID'))
+    sensor = CharField(required=True, label=_('Sensor ID'), widget=Select)
 
     # location information
     address = CharField(required=True)
     latitude = DecimalField()
     longitude = DecimalField()
+
+    def as_box(self):
+        data = super().as_box()
+
+        data.update({
+            "id": f"urn:ngsi-ld:FlowerBed:FlowerBed-{self.data['box_id']}",
+            "type": "FlowerBed",
+            "flowerType": self.data.get('flowers_type'),
+            "location": {
+                "coordinates": [
+                    float(self.data["latitude"]),
+                    float(self.data["longitude"]),
+                ],
+                "type": "Point"
+            },
+            "soilMoisture": 0,
+            "sunExposure": self.data.get('sun_exposure')
+        })
+
+        return data
 
 
 class IssueForm(ModelForm):

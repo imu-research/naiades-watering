@@ -38,7 +38,7 @@
         for(var i=0;i<sensors.length;i++){
             myOptions[sensors[i].serialNumber] = sensors[i].serialNumber+' ('+sensors[i].name+')';
         }
-        myOptions["null"] = "No sensor";
+        myOptions["none"] = "No sensor";
 
         $.each(myOptions, function(val, text) {
             $('#id_sensor').append( new Option(text,val) );

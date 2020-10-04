@@ -45,15 +45,9 @@ def box_create(request):
         # check if valid & create box
         if form.is_valid():
             # post to API
-            WateringBox.post(box_id=None, data=form.data)
+            WateringBox.post(box_id=None, data=form.as_box())
 
-            # get boxes for this user
-            boxes = WateringBox.list()
-
-            return render(request, 'watering/map.html', {
-                'boxes': boxes,
-                'mode': "map",
-            })
+            return redirect('/watering/map/')
 
     else:
         form = BoxSetupForm()
