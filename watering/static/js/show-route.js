@@ -90,6 +90,7 @@ $(function() {
 
             if (!this.currentPositionMarker) {
                 this.currentPositionMarker = new google.maps.Marker({
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                     position: mapsPosition,
                     title: 'Your current location',
                     map: this.map,

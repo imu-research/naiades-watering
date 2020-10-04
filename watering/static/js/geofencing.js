@@ -9,7 +9,6 @@ $(function() {
         },
 
         notify(localMeasurements) {
-            console.log(localMeasurements);
             // clear old notifications
             this.clear();
 
@@ -18,15 +17,28 @@ $(function() {
 
             // show notification for each box
             $.each(localMeasurements, function(idx, measurement) {
-                $container.append($('<div />')
+                const onHideNotification = function() {
+                    $notification.remove();
+                };
+
+                const $notification = $('<div />')
                     .addClass('notification')
                     .append($('<div />')
                         .addClass('message')
                         .text(`Are you watering box #${measurement.boxId}?`)
                     )
-                    .append($('<button />').addClass('btn btn-success').text('Yes'))
-                    .append($('<button />').addClass('btn btn-danger').text('No'))
-                );
+                    .append($('<button />')
+                        .addClass('btn btn-success')
+                        .text('Yes')
+                        .on('click', onHideNotification)
+                    )
+                    .append($('<button />')
+                        .addClass('btn btn-danger')
+                        .text('No')
+                        .on('click', onHideNotification)
+                    );
+
+                $container.append($notification);
             });
         }
     };

@@ -28,6 +28,16 @@ def home(request):
 
 
 def box_create(request):
+    # get sensors
+    sensors = Sensor.list()
+    # Get connected sensors
+    connected_sensors = WateringBox.sensors_list()
+
+    available_sensors = []
+
+    for sensor in sensors:
+        if sensor["serialNumber"] not in connected_sensors:
+            available_sensors.append(sensor)
 
     if request.method == "POST":
         form = BoxSetupForm(request.POST)
@@ -46,18 +56,6 @@ def box_create(request):
             })
 
     else:
-        # get sensors
-        sensors = Sensor.list()
-        #Get connected sensors
-        connected_sensors = WateringBox.sensors_list()
-
-        available_sensors = []
-
-        for sensor in sensors:
-            if sensor["serialNumber"] not in connected_sensors:
-                available_sensors.append(sensor)
-
-
         form = BoxSetupForm()
 
     return render(request, 'watering/create.html', {

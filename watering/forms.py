@@ -11,7 +11,7 @@ class BoxForm(Form):
     #soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
-    installed_at = CharField(required=True, label=_('Installation date'))
+    #installed_at = CharField(required=True, label=_('Installation date'))
     size = ChoiceField(required=True, label=_('Box size'), choices=BOX_SIZES)
 
     @staticmethod
@@ -24,6 +24,7 @@ class BoxForm(Form):
             "sun_exposure": data["sunExposure"],
             #"installed_at": data["installationDate"],
             #"size": data["boxSize"],
+            "refDevice": data["refDevice"],
 
         })
 

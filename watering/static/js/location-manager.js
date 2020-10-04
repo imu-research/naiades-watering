@@ -28,24 +28,27 @@ $(function() {
                 }
             }
 
-            // update new location
-            if (
+            // check if position changed
+            if (!(
                 ((locationInfo.position || {}).lat !== ((this.locationInfo || {}).position || {}).lat) ||
                 ((locationInfo.position || {}).lng !== ((this.locationInfo || {}).position || {}).lng)
-            ) {
-                const positionUpdateCallbacks = this.positionUpdateCallbacks;
-                $.each(Object.entries(positionUpdateCallbacks), function(idx, info) {
-                    try {
-                        // trigger callback with new location
-                        positionUpdateCallbacks[info[0]](LocationManager.locationInfo);
-                    } catch {
-                        // ignore callback failures
-                    }
-                })
+            )) {
+                return
             }
 
-            // swap location info object
+            // update location info object
             this.locationInfo = locationInfo;
+
+            // trigger callbacks
+            const positionUpdateCallbacks = this.positionUpdateCallbacks;
+            $.each(Object.entries(positionUpdateCallbacks), function(idx, info) {
+                try {
+                    // trigger callback with new location
+                    positionUpdateCallbacks[info[0]](locationInfo);
+                } catch {
+                    // ignore callback failures
+                }
+            });
         },
 
         start: function() {

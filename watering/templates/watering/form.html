@@ -60,7 +60,7 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-6 col-xs-12 ">
+        <!--<div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_installed_at">Installation date:</label>
                 <input type="text" name="installed_at" required="" id="id_installed_at" class="form-control" value="{{ form.data.installed_at }}">
@@ -68,7 +68,17 @@
                     <span class="o-red">{{ form.errors.installed_at }}</span>
                 {% endif %}
             </div>
+        </div> -->
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_refDevice">Sensor ID:</label>
+                <input type="text" name="refDevice" required="" id="id_refDevice" class="form-control" value="{{ form.data.refDevice }}">
+                {% if form.errors.refDevice %}
+                    <span class="o-red">{{ form.errors.refDevice }}</span>
+                {% endif %}
+            </div>
         </div>
+
 
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
