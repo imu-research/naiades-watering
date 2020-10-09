@@ -72,7 +72,10 @@
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_refDevice">Sensor ID:</label>
-                <input type="text" name="refDevice" required="" id="id_refDevice" class="form-control" value="{{ form.data.refDevice }}">
+                <select name="refDevice" id="id_refDevice" class="form-control">
+                  <option value="{{ form.data.refDevice }}" {% if form.data.refDevice %}selected{% endif %}>{{ form.data.refDevice }}</option>
+                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>None</option>
+                </select>
                 {% if form.errors.refDevice %}
                     <span class="o-red">{{ form.errors.refDevice }}</span>
                 {% endif %}

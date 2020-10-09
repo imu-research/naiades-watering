@@ -85,3 +85,11 @@
 #data{
     padding: 50px 0 !important;
 }
+
+/* Next watering message */
+#next-box-watering {
+    padding: 10px;
+    background: white;
+    color: #777;
+    box-shadow: 2px 2px 3px 3px #eee;
+}

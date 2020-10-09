@@ -1,4 +1,4 @@
-function exportReport() {
+function exportReport(box_data) {
 
   // So that we know export was started
   console.log("Starting export...");
@@ -35,7 +35,7 @@ function exportReport() {
           if (charts_remaining == 0) {
             // Yup, we got all of them
             // Let's proceed to putting PDF together
-            generatePDF();
+            generatePDF(box_data);
           }
 
         });
@@ -43,7 +43,7 @@ function exportReport() {
     }
   }
 
-  function generatePDF() {
+  function generatePDF(data) {
 
     // Log
     console.log("Generating PDF...");
@@ -56,18 +56,14 @@ function exportReport() {
     // Let's add a custom title
     layout.content.push({
       "text": "Water Consumption Report",
-      "fontSize": 15
+      "fontSize": 15,
+       "alignment": "center"
     });
 
     // Now let's grab actual content from our <p> intro tag
     /*layout.content.push({
       "text": document.getElementById("intro").innerHTML
     }); */
-    // Let's add graph title
-    layout.content.push({
-      "text": "Humidity History Graph",
-      "fontSize": 8
-    });
 
     // Put two next charts side by side in columns
     layout.content.push({
@@ -78,6 +74,46 @@ function exportReport() {
      layout.content.push({
       "image": charts["chart-prediction"].exportedImage,
       "fit": [523, 300]
+    });
+
+     layout.content.push({
+      text: 'Box Details', fontSize: 14, bold: true, margin: [0, 20, 0, 8]
+    });
+
+    layout.content.push({
+      table: {
+                widths: [120, 120, 120, 120],
+                heights: 60,
+				body: [
+					//[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
+					['Box ID:', data.boxId, 'Type of soil:', 'Terrau'],
+                    ['Type of flowers:', data.flowerType, 'Exposure to sun:', data.sunExposure],
+                    ['Sensor ID:', data.refDevice, 'Humidity', data.soilMoisture]
+				]
+			},
+      layout: 'noBorders'
+    });
+
+    // Let's add table
+
+    layout.content.push({
+      text: 'Watering Logs:', fontSize: 14, bold: true, margin: [0, 20, 0, 8]
+    });
+
+    layout.content.push({
+      table: {
+				//headerRows: 1,
+				// dontBreakRows: true,
+				// keepWithHeaderRows: 1,
+                widths: [150, 150, 150],
+				body: [
+					[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
+					['20/10/2020', '0.5 lt', 'Comments'],
+                    ['23/10/2020', '0.5 lt', 'Comments'],
+                    ['25/10/2020', '0.5 lt', 'Comments']
+				]
+			},
+      layout: 'lightHorizontalLines'
     });
 
 
@@ -97,12 +133,14 @@ function exportReport() {
       }],
       "columnGap": 10
     });*/
+    var now = new Date();
 
     // Trigger the generation and download of the PDF
     // We will use the first chart as a base to execute Export on
     chart["export"].toPDF(layout, function(data) {
-      this.download(data, "application/pdf", "amCharts.pdf");
+      this.download(data, "application/pdf", "Report-"+now+".pdf");
     });
+
 
   }
 

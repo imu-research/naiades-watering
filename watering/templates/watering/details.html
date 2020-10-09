@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <h3 style="margin-top:0%;margin-left:3%;">{% trans "Box #" %}{{ box.id }}</h3>
+    <h3 style="margin-top:0%;margin-left:3%;">{% trans "Box #" %}{{ box.id }} </h3>
     <div class="row" style="margin: 10px;">
         <!--<div class="col-md-6">
                 <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
@@ -17,7 +17,7 @@
                 <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">{% trans "Start Watering" %}</button>
            </div>
            <div class="col-md-9">
-               <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport();">
+               <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | safe }} );">
                         <i class="glyphicon glyphicon-print"></i>
                       </button>
            </div>
