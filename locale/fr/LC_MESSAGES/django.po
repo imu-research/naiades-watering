@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-17 17:45+0300\n"
+"POT-Creation-Date: 2020-10-17 18:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,18 @@ msgstr ""
 #: .\templates\registration\login.html:29
 msgid "Use your credentials to access Naiades Watering."
 msgstr ""
+
+#: .\templates\util\js-translations.html:5
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: .\templates\util\js-translations.html:6
+msgid "Tomorrow"
+msgstr "Demain"
+
+#: .\templates\util\js-translations.html:7
+msgid "List problems"
+msgstr "Répertorier les problèmes"
 
 #: .\watering\forms.py:13
 msgid "Type of flowers"

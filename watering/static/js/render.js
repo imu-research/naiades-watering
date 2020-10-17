@@ -175,8 +175,8 @@ $(function () {
             const that = this;
 
             const nextWateringMessages = {
-                "TODAY": "Today",
-                "TOMORROW": "Tomorrow",
+                "TODAY": window.MESSAGES.today,
+                "TOMORROW": window.MESSAGES.tomorrow,
                 "FUTURE": "Later than tomorrow",
                 "UNKNOWN": "Unknown"
             };
@@ -256,7 +256,7 @@ $(function () {
                                         $('<a />')
                                             .attr('href', `/watering/box/${meter.boxId}/issues/`)
                                             .addClass('btn btn-sm btn-default')
-                                            .attr('title', 'List problems')
+                                            .attr('title', window.MESSAGES.listProblems)
                                             .append($('<i class="glyphicon glyphicon-list" />'))
                                             .append($('<span />').text('Issues').css('margin-left', 5))
                                     )
