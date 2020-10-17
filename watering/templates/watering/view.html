@@ -13,11 +13,11 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
           <li class="nav-item">
             <a class="nav-link{% if request.path == "/watering/list/" %} active{% endif %}" id="home-tab" href="/watering/list" role="tab" aria-controls="home"
-              aria-selected="true">Liste</a>
+              aria-selected="true">{% trans "List" %}</a>
           </li>
           <li class="nav-item">
             <a class="nav-link{% if request.path == "/watering/map/" %} active{% endif %}" id="profile-tab" href="/watering/map" role="tab" aria-controls="profile"
-              aria-selected="false">Carte</a>
+              aria-selected="false">{% trans "Map" %}</a>
           </li>
         </ul>
      </div>
@@ -31,7 +31,7 @@
 {#                    </div>#}
              <form class="form-inline">
                  <div class="form-group">
-                     <label for="next-watering">Suggested watering day </label>
+                     <label for="next-watering">{% trans "Suggested watering day" %} </label>
                      <select id="next-watering" class="form-control">
                          {% if mode != "route" %}
                              <option value="">All</option>

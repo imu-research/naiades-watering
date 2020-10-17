@@ -1,5 +1,7 @@
 {% load static %}
 
+{% load i18n %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -46,6 +48,25 @@
               <li><a class="nav-link" href="color-picker.html">Color Picker</a></li>
             </ul> -->
               <ul class="nav navbar-nav navbar-right">
+                <li>
+                    {% get_current_language as LANGUAGE_CODE %}
+
+                    <div id="language-picker">
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                            <input name="language" type="hidden" value="en" />
+                            <button role="option" {% if LANGUAGE_CODE == "en" %}disabled{% endif %} class="btn btn-sm {% if LANGUAGE_CODE == "en" %}btn-primary{% else %}btn-default{% endif %}">EN</button>
+                        </form>
+
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                            <input name="language" type="hidden" value="fr" />
+                            <button role="option" {% if LANGUAGE_CODE == "fr" %}disabled{% endif %} class="btn btn-sm {% if LANGUAGE_CODE == "fr" %}btn-primary{% else %}btn-default{% endif %}">FR</button>
+                        </form>
+                    </div>
+                </li>
                     <!--<li><a class="nav-link" href="{% url 'box-map' %}">Carte</a></li>
                     <li><a class="nav-link" href="{% url 'box-list' %}">Liste</a></li> -->
                     <!-- /.dropdown -->
@@ -61,6 +82,7 @@
                             {% endif %}
                             <i class="fa fa-caret-down"></i>
                         </a>
+
                         <ul class="dropdown-menu dropdown-user">
 
                             {% if request.user.is_authenticated %}
@@ -94,8 +116,8 @@
       <div class="site-footer">
         <div class="container">
           <div class="copyright clearfix">
-              <p><b>IMU</b> of ICCS
-                  <p>© 2020 All rights reserved – developed in the NAIADES project</p>
+              <p><b>IMU</b> {% trans "of ICCS" %}
+                  <p>© 2020 {% trans "All rights reserved – developed in the NAIADES project" %}</p>
           </div>
         </div>
       </div>

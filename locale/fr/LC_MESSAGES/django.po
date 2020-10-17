@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-17 17:45+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\templates\base.html:119
+msgid "of ICCS"
+msgstr "de ICCS"
+
+#: .\templates\base.html:120
+msgid "All rights reserved – developed in the NAIADES project"
+msgstr ""
+
+#: .\templates\registration\login.html:24
+msgid "Please login to continue"
+msgstr ""
+
+#: .\templates\registration\login.html:29
+msgid "Use your credentials to access Naiades Watering."
+msgstr ""
+
+#: .\watering\forms.py:13
+msgid "Type of flowers"
+msgstr ""
+
+#: .\watering\forms.py:14
+msgid "Exposure to sun"
+msgstr ""
+
+#: .\watering\forms.py:44
+msgid "Box ID"
+msgstr ""
+
+#: .\watering\forms.py:47
+msgid "Sensor ID"
+msgstr ""
+
+#: .\watering\lists.py:5
+msgid "soilNormal"
+msgstr ""
+
+#: .\watering\lists.py:6
+msgid "soilCompost"
+msgstr ""
+
+#: .\watering\lists.py:11
+msgid "Annual"
+msgstr ""
+
+#: .\watering\lists.py:12
+msgid "Perennial"
+msgstr ""
+
+#: .\watering\lists.py:17
+msgid "Sunny"
+msgstr ""
+
+#: .\watering\lists.py:18
+msgid "Mid shadow"
+msgstr ""
+
+#: .\watering\lists.py:19
+msgid "None"
+msgstr ""
+
+#: .\watering\templates\watering\create.html:14
+msgid "New Box setup - Info"
+msgstr ""
+
+#: .\watering\templates\watering\create.html:26
+msgid "Next"
+msgstr ""
+
+#: .\watering\templates\watering\details.html:11
+#: .\watering\templates\watering\edit.html:11
+#: .\watering\templates\watering\issues\index.html:12
+msgid "Box #"
+msgstr ""
+
+#: .\watering\templates\watering\details.html:14
+msgid "Date Filter"
+msgstr ""
+
+#: .\watering\templates\watering\details.html:17
+msgid "Start Watering"
+msgstr ""
+
+#: .\watering\templates\watering\index.html:13
+msgid "You have not setup any watering boxes"
+msgstr ""
+
+#: .\watering\templates\watering\index.html:15
+msgid "Setup a new box"
+msgstr ""
+
+#: .\watering\templates\watering\issues\report.html:11
+msgid "Report a problem"
+msgstr ""
+
+#: .\watering\templates\watering\issues\report.html:61
+msgid "Report"
+msgstr ""
+
+#: .\watering\templates\watering\view.html:16
+msgid "List"
+msgstr "Liste"
+
+#: .\watering\templates\watering\view.html:20
+msgid "Map"
+msgstr "Carte"
+
+#: .\watering\templates\watering\view.html:34
+msgid "Suggested watering day"
+msgstr ""

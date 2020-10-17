@@ -48,3 +48,11 @@ ul.errorlist {
     position: absolute;
     right: 20px;
 }
+
+#language-picker {
+    margin-top: 10px;
+}
+
+#language-picker > form {
+    display: inline-block;
+}

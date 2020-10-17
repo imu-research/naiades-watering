@@ -21,6 +21,10 @@ import django.contrib.auth.views as auth_views
 from naiades_watering import views
 
 urlpatterns = [
+    # i18n
+    url(r'^watering/i18n/', include('django.conf.urls.i18n')),
+
+    # admin
     url(r'^watering/admin/', admin.site.urls),
 
     # auth
