@@ -54,6 +54,11 @@ $(function () {
                 return '#F6BB42';
             }
 
+            // watered today
+            if (meter.lastWatering === 'TODAY') {
+                return '#8EC760';
+            }
+
             // need watering today
             if (meter.nextWatering === 'TODAY') {
                 return '#E9573F';
@@ -92,8 +97,8 @@ $(function () {
                 .append($(`<div class="prop-label">Flower type:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
                 .append($(`<div class="prop-label">Sun exposure:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
                 // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
+                //.append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
+                //.append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
                 .append($(`<div class="prop-label">Humidity:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
                 //.append($('<div class="prop-label consumption-label">Amount of water:</div>'))
                 //.append($(`<div class="consumption">${consumption} m<sup>3</sup></div>`))
@@ -206,18 +211,40 @@ $(function () {
                         )
                         .append(
                             $('<div />')
-                                .append($('<span />').text("Suggested watering date: "))
+                                .append($('<span />').text(
+                                    meter.lastWatering !== "TODAY"
+                                        ? "Suggested watering date: "
+                                        : ""
+                                ))
                                 .append(
+                                    meter.lastWatering !== "TODAY" &&
                                     ['TODAY', 'TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
                                     $('<span />').text(meter.nextWateringDeadline.split("T")[0] || "-")
                                 )
                                 .append(
                                     $('<div />')
-                                        .addClass('next-watering-label')
+                                        .addClass(
+                                            `next-watering-label ` +
+                                            `${meter.nextWatering === "TODAY" && "watered-today"}`
+                                        )
                                         .css('background-color', color)
-                                        .text(nextWateringMessages[meter.nextWatering] + (
-                                            meter.isSetup ? '' : ' - Setup Box'
+                                        .text((
+                                            meter.lastWatering !== "TODAY"
+                                                ? `${nextWateringMessages[meter.nextWatering]}`
+                                                : "Watered today ✓"
+                                        )+ (
+                                            !meter.isSetup ? ' - Setup Box' : ''
                                         ))
+                                )
+                                .append(
+                                    meter.lastWatering !== "TODAY" &&
+                                    meter.nextWateringAmountRecommendation &&
+                                    meter.nextWateringAmountRecommendation.indexOf("1970-") !== 0 &&
+                                    $('<div />')
+                                        .text(
+                                            `Suggested watering amount: ` +
+                                            `${meter.nextWateringAmountRecommendation} lt`
+                                        )
                                 )
                         )
                         .append(

@@ -6,6 +6,11 @@ $(function () {
             lat: 46.1838136,
             lng: 6.138625
         },
+        iw: new google.maps.InfoWindow(),
+        lat_longs: new Array(),
+        markers: new Array(),
+        drawingManager: null,
+
 
         init: function() {
             this.initMap();
@@ -74,10 +79,46 @@ $(function () {
                 NaiadesMap.setMarkerPosition(e.latlng.lat, e.latlng.lng);
             });
 
+             drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.POLYGON,
+                drawingControl: true,
+                drawingControlOptions: {
+                  position: google.maps.ControlPosition.TOP_CENTER,
+                  drawingModes: [google.maps.drawing.OverlayType.POLYGON]
+                },
+                polygonOptions: {
+                  editable: true
+                },
+                 setMap: map
+              });
+              drawingManager.setMap(map);
+
+              google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+                var newShape = event.overlay;
+                newShape.type = event.type;
+              });
+
+              google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
+                NaiadesMap.overlayClickListener(event.overlay);
+                $('#vertices').val(event.overlay.getPath().getArray());
+              });
+
+            /*var draw = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                    polygon: true,
+                    trash: true
+                }
+            });
+            map.addControl(draw);
+
+            map.on('draw.create', NaiadesMap.updateArea);
+            map.on('draw.delete', NaiadesMap.updateArea);
+            map.on('draw.update', NaiadesMap.updateArea);*/
+
             // keep ref to map
             this.map = map;
         },
-
         setMarkerPosition: function(lat, lng) {
             const latlng = [lat, lng];
 
@@ -123,10 +164,34 @@ $(function () {
             });
         },
 
+        updateArea: function(e) {
+            var data = draw.getAll();
+            var answer = document.getElementById('calculated-area');
+            if (data.features.length > 0) {
+                var area = turf.area(data);
+                // restrict to area to 2 decimal points
+                var rounded_area = Math.round(area * 100) / 100;
+                answer.innerHTML =
+                    '<p><strong>' +
+                    rounded_area +
+                    '</strong></p><p>square meters</p>';
+            } else {
+                answer.innerHTML = '';
+                if (e.type !== 'draw.delete')
+                    alert('Use the draw tools to draw a polygon!');
+            }
+        },
+
         updateFormInputs(lat, lng, address) {
             $('#id_latitude').val(lat);
             $('#id_longitude').val(lng);
             $('#id_address').val(address);
+        },
+
+        overlayClickListener(overlay) {
+            google.maps.event.addListener(overlay, "mouseup", function (event) {
+                $('#vertices').val(overlay.getPath().getArray());
+            });
         }
     };
 

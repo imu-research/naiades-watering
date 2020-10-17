@@ -2,13 +2,14 @@ from django.utils.translation import gettext as _
 
 
 SOIL_TYPES = (
-    ("Terreau", _("Terreau")),
+    ("soilNormal", _("soilNormal")),
+    ("soilCompost", _("soilCompost")),
 )
 
 
 FLOWER_TYPES = (
-    ("Need more water", _("Need more water")),
-    ("Need less water", _("Need less water")),
+    ("Annual", _("Annual")),
+    ("Perennial", _("Perennial")),
 )
 
 
@@ -18,7 +19,7 @@ SUN_EXPOSURE_OPTIONS = (
     ("None", _("None")),
 )
 
-BOX_SIZES = (
+'''BOX_SIZES = (
     ("Small", _("Small")),
     ("Large", _("Large")),
-)
+)'''

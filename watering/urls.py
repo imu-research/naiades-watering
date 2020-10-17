@@ -31,4 +31,7 @@ urlpatterns = [
 
     # Box Edit
     path('edit/', views.box_edit, name='box-edit'),
+
+    # Box Watered
+    path('watered/', views.box_watered, name='box-watered'),
 ]

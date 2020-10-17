@@ -1,9 +1,12 @@
 import datetime
+from time import time, strftime
+import json
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.timezone import now
+
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
@@ -33,11 +36,11 @@ def box_create(request):
     # Get connected sensors
     connected_sensors = WateringBox.sensors_list()
 
-    available_sensors = []
+    '''available_sensors = []
 
     for sensor in sensors:
         if sensor["serialNumber"] not in connected_sensors:
-            available_sensors.append(sensor)
+            available_sensors.append(sensor)'''
 
     if request.method == "POST":
         form = BoxSetupForm(request.POST)
@@ -54,7 +57,8 @@ def box_create(request):
 
     return render(request, 'watering/create.html', {
         'form': form,
-        'sensors': available_sensors,
+        'sensors': sensors,
+        'connected_sensors': connected_sensors
     })
 
 
@@ -93,7 +97,7 @@ def box_details(request):
         'id': box_id,
         'box': box,
         'form': form,
-        'history': history,
+        'history': json.dumps(history),
     })
 
 
@@ -206,3 +210,15 @@ def box_history(box_id):
 
     # render
     return historic_data
+
+def box_watered(request):
+    box_id = request.GET.get("id")
+
+    last_watering = now().strftime("%Y-%m-%dT%H:%M:%S%Z")
+    WateringBox.post(
+        box_id="urn:ngsi-ld:FlowerBed:FlowerBed-" + box_id,
+        data={"dateLastWatering": last_watering}
+    )
+
+    return JsonResponse({})
+

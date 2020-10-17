@@ -8,13 +8,55 @@ $(function () {
         // filters
         selectedActivityType: '',
 
+        wateringFromDate: function(wateringDate) {
+            if (!wateringDate) {
+                return 'UNKNOWN'
+            }
+
+            // get current date
+            const today = new Date();
+
+            // split input date into parts
+            const parts = wateringDate.split('T')[0].split('-');
+
+            // parse watering date
+            const wDate = new Date(
+                Number.parseInt(parts[0]),
+                Number.parseInt(parts[1]) - 1,
+                Number.parseInt(parts[2])
+            );
+
+            // same date?
+            if ((wDate.getFullYear() === today.getFullYear()) &&
+                (wDate.getMonth() === today.getMonth()) &&
+                (wDate.getDate() === today.getDate())) {
+                return 'TODAY';
+            }
+
+            // next date?
+            // TODO improve check - this fails for the last day of the month
+            else if ((wDate.getFullYear() === today.getFullYear()) &&
+                (wDate.getMonth() === today.getMonth()) &&
+                (wDate.getDate() - 1 === today.getDate())) {
+                return 'TOMORROW';
+            }
+
+            // in the past?
+            else if (wDate < today) {
+                return 'UNKNOWN';
+            }
+            else {
+                // just future
+                return 'FUTURE';
+            }
+        },
+
         loadData: function() {
             const that = this;
             $.ajax({
                 url: '/watering/api/boxes/list',
                 success: function(response) {
                     const boxes = response.boxes;
-                    const today = new Date();
 
                     $.each(boxes, function(idx, box) {
 
@@ -27,45 +69,9 @@ $(function () {
                         // check if setup
                         box.isSetup = that.isSetup(box);
 
-                        // set next watering
-                        box.nextWatering = 'UNKNOWN';
-                        if (!box.nextWateringDeadline) {
-                            return
-                        }
-
-                        const parts = box.nextWateringDeadline.split('T')[0].split('-');
-
-                        // get watering
-                        const nextWateringDate = new Date(
-                            Number.parseInt(parts[0]),
-                            Number.parseInt(parts[1]) - 1,
-                            Number.parseInt(parts[2])
-                        );
-
-                        // same date?
-                        if ((nextWateringDate.getFullYear() === today.getFullYear()) &&
-                            (nextWateringDate.getMonth() === today.getMonth()) &&
-                            (nextWateringDate.getDate() === today.getDate())) {
-                            box.nextWatering = 'TODAY';
-                        }
-
-                        // next date?
-                        // TODO improve check - this fails for the last day of the month
-                        else if ((nextWateringDate.getFullYear() === today.getFullYear()) &&
-                            (nextWateringDate.getMonth() === today.getMonth()) &&
-                            (nextWateringDate.getDate() - 1 === today.getDate())) {
-                            box.nextWatering = 'TOMORROW';
-                        }
-
-                        // in the past?
-                        else if (nextWateringDate < today) {
-                            box.nextWatering = 'UNKNOWN';
-                        }
-                        else {
-                            // just future
-                            box.nextWatering = 'FUTURE';
-                        }
-
+                        // set last & next watering
+                        box.lastWatering = that.wateringFromDate(box.dateLastWatering);
+                        box.nextWatering = that.wateringFromDate(box.nextWateringDeadline);
                     });
 
                     that.fetchedMeasurements = boxes;

@@ -17,8 +17,8 @@
                 <label for="id_soil_type">Type of soil:</label>
                 <select name="soil_type" id="id_soil_type" class="form-control">
                   <option value="" {% if not form.data.soil_type %}selected{% endif %}></option>
-                  <option value="Terreau" {% if form.data.soil_type == "Terreau" %}selected{% endif %}>Terreau</option>
-                  <!--<option value="SOIL_TYPE_2" {% if form.data.soil_type == "SOIL_TYPE_2" %}selected{% endif %}>Soil Type 2</option>-->
+                  <option value="soilNormal" {% if form.data.soil_type == "soilNormal" %}selected{% endif %}>Normal soil</option>
+                  <option value="soilCompost" {% if form.data.soil_type == "soilCompost" %}selected{% endif %}>Compost soil</option>
                 </select>
                 {% if form.errors.soil_type %}
                     <span class="o-red">{{ form.errors.soil_type }}</span>
@@ -33,8 +33,8 @@
                 <label for="id_flowers_type">Type of flowers:</label>
                 <select name="flowers_type" id="id_flowers_type" class="form-control">
                   <option value="" {% if not form.data.flowers_type %}selected{% endif %}></option>
-                  <option value="Need more water" {% if form.data.flowers_type == "Need more water" %}selected{% endif %}>Need more water</option>
-                  <option value="Need less water" {% if form.data.flowers_type == "Need less water" %}selected{% endif %}>Need less water</option>
+                  <option value="Annual" {% if form.data.flowers_type == "Annual" %}selected{% endif %}>Annual</option>
+                  <option value="Perennial" {% if form.data.flowers_type == "Perennial" %}selected{% endif %}>Perennial</option>
                 </select>
                 {% if form.errors.flowers_type %}
                     <span class="o-red">{{ form.errors.flowers_type }}</span>
@@ -83,7 +83,7 @@
         </div>
 
 
-        <div class="col-lg-6 col-xs-12 ">
+        <!--<div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_size">Box size:</label>
                 <select name="size" id="id_size" class="form-control">
@@ -95,7 +95,7 @@
                     <span class="o-red">{{ form.errors.size }}</span>
                 {% endif %}
             </div>
-        </div>
+        </div>-->
     </div>
 
     <div class="row">

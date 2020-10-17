@@ -19,6 +19,20 @@ $(function() {
             $.each(localMeasurements, function(idx, measurement) {
                 const onHideNotification = function() {
                     $notification.remove();
+                    //location.href="/"
+                };
+
+                const onYESNotification = function () {
+                    const that = this;
+                    $.ajax({
+                        url: `/watering/watered?id=${measurement.boxId}`,
+                        success: function (response) {
+
+                        }
+                    });
+                    $notification.remove();
+
+
                 };
 
                 const $notification = $('<div />')
@@ -30,7 +44,7 @@ $(function() {
                     .append($('<button />')
                         .addClass('btn btn-success')
                         .text('Yes')
-                        .on('click', onHideNotification)
+                        .on('click', onYESNotification)
                     )
                     .append($('<button />')
                         .addClass('btn btn-danger')

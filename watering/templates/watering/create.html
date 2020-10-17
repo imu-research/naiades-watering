@@ -17,6 +17,11 @@
 
         <div id="mapid"></div>
 
+        <form method="post" accept-charset="utf-8" id="map_form">
+          <input type="text" name="vertices" value="" id="vertices" />
+          <input type="button" name="save" value="Save" id="save" />
+        </form>
+
         <button class="btn btn-primary" type="submit">
             {% trans "Next" %}
         </button>
@@ -34,6 +39,7 @@
             addClass('form-control');
 
         var sensors = {{ sensors|safe }};
+        var connected_sensors = {{ connected_sensors|safe }};
         var myOptions = {};
         for(var i=0;i<sensors.length;i++){
             myOptions[sensors[i].serialNumber] = sensors[i].serialNumber+' ('+sensors[i].name+')';
@@ -44,6 +50,7 @@
             $('#id_refDevice').append( new Option(text,val) );
         });
     </script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places,drawing"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="{% static 'js/map.js' %}"></script>
 {% endblock %}

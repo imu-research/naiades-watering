@@ -15,9 +15,14 @@ class OrionEntity(object):
     def get_headers(self, service):
         headers = {}
 
-        if service:
+        if service == "carouge":
             headers.update({
                 'Fiware-Service': service,
+            })
+        if service == "Attr":
+            headers.update({
+                'Fiware-Service': 'carouge',
+                'Content-Type': 'text/plain',
             })
 
         return headers
@@ -57,6 +62,7 @@ class OrionEntity(object):
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
             raise OrionError(response.content)
+
 
     def history(self, service, entity_id):
         # list entities
