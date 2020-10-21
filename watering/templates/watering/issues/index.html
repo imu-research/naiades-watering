@@ -13,7 +13,7 @@
 
     <div style="text-align: right; margin-bottom: 20px;">
         <a href="{% url 'report-issue' box_id=box_id %}" class="btn btn-warning">
-            Report issue
+            {% trans "Report issue" %}
         </a>
     </div>
 
@@ -31,13 +31,13 @@
                                 {{ issue.description|linebreaksbr }}
                             </div>
                             <div>
-                                Posted by: {{ issue.submitted_by.username }} at  {{ issue.created|timesince }} ago
+                                {% trans "Posted by" %}: {{ issue.submitted_by.username }} {% trans "at" %}  {{ issue.created|timesince }} {% trans "ago" %}
                             </div>
                             <div>
-                                Status: {% if issue.resolved %}
-                                                Resolved
+                                {% trans "Status" %}: {% if issue.resolved %}
+                                                {% trans "Resolved" %}
                                             {% else %}
-                                                Open
+                                                {% trans "Open" %}
                                             {% endif %}
                             </div>
                             <div class="actions"></div>
@@ -45,7 +45,7 @@
                          {% empty %}
                                 <div class="entry">
                                     <p colspan="5" style="padding: 20px; text-align: center; color: #777;">
-                                        No issues reported for Box #{{ box_id }}
+                                        {% trans "No issues reported for Box" %} #{{ box_id }}
 
                                     </p>
                                 </div>

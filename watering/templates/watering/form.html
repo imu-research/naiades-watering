@@ -1,24 +1,25 @@
+{% load i18n %}
 <div class="box-form" style="margin: 20px 0 40px 0;">
     <div class="row">
         <div class="col-xs-12">
-            <h3>Box details</h3>
+            <h3>{% trans "Box details" %}</h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_box_id">Box ID:</label>
+                <label for="id_box_id">{% trans "Box ID" %}:</label>
                 <input type="text" name="box_id" required="" id="id_box_id" class="form-control disabled" value="{{ box.id }}" disabled>
             </div>
         </div>
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_soil_type">Type of soil:</label>
+                <label for="id_soil_type">{% trans "Type of soil" %}:</label>
                 <select name="soil_type" id="id_soil_type" class="form-control">
                   <option value="" {% if not form.data.soil_type %}selected{% endif %}></option>
-                  <option value="soilNormal" {% if form.data.soil_type == "soilNormal" %}selected{% endif %}>Normal soil</option>
-                  <option value="soilCompost" {% if form.data.soil_type == "soilCompost" %}selected{% endif %}>Compost soil</option>
+                  <option value="soilNormal" {% if form.data.soil_type == "soilNormal" %}selected{% endif %}>{% trans "Normal soil" %}</option>
+                  <option value="soilCompost" {% if form.data.soil_type == "soilCompost" %}selected{% endif %}>{% trans "Compost soil" %}</option>
                 </select>
                 {% if form.errors.soil_type %}
                     <span class="o-red">{{ form.errors.soil_type }}</span>
@@ -30,11 +31,11 @@
     <div class="row">
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_flowers_type">Type of flowers:</label>
+                <label for="id_flowers_type">{% trans "Type of flowers" %}:</label>
                 <select name="flowers_type" id="id_flowers_type" class="form-control">
                   <option value="" {% if not form.data.flowers_type %}selected{% endif %}></option>
-                  <option value="Annual" {% if form.data.flowers_type == "Annual" %}selected{% endif %}>Annual</option>
-                  <option value="Perennial" {% if form.data.flowers_type == "Perennial" %}selected{% endif %}>Perennial</option>
+                  <option value="Annual" {% if form.data.flowers_type == "Annual" %}selected{% endif %}>{% trans "Annual" %}</option>
+                  <option value="Perennial" {% if form.data.flowers_type == "Perennial" %}selected{% endif %}>{% trans "Perennial" %}</option>
                 </select>
                 {% if form.errors.flowers_type %}
                     <span class="o-red">{{ form.errors.flowers_type }}</span>
@@ -44,13 +45,13 @@
 
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_sun_exposure">Exposure to sun:</label>
+                <label for="id_sun_exposure">{% trans "Exposure to sun" %}:</label>
 
                 <select name="sun_exposure" id="id_sun_exposure" class="form-control">
                   <option value="" {% if not form.data.sun_exposure %}selected{% endif %}></option>
-                  <option value="Sunny" {% if form.data.sun_exposure == "Sunny" %}selected{% endif %}>Sunny</option>
-                  <option value="Mid shadow" {% if form.data.sun_exposure == "Mid shadow" %}selected{% endif %}>Mid shadow</option>
-                  <option value="None" {% if form.data.sun_exposure == "None" %}selected{% endif %}>None</option>
+                  <option value="Sunny" {% if form.data.sun_exposure == "Sunny" %}selected{% endif %}>{% trans "Sunny" %}</option>
+                  <option value="Mid shadow" {% if form.data.sun_exposure == "Mid shadow" %}selected{% endif %}>{% trans "Mid shadow" %}</option>
+                  <option value="None" {% if form.data.sun_exposure == "None" %}selected{% endif %}>{% trans "None" %}</option>
                 </select>
                 {% if form.errors.sun_exposure %}
                     <span class="o-red">{{ form.errors.sun_exposure }}</span>
@@ -71,10 +72,10 @@
         </div> -->
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_refDevice">Sensor ID:</label>
+                <label for="id_refDevice">{% trans "Sensor ID" %}:</label>
                 <select name="refDevice" id="id_refDevice" class="form-control">
                   <option value="{{ form.data.refDevice }}" {% if form.data.refDevice %}selected{% endif %}>{{ form.data.refDevice }}</option>
-                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>None</option>
+                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>{% trans "None" %}</option>
                 </select>
                 {% if form.errors.refDevice %}
                     <span class="o-red">{{ form.errors.refDevice }}</span>
@@ -102,7 +103,7 @@
         <div class="col-xs-12">
             <button class="btn btn-success" type="submit">
                 <i class="fa fa-save"></i>
-                Update box
+                {% trans "Update box" %}
             </button>
         </div>
     </div>

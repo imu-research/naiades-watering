@@ -18,22 +18,22 @@
                 <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
                   <div class="col-md-12" style="text-align: right">
                       <a href="{% url 'list-issues' box_id=box_id %}" class="btn btn-sm btn-default">
-                          Back to Box #{{ box_id }} issues
+                          {% trans "Back to Box" %} #{{ box_id }} {% trans "issues" %}
                       </a>
                   </div>
                 </div>
 
                 <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
                   <div class="col-md-12">
-                      <label for="report_type">Issue type:</label>
+                      <label for="report_type">{% trans "Issue type" %}:</label>
                   </div>
                   <div class="col-md-12">
                     <select class="selecter_3 selecter-element" name="issue_type">
-                        <option value="Broken sensor" selected>Broken sensor</option>
-                        <option value="Wrong data">Wrong data</option>
-                        <option value="Problem with the box">Problem with the box</option>
-                        <option value="Flowers destroyed">Flowers destroyed</option>
-                        <option value="Other">Other</option>
+                        <option value="Broken sensor" selected>{% trans "Broken sensor" %}</option>
+                        <option value="Wrong data">{% trans "Wrong data" %}</option>
+                        <option value="Problem with the box">{% trans "Problem with the box" %}</option>
+                        <option value="Flowers destroyed">{% trans "Flowers destroyed" %}</option>
+                        <option value="Other">{% trans "Other" %}</option>
                     </select>
                     <!--<div class="selecter  cover closed" tabindex="0"><select name="selecter_basic" class="selecter_3 selecter-element" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="-1">
                         <option value="1" selected>Broken sensor</option>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="row" style="margin-top: 10px;">
                   <div class="col-md-12">
-                      <label for="report">Description:</label>
+                      <label for="report">{% trans "Description" %}:</label>
                   </div>
                    <div class="col-md-12">
                       <textarea class="form-control" rows="5" name="description"></textarea>

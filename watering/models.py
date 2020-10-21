@@ -192,14 +192,17 @@ class WateringBox(Model):
         ]
 
         # create WateringBox instances
-        sensors = []
+        sensors = {}
 
         for flowerbed in flowerbeds:
             # get sensor Id
-            refDevice = flowerbed.get("refDevice")
+            ref_device = flowerbed.get("refDevice")
 
-            if refDevice or refDevice == 0:
-                sensors.append(refDevice)
+            if ref_device is not None:
+                try:
+                    sensors[ref_device] = str(int(flowerbed["id"].split("-")[-1]))
+                except ValueError:
+                    sensors[ref_device] = flowerbed["id"]
 
         return sensors
 

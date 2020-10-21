@@ -12,7 +12,7 @@ var chart = AmCharts.makeChart("chart-history", {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": "Humidity History Graph"
+                        "text": window.MESSAGES.humidityGraph
                     }
                 ],
     "valueAxes": [{
@@ -677,7 +677,7 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": "Prediction Graph"
+                        "text": window.MESSAGES.predictionGraph
                     }
                 ],
     "valueAxes": [{
@@ -1304,7 +1304,7 @@ AmCharts.checkEmptyData = function (chart) {
         chart.dataProvider = [dataPoint];
 
         // add label
-        chart.addLabel(0, '50%', 'The chart contains no data', 'center');
+        chart.addLabel(0, '50%', window.MESSAGES.noData, 'center');
 
         // set opacity of the chart div
         chart.chartDiv.style.opacity = 0.5;

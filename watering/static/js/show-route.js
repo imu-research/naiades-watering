@@ -50,16 +50,16 @@ $(function() {
                         const next = response["routes"][0]["waypoint_order"][0]
 
                         $( "#next-box-watering" ).append(
-                            $('<div />').text(`Next Box: Box #${wptdetails[next].meter.id.split("FlowerBed-")[1] || '-'}`)
+                            $('<div />').text(window.MESSAGES.nextBox+`: `+window.MESSAGES.box+` #${wptdetails[next].meter.id.split("FlowerBed-")[1] || '-'}`)
                         )
                             .append(
-                                $('<div />').text(`Suggested Amount of water: ${wptdetails[next].meter.nextWateringAmountRecommendation || '-'} lt`)
+                                $('<div />').text(window.MESSAGES.amount+`: ${wptdetails[next].meter.nextWateringAmountRecommendation || '-'} lt`)
                             )
                         $( "#next-box-watering" ).show();
                     }
 
                 } else {
-                    window.alert('Directions request failed due to ' + status);
+                    window.alert(window.MESSAGES.directionsFailed+ status);
                 }
             });
         },
@@ -108,7 +108,7 @@ $(function() {
                 this.currentPositionMarker = new google.maps.Marker({
                     icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
                     position: mapsPosition,
-                    title: 'Your current location',
+                    title: window.MESSAGES.currentLocation,
                     map: this.map,
                 });
             } else {

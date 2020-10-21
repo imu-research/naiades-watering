@@ -46,6 +46,9 @@ class BoxSetupForm(BoxForm):
     #Sensor id
     refDevice = CharField(required=True, label=_('Sensor ID'), widget=Select)
 
+    #Array of points (Cluster Polygon coordinates)
+    #polygon = CharField(required=True)
+
     # location information
     address = CharField(required=True)
     latitude = DecimalField()
@@ -66,7 +69,8 @@ class BoxSetupForm(BoxForm):
                 "type": "Point"
             },
             "soilMoisture": 0,
-            "sunExposure": self.data.get('sun_exposure')
+            "sunExposure": self.data.get('sun_exposure'),
+            "refDevice": self.data.get('refDevice')
         })
 
         return data

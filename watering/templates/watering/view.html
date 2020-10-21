@@ -34,15 +34,15 @@
                      <label for="next-watering">{% trans "Suggested watering day" %} </label>
                      <select id="next-watering" class="form-control">
                          {% if mode != "route" %}
-                             <option value="">All</option>
+                             <option value="">{% trans "All" %}</option>
                          {% endif %}
 
-                         <option value="TODAY">Today</option>
-                         <option value="TOMORROW">Tomorrow</option>
+                         <option value="TODAY">{% trans "Today" %}</option>
+                         <option value="TOMORROW">{% trans "Tomorrow" %}</option>
 
                          {% if mode != "route" %}
-                             <option value="FUTURE">Later in the future</option>
-                             <option value="UNKNOWN">Unknown</option>
+                             <option value="FUTURE">{% trans "Later in the future" %}</option>
+                             <option value="UNKNOWN">{% trans "Unknown" %}</option>
                          {% endif %}
                      </select>
                  </div>
@@ -62,7 +62,7 @@
 
          {% if mode != "route" %}
              <div class="col-md-3">
-                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'"><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span> Configure a new Box</button>
+                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'"><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Box" %}</button>
              </div>
          {% endif %}
      </div>
@@ -76,16 +76,16 @@
               <div class="col-md-2">
              </div>
                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">View suggested route for visiting boxes</button>
+                    <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">{% trans "View suggested route for visiting boxes" %}</button>
                </div>
         </div>
     {% elif TESTING %}
         <div class="row" style="margin: 10px">
             <button type="button" class="btn btn-primary" id="test-route-btn">
-                Start test route
+                {% trans "Start test route" %}
             </button>
             <button type="button" class="btn btn-default disabled" disabled id="next-position-btn">
-                Move to next position
+                {% trans "Move to next position" %}
             </button>
         </div>
     {% endif %}

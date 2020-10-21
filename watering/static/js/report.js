@@ -55,7 +55,7 @@ function exportReport(box_data) {
 
     // Let's add a custom title
     layout.content.push({
-      "text": "Water Consumption Report",
+      "text": window.MESSAGES.consumptionReport,
       "fontSize": 15,
        "alignment": "center"
     });
@@ -82,22 +82,22 @@ function exportReport(box_data) {
 
     layout.content.push({
       table: {
-                widths: [120, 120, 120, 120],
-                heights: 60,
-				body: [
-					//[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
-					['Box ID:', data.boxId, 'Type of soil:', 'Terrau'],
-                    ['Type of flowers:', data.flowerType, 'Exposure to sun:', data.sunExposure],
-                    ['Sensor ID:', data.refDevice, 'Humidity', data.soilMoisture]
-				]
-			},
+            widths: [120, 120, 120, 120],
+            heights: 60,
+            body: [
+                //[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
+                [window.MESSAGES.boxId+':', data.boxId, window.MESSAGES.soilType2+':', 'Terrau'],
+                [window.MESSAGES.flowerType2+':', data.flowerType, window.MESSAGES.sunExposure2+':', data.sunExposure],
+                [window.MESSAGES.sensorId+':', data.refDevice, window.MESSAGES.humidity+':', data.soilMoisture]
+            ]
+        },
       layout: 'noBorders'
     });
 
     // Let's add table
 
     layout.content.push({
-      text: 'Watering Logs:', fontSize: 14, bold: true, margin: [0, 20, 0, 8]
+      text: window.MESSAGES.wateringLogs+':', fontSize: 14, bold: true, margin: [0, 20, 0, 8]
     });
 
     layout.content.push({
@@ -107,7 +107,7 @@ function exportReport(box_data) {
 				// keepWithHeaderRows: 1,
                 widths: [150, 150, 150],
 				body: [
-					[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
+					[{ text: window.MESSAGES.date, style: 'tableHeader'}, { text: window.MESSAGES.waterAmount, style: 'tableHeader' }, { text: window.MESSAGES.comments, style: 'tableHeader' }],
 					['20/10/2020', '0.5 lt', 'Comments'],
                     ['23/10/2020', '0.5 lt', 'Comments'],
                     ['25/10/2020', '0.5 lt', 'Comments']

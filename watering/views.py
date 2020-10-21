@@ -98,6 +98,8 @@ def box_details(request):
         'box': box,
         'form': form,
         'history': json.dumps(history),
+        'sensors': Sensor.list(),
+        'connected_sensors': WateringBox.sensors_list(),
     })
 
 
@@ -198,7 +200,10 @@ def box_edit(request):
         'id': box_id,
         'box': box,
         'form': form,
+        'sensors': Sensor.list(),
+        'connected_sensors': WateringBox.sensors_list(),
     })
+
 
 def box_history(box_id):
     # find box

@@ -42,9 +42,9 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Amount of watering</th>
-                    <th>Comments</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Amount of watering" %}</th>
+                    <th>{% trans "Comments" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -70,8 +70,9 @@
 
 
     </div>
+{% endblock %}
 
-
+{% block js %}
     <!-- AmCharts JavaScript -->
     <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
@@ -84,6 +85,7 @@
     <script type="text/javascript">
         const history = {{history |safe}};
     </script>
+    {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/box-details-graphs.js' %}"></script>
     <script src="{% static 'js/report.js' %}"></script>
 

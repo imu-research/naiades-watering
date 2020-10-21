@@ -79,8 +79,8 @@ $(function () {
             if (!meter.isSetup) {
                 return $("<div />")
                     .addClass("popup-content")
-                    .append($(`<div class="prop-label">Box ID:</div><div class="prop-value">${meter.boxId}</></div><br>`))
-                    .append($(`<button class="btn btn-block btn-sm action btn--first">Set up the box</button>`)
+                    .append($(`<div class="prop-label">${window.MESSAGES.boxId}:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                    .append($(`<button class="btn btn-block btn-sm action btn--first">${window.MESSAGES.setup2}</button>`)
                         .on("click", function () {
                             location.href = `/watering/edit?id=${meter.boxId}`
                         })
@@ -90,27 +90,27 @@ $(function () {
 
             return $("<div />")
                 .addClass("popup-content")
-                .append($(`<div class="prop-label">Box ID:</div><div class="prop-value">${meter.boxId}</></div><br>`))
-                .append($(`<div class="prop-label">Last watering:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Next watering:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Soil type:</div><div class="prop-value"> ${meter.soilType || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Flower type:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Sun exposure:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.boxId+`:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.lastWatering+`:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.nextWatering+`:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.soilType+`:</div><div class="prop-value"> ${meter.soilType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.flowerType+`:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.sunExposure+`:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
                 // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))
                 //.append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
                 //.append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
-                .append($(`<div class="prop-label">Humidity:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.humidity+`:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
                 //.append($('<div class="prop-label consumption-label">Amount of water:</div>'))
                 //.append($(`<div class="consumption">${consumption} m<sup>3</sup></div>`))
                 //.append($('<div class="prop-label">Box Id:</div>'))
                 //.append($(`<div class="prop-value">${meter.box_id}</div>`))
                 //.append($(`<a href="#" class="action">More Details</a>`))
-                .append($(`<button class="btn btn-primary btn-sm action btn--first">More Details</button>`)
+                .append($(`<button class="btn btn-primary btn-sm action btn--first">`+window.MESSAGES.moreDetails+`</button>`)
                     .on("click", function() {
                         location.href=`/watering/details?id=${meter.boxId}`
                     })
                 )
-                .append($(`<button class="btn btn-default btn-sm action">Report Problem</button>`)
+                .append($(`<button class="btn btn-default btn-sm action">`+window.MESSAGES.reportProblem+`</button>`)
                     .on("click", function() {
                         //that.addToMeterChart(meter)
                         location.href='/watering/report'
@@ -168,7 +168,56 @@ $(function () {
 
                 // add to items
                 that.items.push(point);
+
+                 /*const cpoint = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
+                    icon: that.getIcon(color),
+                    color: '#555',
+                    fillColor: color,
+                    fillOpacity: 0.8,
+                    radius: 30
+                }).addTo(map).on("click", function(e) {
+                    const clickedCircle = e.target;
+                    if (!clickedCircle._popup) {
+                        clickedCircle
+                            .bindPopup(that.getPopupContent(measurement))
+                            .openPopup();
+                    }
+                });
+
+                // add to items
+                that.items.push(cpoint);*/
             });
+            //Create polugon
+            var polugon1 = [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                       [6.138525, 46.1839136],
+                        [6.138624, 46.1838236],
+                        [6.138825, 46.1839136],
+                    ]]
+                }
+            }];
+            var polugon = [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                       [6.140020953, 46.18419683],
+                        [6.139911953, 46.18423683],
+                        [6.140212953, 46.18422683],
+                        [6.139999953, 46.18421683],
+
+                    ]]
+                }
+            }];
+
+            L.geoJSON(polugon, {
+                color: "#ff0000",
+                fillOpacity: 0.3,
+            }).addTo(map);
+
         },
 
         renderList: function(measurements) {
@@ -177,8 +226,8 @@ $(function () {
             const nextWateringMessages = {
                 "TODAY": window.MESSAGES.today,
                 "TOMORROW": window.MESSAGES.tomorrow,
-                "FUTURE": "Later than tomorrow",
-                "UNKNOWN": "Unknown"
+                "FUTURE": window.MESSAGES.future,
+                "UNKNOWN": window.MESSAGES.unknown
             };
 
             // for each next watering indication
@@ -207,13 +256,13 @@ $(function () {
                                 )
                         )
                         .append(
-                            $('<div />').text(`Humidity Level: ${meter.soilMoisture.toFixed(2) || '-'}`)
+                            $('<div />').text(window.MESSAGES.humidityLevel+` : ${meter.soilMoisture.toFixed(2) || '-'}`)
                         )
                         .append(
                             $('<div />')
                                 .append($('<span />').text(
                                     meter.lastWatering !== "TODAY"
-                                        ? "Suggested watering date: "
+                                        ? window.MESSAGES.date+": "
                                         : ""
                                 ))
                                 .append(
@@ -231,9 +280,9 @@ $(function () {
                                         .text((
                                             meter.lastWatering !== "TODAY"
                                                 ? `${nextWateringMessages[meter.nextWatering]}`
-                                                : "Watered today ✓"
+                                                : window.MESSAGES.watered+" ✓"
                                         )+ (
-                                            !meter.isSetup ? ' - Setup Box' : ''
+                                            !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
                                         ))
                                 )
                                 .append(
@@ -242,7 +291,7 @@ $(function () {
                                     meter.nextWateringAmountRecommendation.indexOf("1970-") !== 0 &&
                                     $('<div />')
                                         .text(
-                                            `Suggested watering amount: ` +
+                                            window.MESSAGES.amount+`: ` +
                                             `${meter.nextWateringAmountRecommendation} lt`
                                         )
                                 )
@@ -258,15 +307,15 @@ $(function () {
                                             .addClass('btn btn-sm btn-default')
                                             .attr('title', window.MESSAGES.listProblems)
                                             .append($('<i class="glyphicon glyphicon-list" />'))
-                                            .append($('<span />').text('Issues').css('margin-left', 5))
+                                            .append($('<span />').text(window.MESSAGES.issues).css('margin-left', 5))
                                     )
                                     .append(
                                         $('<a />')
                                             .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
                                             .addClass('btn btn-sm btn-default')
-                                            .attr('title', 'Report new problem')
+                                            .attr('title', window.MESSAGES.report)
                                             .append($('<i class="glyphicon glyphicon-plus" />'))
-                                            .append($('<span />').text('Report new issue').css('margin-left', 5))
+                                            .append($('<span />').text(window.MESSAGES.reportIssue).css('margin-left', 5))
                                     )
                                 )
                         );

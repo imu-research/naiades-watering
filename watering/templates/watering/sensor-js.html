@@ -1,0 +1,53 @@
+<script>
+    const sensors = {{ sensors|safe }};
+    const connected_sensors = {{ connected_sensors|safe }};
+
+    const $refDevice = $('#id_refDevice');
+    const refDeviceValue = $refDevice.val();
+
+    // remove default options
+    $refDevice
+        .find('option')
+        .remove();
+
+    // add no sensor value
+    $refDevice.append($('<option />')
+        .attr("value", "none")
+        .text("Select a sensor")
+    );
+
+    // add one option per sensor
+    $.each(sensors, function(idx, sensor) {
+        const attachedTo = connected_sensors[sensor.serialNumber];
+
+        const $option = $('<option />')
+            .attr("value", sensor.serialNumber)
+            .text(
+                `${sensor.serialNumber}${sensor.name ? ` (${sensor.name})` : ""}` +
+                `${attachedTo && (
+                    attachedTo === "{{ box.id }}"
+                        ? " [Attached to this box]"
+                        : " [Warning: Already attached to other box]"
+                )}`
+            );
+
+        // mark as selected
+        if (sensor.serialNumber === refDeviceValue) {
+            $option.attr("selected", "selected");
+        }
+
+        // add option
+        $refDevice.append($option);
+    });
+
+    /*
+    // Popup to notify on already attached sensor
+    $refDevice.change(function()
+    {
+        console.log(connected_sensors)
+        if(connected_sensors.includes($(this).val())) {
+            alert('Sensor with id '+$(this).val()+ ' is attached to other box' );
+        }
+    });
+     */
+</script>

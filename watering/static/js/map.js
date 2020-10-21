@@ -6,10 +6,10 @@ $(function () {
             lat: 46.1838136,
             lng: 6.138625
         },
-        iw: new google.maps.InfoWindow(),
+        /*iw: new google.maps.InfoWindow(),
         lat_longs: new Array(),
         markers: new Array(),
-        drawingManager: null,
+        drawingManager: null,*/
 
 
         init: function() {
@@ -79,7 +79,7 @@ $(function () {
                 NaiadesMap.setMarkerPosition(e.latlng.lat, e.latlng.lng);
             });
 
-             drawingManager = new google.maps.drawing.DrawingManager({
+             /*drawingManager = new google.maps.drawing.DrawingManager({
                 drawingMode: google.maps.drawing.OverlayType.POLYGON,
                 drawingControl: true,
                 drawingControlOptions: {
@@ -91,7 +91,7 @@ $(function () {
                 },
                  setMap: map
               });
-              drawingManager.setMap(map);
+              //drawingManager.setMap(map);
 
               google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
                 var newShape = event.overlay;
@@ -101,7 +101,7 @@ $(function () {
               google.maps.event.addListener(drawingManager, "overlaycomplete", function(event) {
                 NaiadesMap.overlayClickListener(event.overlay);
                 $('#vertices').val(event.overlay.getPath().getArray());
-              });
+              });*/
 
             /*var draw = new MapboxDraw({
                 displayControlsDefault: false,
@@ -164,7 +164,7 @@ $(function () {
             });
         },
 
-        updateArea: function(e) {
+        /*updateArea: function(e) {
             var data = draw.getAll();
             var answer = document.getElementById('calculated-area');
             if (data.features.length > 0) {
@@ -180,7 +180,7 @@ $(function () {
                 if (e.type !== 'draw.delete')
                     alert('Use the draw tools to draw a polygon!');
             }
-        },
+        },*/
 
         updateFormInputs(lat, lng, address) {
             $('#id_latitude').val(lat);
@@ -188,11 +188,11 @@ $(function () {
             $('#id_address').val(address);
         },
 
-        overlayClickListener(overlay) {
+        /*overlayClickListener(overlay) {
             google.maps.event.addListener(overlay, "mouseup", function (event) {
                 $('#vertices').val(overlay.getPath().getArray());
             });
-        }
+        }*/
     };
 
     // initialize map
