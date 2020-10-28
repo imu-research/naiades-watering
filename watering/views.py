@@ -10,7 +10,7 @@ from django.utils.timezone import now
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
-from watering.models import WateringBox, Issue, Sensor
+from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists
 
 
 def home(request):
@@ -48,9 +48,12 @@ def box_create(request):
         # check if valid & create box
         if form.is_valid():
             # post to API
-            WateringBox.post(box_id=None, data=form.as_box())
+            try:
+                WateringBox.post(box_id=None, data=form.as_box())
 
-            return redirect('/watering/map/')
+                return redirect('/watering/map/')
+            except BoxAlreadyExists:
+                form.add_error("box_id", "A box with this ID already exists.")
 
     else:
         form = BoxSetupForm()
@@ -66,6 +69,20 @@ def box_api_list(request):
     return JsonResponse({
         "boxes": [box.data for box in WateringBox.list()]
     })
+
+
+def box_api_delete(request, box_id):
+    if request.method == "GET":
+        return JsonResponse({
+            "error": "Invalid HTTP method."
+        }, status=400)
+
+    WateringBox.delete(box_id)
+
+    return JsonResponse({
+        "box_id": box_id,
+        "status": "deleted",
+    }, status=204)
 
 
 def box_details(request):

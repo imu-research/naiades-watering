@@ -8,6 +8,10 @@ class OrionError(ValueError):
     pass
 
 
+class BoxAlreadyExists(OrionError):
+    pass
+
+
 class OrionEntity(object):
     endpoint = '5.53.108.182:1026'
     history_endpoint = '5.53.108.182:8668'
@@ -27,6 +31,26 @@ class OrionEntity(object):
 
         return headers
 
+    @staticmethod
+    def handle_error(response):
+        exception = None
+
+        # check if known error type must be thrown
+        try:
+            response = response.json()
+            if response.get("error", "").lower() == "unprocessable" and \
+                    response.get("description", "").lower() == "already exists":
+                exception = BoxAlreadyExists()
+        except:
+            pass
+
+        # raise specific exception if detected
+        if exception:
+            raise exception
+
+        # raise generic exception
+        raise OrionError(response.content)
+
     def list(self, service):
         # list entities
         response = requests.get(
@@ -36,13 +60,13 @@ class OrionEntity(object):
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
-            raise OrionError(response.content)
+            self.handle_error(response)
 
         # return list
         return response.json()
 
     def create(self, service, data):
-        response = requests.patch(
+        response = requests.post(
             f'http://{self.endpoint}/v2/entities/?options=keyValues',
             headers=self.get_headers(service=service),
             json=data,
@@ -50,7 +74,17 @@ class OrionEntity(object):
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
-            raise OrionError(response.content)
+            self.handle_error(response)
+
+    def delete(self, service, box_id):
+        response = requests.delete(
+            f'http://{self.endpoint}/v2/entities/urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}',
+            headers=self.get_headers(service=service),
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
 
     def update(self, service, entity_id, data):
         response = requests.patch(
@@ -61,8 +95,7 @@ class OrionEntity(object):
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
-            raise OrionError(response.content)
-
+            self.handle_error(response)
 
     def history(self, service, entity_id):
         # list entities
@@ -76,7 +109,7 @@ class OrionEntity(object):
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
-            raise OrionError(response.content)
+            self.handle_error(response)
 
         # return list
         return response.json()
@@ -90,7 +123,7 @@ class OrionEntity(object):
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
-            raise OrionError(response.content)
+            self.handle_error(response)
 
         # return list
         return response.json()
@@ -106,6 +139,10 @@ class WateringBox(Model):
 
     service = 'carouge'
     type = 'FlowerBed'
+
+    @property
+    def can_be_deleted(self):
+        return self.id not in [str(_id) for _id in range(1, 9)]
 
     @staticmethod
     def get(box_id):
@@ -159,6 +196,13 @@ class WateringBox(Model):
             service=WateringBox.service,
             entity_id=box_id,
             data=data
+        )
+
+    @staticmethod
+    def delete(box_id):
+        return OrionEntity().delete(
+            service=WateringBox.service,
+            box_id=box_id
         )
 
     @staticmethod

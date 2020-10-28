@@ -63,8 +63,8 @@ class BoxSetupForm(BoxForm):
             "flowerType": self.data.get('flowers_type'),
             "location": {
                 "coordinates": [
-                    float(self.data["latitude"]),
                     float(self.data["longitude"]),
+                    float(self.data["latitude"]),
                 ],
                 "type": "Point"
             },

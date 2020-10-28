@@ -107,7 +107,7 @@ function exportReport(box_data) {
 				// keepWithHeaderRows: 1,
                 widths: [150, 150, 150],
 				body: [
-					[{ text: window.MESSAGES.date, style: 'tableHeader'}, { text: window.MESSAGES.waterAmount, style: 'tableHeader' }, { text: window.MESSAGES.comments, style: 'tableHeader' }],
+					[{ text: window.MESSAGES.date2, style: 'tableHeader'}, { text: window.MESSAGES.waterAmount, style: 'tableHeader' }, { text: window.MESSAGES.comments, style: 'tableHeader' }],
 					['20/10/2020', '0.5 lt', 'Comments'],
                     ['23/10/2020', '0.5 lt', 'Comments'],
                     ['25/10/2020', '0.5 lt', 'Comments']

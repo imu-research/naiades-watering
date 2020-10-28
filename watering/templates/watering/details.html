@@ -8,19 +8,32 @@
 {% endblock %}
 
 {% block content %}
-    <h3 style="margin-top:0%;margin-left:3%;">{% trans "Box #" %}{{ box.id }} </h3>
-    <div class="row" style="margin: 10px;">
+    <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12 col-sm-9">
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Box #" %}{{ box.id }} </h3>
+        </div>
+        <div class="col-xs-12 col-sm-3" style="text-align: right">
+            <button id="delete-box"
+                    class="btn btn-danger {% if not box.can_be_deleted %}disabled{% endif %}"
+                    {% if not box.can_be_deleted %}disabled{% endif %}
+                    style="margin-right: 12px;">
+                <i class="glyphicon glyphicon-trash"></i> Delete box
+            </button>
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0;">
         <!--<div class="col-md-6">
-                <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
-              </div> -->
-           <div class="col-md-3">
-                <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">{% trans "Start Watering" %}</button>
-           </div>
-           <div class="col-md-9">
-               <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | safe }} );">
-                        <i class="glyphicon glyphicon-print"></i>
-                      </button>
-           </div>
+            <input type="text" class="form-control" placeholder="{% trans "Date Filter" %}">
+          </div> -->
+
+        <div class="col-md-3">
+            <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">{% trans "Start Watering" %}</button>
+        </div>
+        <div class="col-md-9">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | safe }} );">
+                <i class="glyphicon glyphicon-print"></i>
+            </button>
+        </div>
     </div>
     <div id="chart-history" style="width:100%;height: 400px;"></div>
     <div id="chart-prediction" style="width:100%;height: 400px;"></div>
@@ -88,7 +101,26 @@
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/box-details-graphs.js' %}"></script>
     <script src="{% static 'js/report.js' %}"></script>
+    <script>
+        $(function() {
+            $('#delete-box').on("click", function() {
+                if (!window.confirm('Are you sure you want to delete box {{ box.id }}?')) {
+                    return
+                }
 
+                $.ajax({
+                    url: "/watering/api/boxes/{{ box.id }}/delete/",
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function() {
+                        window.location.href = "/watering/list/";
+                    }
+                })
+            })
+        });
+    </script>
 
 
 {% endblock %}

@@ -88,9 +88,9 @@ $(function() {
             const destination = new google.maps.LatLng(46.181787,6.147807);
 
             //Remove destination from waypoints
-            if (!destination) {
+            /*if (!destination) {
                 return
-            }
+            }*/
 
             // get route from current position to destination
             /*this.calculateAndDisplayRoute(

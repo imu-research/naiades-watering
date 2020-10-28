@@ -23,8 +23,9 @@ urlpatterns = [
     path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
     path('box/<str:box_id>/issues/', views.list_issues, name='list-issues'),
 
-    # Boxes list API
+    # Boxes API
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
+    path('api/boxes/<str:box_id>/delete/', views.box_api_delete, name='box-api-delete'),
 
     # List View
     path('route/', views.route_view, name='route'),
