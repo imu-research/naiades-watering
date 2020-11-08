@@ -1,7 +1,10 @@
 import requests
 
+from datetime import datetime, timedelta
+
 from django.contrib.postgres.fields import JSONField
 from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField
+from django.utils.timezone import now
 
 
 class OrionError(ValueError):
@@ -156,6 +159,46 @@ class WateringBox(Model):
             raise WateringBox.DoesNotExist()
 
     @staticmethod
+    def is_setup(data):
+        return data["flowerType"] and data["sunExposure"]
+
+    @staticmethod
+    def status_from_watering_date(watering_date):
+        # handle empty
+        if not watering_date:
+            return 'UNKNOWN'
+
+        # parse
+        try:
+            date = datetime.strptime(
+                watering_date.split('T')[0],
+                '%Y-%m-%d'
+            ).date()
+        except ValueError:
+            return 'UNKNOWN'
+
+        # get current date
+        today = now().date()
+
+        # check if past
+        if date < today:
+            return 'UNKNOWN'
+
+        # check if any of the upcoming days
+        for delta, status in [(0, 'TODAY'), (1, 'TOMORROW'), (2, 'DAY_AFTER_TOMORROW')]:
+            if today + timedelta(days=delta) == date:
+                return status
+
+        # fallback - day is in future
+        return 'FUTURE'
+
+    @staticmethod
+    def prepare(data):
+        data["isSetup"] = WateringBox.is_setup(data)
+        data["lastWatering"] = WateringBox.status_from_watering_date(data["dateLastWatering"])
+        data["nextWatering"] = WateringBox.status_from_watering_date(data["nextWateringDeadline"])
+
+    @staticmethod
     def list():
         # list flowerbeds in Orion
         # filter only flowerbed entities
@@ -174,6 +217,9 @@ class WateringBox(Model):
 
             # update in flowerbed
             flowerbed["boxId"] = box_id
+
+            # add dates & setup
+            WateringBox.prepare(flowerbed)
 
             # add instance
             boxes.append(WateringBox(

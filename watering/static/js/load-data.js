@@ -8,49 +8,6 @@ $(function () {
         // filters
         selectedActivityType: '',
 
-        wateringFromDate: function(wateringDate) {
-            if (!wateringDate) {
-                return 'UNKNOWN'
-            }
-
-            // get current date
-            const today = new Date();
-
-            // split input date into parts
-            const parts = wateringDate.split('T')[0].split('-');
-
-            // parse watering date
-            const wDate = new Date(
-                Number.parseInt(parts[0]),
-                Number.parseInt(parts[1]) - 1,
-                Number.parseInt(parts[2])
-            );
-
-            // same date?
-            if ((wDate.getFullYear() === today.getFullYear()) &&
-                (wDate.getMonth() === today.getMonth()) &&
-                (wDate.getDate() === today.getDate())) {
-                return 'TODAY';
-            }
-
-            // next date?
-            // TODO improve check - this fails for the last day of the month
-            else if ((wDate.getFullYear() === today.getFullYear()) &&
-                (wDate.getMonth() === today.getMonth()) &&
-                (wDate.getDate() - 1 === today.getDate())) {
-                return 'TOMORROW';
-            }
-
-            // in the past?
-            else if (wDate < today) {
-                return 'UNKNOWN';
-            }
-            else {
-                // just future
-                return 'FUTURE';
-            }
-        },
-
         loadData: function() {
             const that = this;
             $.ajax({
@@ -65,13 +22,6 @@ $(function () {
                             lat: box.location.coordinates[1],
                             lng: box.location.coordinates[0]
                         };
-
-                        // check if setup
-                        box.isSetup = that.isSetup(box);
-
-                        // set last & next watering
-                        box.lastWatering = that.wateringFromDate(box.dateLastWatering);
-                        box.nextWatering = that.wateringFromDate(box.nextWateringDeadline);
                     });
 
                     that.fetchedMeasurements = boxes;
@@ -97,10 +47,6 @@ $(function () {
 
             // show points
             window.NaiadesRender.render(this.filteredMeasurements);
-        },
-
-        isSetup: function(meter) {
-            return meter.flowerType && meter.sunExposure;
         },
 
         load: function() {

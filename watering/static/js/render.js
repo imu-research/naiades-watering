@@ -226,12 +226,13 @@ $(function () {
             const nextWateringMessages = {
                 "TODAY": window.MESSAGES.today,
                 "TOMORROW": window.MESSAGES.tomorrow,
+                "DAY_AFTER_TOMORROW": window.MESSAGES.day_after_tomorrow,
                 "FUTURE": window.MESSAGES.future,
                 "UNKNOWN": window.MESSAGES.unknown
             };
 
             // for each next watering indication
-            $.each(["TODAY", "TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
+            $.each(["TODAY", "TOMORROW", "DAY_AFTER_TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
                 // select measurements with this next watering indication
                 const filteredMeasurements = measurements.
                     filter(meter => meter.nextWatering === nextWatering);
@@ -267,7 +268,7 @@ $(function () {
                                 ))
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
-                                    ['TODAY', 'TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
+                                    ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
                                     $('<span />').text(meter.nextWateringDeadline.split("T")[0] || "-")
                                 )
                                 .append(

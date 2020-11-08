@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-20 16:33+0300\n"
+"POT-Creation-Date: 2020-11-04 15:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,15 +24,15 @@ msgstr "de ICCS"
 
 #: .\templates\base.html:120
 msgid "All rights reserved – developed in the NAIADES project"
-msgstr ""
+msgstr "Tous drois réservés - développé dans le cadre du projet NAIADES"
 
 #: .\templates\registration\login.html:24
 msgid "Please login to continue"
-msgstr ""
+msgstr "Merci de vous authentifier pour continuer"
 
 #: .\templates\registration\login.html:29
 msgid "Use your credentials to access Naiades Watering."
-msgstr ""
+msgstr "Utiliser votre compte pour vous connecter à l'application"
 
 #: .\templates\registration\login.html:40
 msgid "Login"
@@ -56,12 +56,12 @@ msgstr "Répertorier les problèmes"
 
 #: .\templates\util\js-translations.html:8
 msgid "Later than tomorrow"
-msgstr ""
+msgstr "Plus tard que demain"
 
 #: .\templates\util\js-translations.html:9
 #: .\watering\templates\watering\view.html:45
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 #: .\templates\util\js-translations.html:10
 #, fuzzy
@@ -71,15 +71,15 @@ msgstr "Taux d'humidité"
 
 #: .\templates\util\js-translations.html:11
 msgid "Suggested watering date"
-msgstr ""
+msgstr "Date d'arrosage suggerée"
 
 #: .\templates\util\js-translations.html:12
 msgid "Watered today"
-msgstr ""
+msgstr "Arrosé aujourd'hui"
 
 #: .\templates\util\js-translations.html:13
 msgid "Suggested Amount of water"
-msgstr ""
+msgstr "Quantité d'eau suggérée"
 
 #: .\templates\util\js-translations.html:14
 #, fuzzy
@@ -89,166 +89,170 @@ msgstr "Reporter un problème"
 
 #: .\templates\util\js-translations.html:15
 msgid "Issues"
-msgstr ""
+msgstr "Problèmes"
 
 #: .\templates\util\js-translations.html:16
 msgid "Report new issue"
-msgstr ""
+msgstr "Signaler un problème"
 
 #: .\templates\util\js-translations.html:17 .\watering\forms.py:44
-#: .\watering\templates\watering\form.html:11
+#: .\watering\templates\watering\form.html:12
 msgid "Box ID"
 msgstr "No du bac"
 
 #: .\templates\util\js-translations.html:18
+#: .\templates\util\js-translations.html:19
 #, fuzzy
 #| msgid "Setup a new box"
 msgid "Setup Box"
 msgstr "Configurer un nouveau bac"
 
-#: .\templates\util\js-translations.html:19
-msgid "Last watering"
-msgstr ""
-
 #: .\templates\util\js-translations.html:20
-msgid "Next watering"
-msgstr ""
+msgid "Last watering"
+msgstr "Dernier arrosage"
 
 #: .\templates\util\js-translations.html:21
+msgid "Next watering"
+msgstr "Prochain arrosage"
+
+#: .\templates\util\js-translations.html:22
 msgid "Soil type"
 msgstr "Type de terre"
 
-#: .\templates\util\js-translations.html:22
+#: .\templates\util\js-translations.html:23
 msgid "Flower type"
 msgstr "Type de fleurs"
 
-#: .\templates\util\js-translations.html:23
+#: .\templates\util\js-translations.html:24
 msgid "Sun exposure"
 msgstr "Exposition au soleil"
 
-#: .\templates\util\js-translations.html:24
+#: .\templates\util\js-translations.html:25
 #, fuzzy
 #| msgid "`Humidity Level"
 msgid "Humidity"
 msgstr "Taux d'humidité"
 
-#: .\templates\util\js-translations.html:25
+#: .\templates\util\js-translations.html:26
 msgid "More Details"
 msgstr "Plus détails"
 
-#: .\templates\util\js-translations.html:26
+#: .\templates\util\js-translations.html:27
 #, fuzzy
 #| msgid "Report a problem"
 msgid "Report Problem"
 msgstr "Reporter un problème"
 
-#: .\templates\util\js-translations.html:27
+#: .\templates\util\js-translations.html:28
 #, fuzzy
 #| msgid "Box ID"
 msgid "Box"
 msgstr "No du bac"
 
-#: .\templates\util\js-translations.html:28
-msgid "Directions request failed due to "
-msgstr ""
-
 #: .\templates\util\js-translations.html:29
-msgid "Your current location"
-msgstr ""
+msgid "Directions request failed due to "
+msgstr "Echec de la demande d'itineraire, cause"
 
 #: .\templates\util\js-translations.html:30
-msgid "Are you watering box"
-msgstr ""
+msgid "Your current location"
+msgstr "Votre position actuelle"
 
 #: .\templates\util\js-translations.html:31
+msgid "Are you watering box"
+msgstr "Etes vous en train d'arroser le bac"
+
+#: .\templates\util\js-translations.html:32
 msgid "Yes"
 msgstr "Qui"
 
-#: .\templates\util\js-translations.html:32
+#: .\templates\util\js-translations.html:33
 msgid "No"
 msgstr "Non"
 
-#: .\templates\util\js-translations.html:33
+#: .\templates\util\js-translations.html:34
 msgid "Humidity History Graph"
 msgstr "Graphique historique humidité"
 
-#: .\templates\util\js-translations.html:34
-msgid "The chart contains no data"
-msgstr ""
-
 #: .\templates\util\js-translations.html:35
-msgid "Water Consumption Report"
+msgid "Watering Predictions Graph"
 msgstr ""
 
 #: .\templates\util\js-translations.html:36
-#: .\watering\templates\watering\form.html:17
+msgid "The chart contains no data"
+msgstr "Le graphique ne contient pas de données"
+
+#: .\templates\util\js-translations.html:37
+msgid "Water Consumption Report"
+msgstr "Rapport de consommation d'eau"
+
+#: .\templates\util\js-translations.html:38
+#: .\watering\templates\watering\form.html:18
 #, fuzzy
 #| msgid "Type of flowers"
 msgid "Type of soil"
 msgstr "Type de fleurs"
 
-#: .\templates\util\js-translations.html:37 .\watering\forms.py:13
-#: .\watering\templates\watering\form.html:33
+#: .\templates\util\js-translations.html:39 .\watering\forms.py:13
+#: .\watering\templates\watering\form.html:34
 msgid "Type of flowers"
 msgstr "Type de fleurs"
 
-#: .\templates\util\js-translations.html:38 .\watering\forms.py:14
-#: .\watering\templates\watering\form.html:47
+#: .\templates\util\js-translations.html:40 .\watering\forms.py:14
+#: .\watering\templates\watering\form.html:48
 msgid "Exposure to sun"
 msgstr "Exposition au soleil"
 
-#: .\templates\util\js-translations.html:39 .\watering\forms.py:47
-#: .\watering\templates\watering\form.html:74
+#: .\templates\util\js-translations.html:41 .\watering\forms.py:47
+#: .\watering\templates\watering\form.html:75
 msgid "Sensor ID"
-msgstr ""
+msgstr "ID capteur"
 
-#: .\templates\util\js-translations.html:40
+#: .\templates\util\js-translations.html:42
 msgid "Watering Logs"
-msgstr ""
+msgstr "Registres d'arrosage"
 
-#: .\templates\util\js-translations.html:41
-#: .\templates\util\js-translations.html:44
-#: .\watering\templates\watering\details.html:45
+#: .\templates\util\js-translations.html:43
+#: .\watering\templates\watering\details.html:58
 msgid "Date"
 msgstr ""
 
-#: .\templates\util\js-translations.html:42
+#: .\templates\util\js-translations.html:44
 msgid "Amount of water"
 msgstr "Quantité d'eau"
 
-#: .\templates\util\js-translations.html:43
-#: .\watering\templates\watering\details.html:47
+#: .\templates\util\js-translations.html:45
+#: .\watering\templates\watering\details.html:60
 msgid "Comments"
 msgstr "Commentaires"
 
 #: .\watering\lists.py:5
 msgid "soilNormal"
-msgstr ""
+msgstr "Normal"
 
 #: .\watering\lists.py:6
 msgid "soilCompost"
-msgstr "Terreau"
+msgstr "Compost"
 
-#: .\watering\lists.py:11 .\watering\templates\watering\form.html:36
+#: .\watering\lists.py:11 .\watering\templates\watering\form.html:37
 msgid "Annual"
 msgstr "Annuelle"
 
-#: .\watering\lists.py:12 .\watering\templates\watering\form.html:37
+#: .\watering\lists.py:12 .\watering\templates\watering\form.html:38
 msgid "Perennial"
 msgstr "Vivace"
 
-#: .\watering\lists.py:17 .\watering\templates\watering\form.html:51
+#: .\watering\lists.py:17 .\watering\templates\watering\form.html:52
 msgid "Sunny"
-msgstr ""
+msgstr "Ensoleillé"
 
-#: .\watering\lists.py:18 .\watering\templates\watering\form.html:52
+#: .\watering\lists.py:18 .\watering\templates\watering\form.html:53
 msgid "Mid shadow"
-msgstr ""
+msgstr "Partiellement ombragé"
 
-#: .\watering\lists.py:19 .\watering\templates\watering\form.html:53
-#: .\watering\templates\watering\form.html:77
+#: .\watering\lists.py:19 .\watering\templates\watering\form.html:54
+#: .\watering\templates\watering\form.html:78
 msgid "None"
-msgstr ""
+msgstr "Aucun"
 
 #: .\watering\templates\watering\create.html:14
 msgid "New Box setup - Info"
@@ -258,43 +262,43 @@ msgstr "Configuration d'un bac - Infos"
 msgid "Next"
 msgstr "Suivant"
 
-#: .\watering\templates\watering\details.html:11
+#: .\watering\templates\watering\details.html:13
 #: .\watering\templates\watering\edit.html:11
 #: .\watering\templates\watering\issues\index.html:12
 msgid "Box #"
 msgstr "Bac #"
 
-#: .\watering\templates\watering\details.html:14
+#: .\watering\templates\watering\details.html:26
 msgid "Date Filter"
 msgstr "Filtre Date"
 
-#: .\watering\templates\watering\details.html:17
+#: .\watering\templates\watering\details.html:30
 msgid "Start Watering"
-msgstr ""
+msgstr "Commencer arrosage"
 
-#: .\watering\templates\watering\details.html:46
+#: .\watering\templates\watering\details.html:59
 #, fuzzy
 #| msgid "Amount of water"
 msgid "Amount of watering"
 msgstr "Quantité d'eau"
 
-#: .\watering\templates\watering\form.html:4
+#: .\watering\templates\watering\form.html:5
 #, fuzzy
 #| msgid "More Details"
 msgid "Box details"
 msgstr "Plus détails"
 
-#: .\watering\templates\watering\form.html:20
-msgid "Normal soil"
-msgstr ""
-
 #: .\watering\templates\watering\form.html:21
+msgid "Normal soil"
+msgstr "Normal"
+
+#: .\watering\templates\watering\form.html:22
 #, fuzzy
 #| msgid "soilCompost"
 msgid "Compost soil"
-msgstr "Terreau"
+msgstr "Compost"
 
-#: .\watering\templates\watering\form.html:105
+#: .\watering\templates\watering\form.html:106
 msgid "Update box"
 msgstr ""
 
@@ -396,7 +400,7 @@ msgstr "Carte"
 
 #: .\watering\templates\watering\view.html:34
 msgid "Suggested watering day"
-msgstr ""
+msgstr "Jour d'arrosage suggeré"
 
 #: .\watering\templates\watering\view.html:37
 msgid "All"
@@ -404,7 +408,7 @@ msgstr "Tous"
 
 #: .\watering\templates\watering\view.html:44
 msgid "Later in the future"
-msgstr ""
+msgstr "Ultérieurement"
 
 #: .\watering\templates\watering\view.html:65
 msgid "Configure a new Box"
@@ -412,12 +416,12 @@ msgstr "Ajouter un bac"
 
 #: .\watering\templates\watering\view.html:79
 msgid "View suggested route for visiting boxes"
-msgstr ""
+msgstr "Voir le trajet suggéré"
 
 #: .\watering\templates\watering\view.html:85
 msgid "Start test route"
-msgstr ""
+msgstr "Démarrer trajet de test"
 
 #: .\watering\templates\watering\view.html:88
 msgid "Move to next position"
-msgstr ""
+msgstr "Aller à la position suivante"
