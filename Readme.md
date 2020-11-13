@@ -11,7 +11,7 @@ First, install Docker & Docker compose:
 
 On Ubuntu, run the following command:
 ```
-sudo apt update && sudo apt install git docker -y
+sudo apt update && sudo apt install git docker docker-compose -y
 ```
 
 On Windows, follow directions [these directions](https://docs.docker.com/docker-for-windows/install/).
@@ -26,20 +26,23 @@ git clone https://github.com/EvangelieAnagnostopoulou/naiades-watering.git
 After that, build the app:
 
 ```
-cd naiades_watering && sudo docker-compose build
+cd naiades-watering && sudo docker-compose build
 ```
 
 ### Run
 After the build finishes successfully, deploy the app:
 ```
-sudo docker-compose start
+sudo docker-compose up -d
 ```
+
+By default, the application is exposed on port 80, 
+but you can control this behaviour by setting the `NAIADES_WATERING_PORT` environment variable.
 
 ### Setup
 After running the app for the first time, connect to the `web` container in order to initialize it:
 
 ```
-docker exec -it naiades_watering_web_1 /bin/bash
+sudo docker exec -it naiades-watering_web_1 /bin/bash
 python manage.py migrate
 ```
 
@@ -61,7 +64,7 @@ In order to update the app to a new version, perform the following steps:
 
 1. Pull latest changes from repository:
 ```
-cd naiades_watering && git pull
+cd naiades-watering && git pull
 ```
 
 2. Rebuild the updated app:
@@ -71,12 +74,13 @@ sudo docker-compose build
 
 3. Restart it:
 ```
-sudo docker-compose restart
+sudo docker-compose stop
+sudo docker-compose up -d
 ```
 
 4. Apply database migrations in the web container:
 ```
-docker exec -it naiades_watering_web_1 /bin/bash
+docker exec -it naiades-watering_web_1 /bin/bash
 python manage.py migrate
 exit
 ```
