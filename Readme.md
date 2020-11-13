@@ -80,7 +80,7 @@ sudo docker-compose up -d
 
 4. Apply database migrations in the web container:
 ```
-docker exec -it naiades-watering_web_1 /bin/bash
+sudo docker exec -it naiades-watering_web_1 /bin/bash
 python manage.py migrate
 exit
 ```
