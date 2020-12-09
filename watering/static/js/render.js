@@ -145,79 +145,58 @@ $(function () {
 
             const that = this;
             $.each(measurements, function(idx, measurement) {
-                //const meter = measurement.box_id;
-
                 // calculate color
                 const color = that.getMeterColor(measurement);
 
-                // create point
-                const point = L.marker([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
-                    icon: that.getIcon(color),
-                    color: '#555',
-                    fillColor: color,
-                    fillOpacity: 0.8,
-                    radius: 30
-                }).addTo(map).on("click", function(e) {
-                    const clickedCircle = e.target;
-                    if (!clickedCircle._popup) {
-                        clickedCircle
-                            .bindPopup(that.getPopupContent(measurement))
-                            .openPopup();
+                //Get sensor position
+                $.ajax({
+                    url: `/watering/api/sensor/${measurement.refDevice}/details`,
+                    success: function(response) {
+                        const sensor = response;
+                        const sensor_location = {
+                            lat: sensor.sensor.location.coordinates[1],
+                            lng: sensor.sensor.location.coordinates[0]
+                        };
+                        // create point
+                        const point = L.marker([sensor_location.lng, sensor_location.lat], {
+                            icon: that.getIcon(color),
+                            color: '#555',
+                            fillColor: color,
+                            fillOpacity: 0.8,
+                            radius: 30
+                        }).addTo(map).on("click", function(e) {
+                            const clickedCircle = e.target;
+                            if (!clickedCircle._popup) {
+                                clickedCircle
+                                    .bindPopup(that.getPopupContent(measurement))
+                                    .openPopup();
+                            }
+                        });
+
+                        // add to items
+                        that.items.push(point);
                     }
                 });
 
-                // add to items
-                that.items.push(point);
-
-                 /*const cpoint = L.circle([measurement.location.coordinates[1], measurement.location.coordinates[0]], {
-                    icon: that.getIcon(color),
-                    color: '#555',
-                    fillColor: color,
-                    fillOpacity: 0.8,
-                    radius: 30
-                }).addTo(map).on("click", function(e) {
-                    const clickedCircle = e.target;
-                    if (!clickedCircle._popup) {
-                        clickedCircle
-                            .bindPopup(that.getPopupContent(measurement))
-                            .openPopup();
+                // create flowerbed polygon
+                const polygon = L.geoJSON([{
+                    type: "Feature",
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [
+                            measurement.location.map(position => [
+                                position.lat, position.long
+                            ])
+                        ]
                     }
-                });
+                }], {
+                    color: color,
+                    fillOpacity: 0.8,
+                }).addTo(map);
 
                 // add to items
-                that.items.push(cpoint);*/
+                that.items.push(polygon);
             });
-            //Create polugon
-            var polugon1 = [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[
-                       [6.138525, 46.1839136],
-                        [6.138624, 46.1838236],
-                        [6.138825, 46.1839136],
-                    ]]
-                }
-            }];
-            var polugon = [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [[
-                       [6.140020953, 46.18419683],
-                        [6.139911953, 46.18423683],
-                        [6.140212953, 46.18422683],
-                        [6.139999953, 46.18421683],
-
-                    ]]
-                }
-            }];
-
-            L.geoJSON(polugon, {
-                color: "#ff0000",
-                fillOpacity: 0.3,
-            }).addTo(map);
-
         },
 
         renderList: function(measurements) {

@@ -35,4 +35,7 @@ urlpatterns = [
 
     # Box Watered
     path('watered/', views.box_watered, name='box-watered'),
+
+    # Sensors API
+    path('api/sensor/<str:refDevice>/details', views.sensor_api_details, name='sensor-api-details'),
 ]

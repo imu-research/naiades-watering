@@ -15,35 +15,31 @@
 
         {% include "util/form-fields.html" %}
 
-        <div id="mapid"></div>
-
-        <!--<form method="post" accept-charset="utf-8" id="map_form">
-          <input type="text" name="vertices" value="" id="vertices" />
-          <input type="button" name="save" value="Save" id="save" />
-        </form> -->
-
         <button class="btn btn-primary" type="submit">
-            {% trans "Next" %}
+            {% trans "Create Box" %}
         </button>
     </form>
 {% endblock %}
 
 {% block js %}
     <script>
-        $('#id_address, #id_latitude, #id_longitude')
-            {#.attr('disabled', 'disabled');#}
-            .closest('.form-group')
-            .css('display', 'none');
-
         $('.form-group input, .form-group select, .form-group textarea').
             addClass('form-control');
 
-        /*
+        const $locationInput = $('#id_location');
 
-        */
+        $('<span />')
+            .addClass('example-location')
+            .text("Example location: [[6.140411101107388,46.18418608298799],[6.140545143921089,46.18399689316645],[6.140663530473896,46.184056735085676]]")
+            .insertAfter($locationInput);
+
+        $locationInput.bind('input', function(){
+            $(this).val(function(_, v){
+                return v.replace(/\s+/g, '');
+            });
+        });
     </script>
     {% include 'watering/sensor-js.html' %}
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAeXisjnsAMK0rYoxNNOPPdtc9JFF7OL_w&libraries=places,drawing"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="{% static 'js/map.js' %}"></script>
 {% endblock %}

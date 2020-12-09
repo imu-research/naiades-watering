@@ -1,3 +1,6 @@
+import ast
+
+from django.core.exceptions import ValidationError
 from django.forms import Form, ModelForm
 from django.forms.widgets import Select
 from django.forms.fields import CharField, DateField, ChoiceField, DecimalField
@@ -43,16 +46,28 @@ class BoxForm(Form):
 class BoxSetupForm(BoxForm):
     box_id = CharField(required=True, label=_('Box ID'))
 
-    #Sensor id
+    # Sensor ID
     refDevice = CharField(required=True, label=_('Sensor ID'), widget=Select)
 
-    #Array of points (Cluster Polygon coordinates)
-    #polygon = CharField(required=True)
+    # Array of points (Cluster Polygon coordinates)
+    location = CharField(required=True)
 
     # location information
-    address = CharField(required=True)
-    latitude = DecimalField()
-    longitude = DecimalField()
+    # TODO remove - migrated to Sensor model
+    # address = CharField(required=True)
+    # latitude = DecimalField()
+    # longitude = DecimalField()
+
+    def clean_location(self):
+        location = self.data.get('location')
+
+        try:
+            return [
+                "%s,%s" % (str(position[1]), str(position[0]))
+                for position in ast.literal_eval(location)
+            ]
+        except (SyntaxError, IndexError):
+            raise ValidationError("Invalid flowerbed location - please check formatting.")
 
     def as_box(self):
         data = super().as_box()
@@ -61,13 +76,9 @@ class BoxSetupForm(BoxForm):
             "id": f"urn:ngsi-ld:FlowerBed:FlowerBed-{self.data['box_id']}",
             "type": "FlowerBed",
             "flowerType": self.data.get('flowers_type'),
-            "location": {
-                "coordinates": [
-                    float(self.data["longitude"]),
-                    float(self.data["latitude"]),
-                ],
-                "type": "Point"
-            },
+            "location": self.cleaned_data["location"],
+            "dateLastWatering": "1970-01-01T01:00:00.00Z",
+            "nextWateringDeadline": "1970-01-01T01:00:00.00Z",
             "soilMoisture": 0,
             "sunExposure": self.data.get('sun_exposure'),
             "refDevice": self.data.get('refDevice')

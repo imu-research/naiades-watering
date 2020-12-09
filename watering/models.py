@@ -193,10 +193,30 @@ class WateringBox(Model):
         return 'FUTURE'
 
     @staticmethod
+    def format_location(location_str_list):
+        return [
+            {
+                "lat": float(location_str.split(",")[1].strip()),
+                "long": float(location_str.split(",")[0].strip()),
+            }
+            for location_str in location_str_list
+        ]
+
+    @staticmethod
     def prepare(data):
         data["isSetup"] = WateringBox.is_setup(data)
-        data["lastWatering"] = WateringBox.status_from_watering_date(data["dateLastWatering"])
-        data["nextWatering"] = WateringBox.status_from_watering_date(data["nextWateringDeadline"])
+
+        for source_prop, target_prop in [
+            ("dateLastWatering", "lastWatering"),
+            ("nextWateringDeadline", "nextWatering"),
+        ]:
+            if source_prop in data:
+                data[target_prop] = WateringBox.status_from_watering_date(data[source_prop])
+            else:
+                data[target_prop] = "UNKNOWN"
+
+        if "location" in data:
+            data["location"] = WateringBox.format_location(data["location"])
 
     @staticmethod
     def list():
@@ -316,6 +336,8 @@ class Sensor(Model):
     TODO migrate to API
     """
     id = CharField(max_length=16, primary_key=True, db_index=True)
+    serialNumber = CharField(max_length=16, primary_key=True, db_index=True)
+
     data = JSONField(blank=True, default=dict)
 
     service = 'carouge'
@@ -341,3 +363,14 @@ class Sensor(Model):
         ]
 
         return sensors
+
+    @staticmethod
+    def get_device(refDevice):
+        try:
+            return [
+                sensor
+                for sensor in Sensor.list()
+                if sensor["serialNumber"] == refDevice
+            ][0]
+        except IndexError:
+            raise Sensor.DoesNotExist()

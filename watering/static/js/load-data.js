@@ -17,11 +17,14 @@ $(function () {
 
                     $.each(boxes, function(idx, box) {
 
+                        // set cluster position
+                        box.location.position = box.location;
+
                         // set position
-                        box.location.position = {
+                        /*box.location.position = {
                             lat: box.location.coordinates[1],
                             lng: box.location.coordinates[0]
-                        };
+                        };*/
                     });
 
                     that.fetchedMeasurements = boxes;

@@ -233,6 +233,7 @@ def box_history(box_id):
     # render
     return historic_data
 
+
 def box_watered(request):
     box_id = request.GET.get("id")
 
@@ -244,3 +245,8 @@ def box_watered(request):
 
     return JsonResponse({})
 
+
+def sensor_api_details(request, refDevice):
+    return JsonResponse({
+        "sensor":  Sensor.get_device(refDevice)
+    })

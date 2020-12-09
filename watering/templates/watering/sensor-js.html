@@ -24,11 +24,11 @@
             .attr("value", sensor.serialNumber)
             .text(
                 `${sensor.serialNumber}${sensor.name ? ` (${sensor.name})` : ""}` +
-                `${attachedTo && (
+                `${attachedTo ? (
                     attachedTo === "{{ box.id }}"
                         ? " [Attached to this box]"
                         : " [Warning: Already attached to other box]"
-                )}`
+                ) : " [Not attached yet]"}`
             );
 
         // mark as selected
