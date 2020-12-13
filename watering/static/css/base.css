@@ -56,3 +56,16 @@ ul.errorlist {
 #language-picker > form {
     display: inline-block;
 }
+
+.stepper .stepper-arrow {
+    height: 18px;
+}
+
+.stepper .up {
+    top: 25px;
+}
+
+.stepper .down {
+    bottom: auto;
+    top: 40px;
+}

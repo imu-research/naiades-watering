@@ -1,3 +1,5 @@
+import copy
+
 import requests
 
 from datetime import datetime, timedelta
@@ -217,6 +219,15 @@ class WateringBox(Model):
 
         if "location" in data:
             data["location"] = WateringBox.format_location(data["location"])
+
+        if "category" in data:
+            category = data.pop("category")
+
+            try:
+                data["soil_type"] = category[0]
+                data["number_of_boxes"] = int(category[1].split(" ")[1])
+            except (IndexError, ValueError):
+                pass
 
     @staticmethod
     def list():

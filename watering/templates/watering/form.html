@@ -61,15 +61,16 @@
     </div>
 
     <div class="row">
-        <!--<div class="col-lg-6 col-xs-12 ">
+        <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_installed_at">Installation date:</label>
-                <input type="text" name="installed_at" required="" id="id_installed_at" class="form-control" value="{{ form.data.installed_at }}">
-                {% if form.errors.installed_at %}
-                    <span class="o-red">{{ form.errors.installed_at }}</span>
+                <label for="id_number_of_boxes">Number of boxes:</label>
+                <input type="number" step="1" name="number_of_boxes" required="" id="id_number_of_boxes" class="form-control" value="{{ form.data.number_of_boxes }}">
+                {% if form.errors.number_of_boxes %}
+                    <span class="o-red">{{ form.errors.number_of_boxes }}</span>
                 {% endif %}
             </div>
-        </div> -->
+        </div>
+
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_refDevice">{% trans "Sensor ID" %}:</label>

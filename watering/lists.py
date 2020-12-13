@@ -2,8 +2,8 @@ from django.utils.translation import gettext as _
 
 
 SOIL_TYPES = (
-    ("soilNormal", _("soilNormal")),
-    ("soilCompost", _("soilCompost")),
+    ("soilNormal", _("Normal")),
+    ("soilCompost", _("Compost")),
 )
 
 

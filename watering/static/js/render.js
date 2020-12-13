@@ -93,7 +93,7 @@ $(function () {
                 .append($(`<div class="prop-label">`+window.MESSAGES.boxId+`:</div><div class="prop-value">${meter.boxId}</></div><br>`))
                 .append($(`<div class="prop-label">`+window.MESSAGES.lastWatering+`:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
                 .append($(`<div class="prop-label">`+window.MESSAGES.nextWatering+`:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.soilType+`:</div><div class="prop-value"> ${meter.soilType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">`+window.MESSAGES.soil_type+`:</div><div class="prop-value"> ${meter.soil_type.replace("soil", "") || '-'}</div><br>`))
                 .append($(`<div class="prop-label">`+window.MESSAGES.flowerType+`:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
                 .append($(`<div class="prop-label">`+window.MESSAGES.sunExposure+`:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
                 // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))

@@ -3,7 +3,7 @@ import ast
 from django.core.exceptions import ValidationError
 from django.forms import Form, ModelForm
 from django.forms.widgets import Select
-from django.forms.fields import CharField, DateField, ChoiceField, DecimalField
+from django.forms.fields import CharField, DateField, ChoiceField, IntegerField
 
 from django.utils.translation import gettext as _
 
@@ -12,34 +12,32 @@ from .lists import *
 
 
 class BoxForm(Form):
-    #soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
+    soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
-    #installed_at = CharField(required=True, label=_('Installation date'))
-    #size = ChoiceField(required=True, label=_('Box size'), choices=BOX_SIZES)
+    number_of_boxes = IntegerField(required=True, label=_('Number of boxes'))
 
     @staticmethod
     def from_box(box):
         data = box.data
 
         return BoxForm({
-            #"soil_type": data["soilType"],
             "flowers_type": data["flowerType"],
             "sun_exposure": data["sunExposure"],
-            #"installed_at": data["installationDate"],
-            #"size": data["boxSize"],
             "refDevice": data["refDevice"],
-
+            "soil_type": data.get("soil_type"),
+            "number_of_boxes": data.get("number_of_boxes"),
         })
 
     def as_box(self):
         return {
-            #"soilType": self.data["soil_type"],
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
-            #"installationDate": self.data["installed_at"],
-            #"boxSize": self.data["size"],
             "refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
+            "category": [
+                self.data["soil_type"],
+                "numberOfInstances: %d" % int(self.data["number_of_boxes"])
+            ],
         }
 
 
@@ -51,12 +49,6 @@ class BoxSetupForm(BoxForm):
 
     # Array of points (Cluster Polygon coordinates)
     location = CharField(required=True)
-
-    # location information
-    # TODO remove - migrated to Sensor model
-    # address = CharField(required=True)
-    # latitude = DecimalField()
-    # longitude = DecimalField()
 
     def clean_location(self):
         location = self.data.get('location')
@@ -81,7 +73,11 @@ class BoxSetupForm(BoxForm):
             "nextWateringDeadline": "1970-01-01T01:00:00.00Z",
             "soilMoisture": 0,
             "sunExposure": self.data.get('sun_exposure'),
-            "refDevice": self.data.get('refDevice')
+            "refDevice": self.data.get('refDevice'),
+            "category": [
+                self.data["soil_type"],
+                "numberOfInstances: %d" % int(self.data["number_of_boxes"])
+            ],
         })
 
         return data
