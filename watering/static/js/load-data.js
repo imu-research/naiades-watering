@@ -18,7 +18,9 @@ $(function () {
                     $.each(boxes, function(idx, box) {
 
                         // set cluster position
-                        box.location.position = box.location;
+                        if (box.location) {
+                            box.location.position = box.location;
+                        }
 
                         // set position
                         /*box.location.position = {

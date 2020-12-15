@@ -22,9 +22,9 @@ class BoxForm(Form):
         data = box.data
 
         return BoxForm({
-            "flowers_type": data["flowerType"],
-            "sun_exposure": data["sunExposure"],
-            "refDevice": data["refDevice"],
+            "flowers_type": data.get("flowerType"),
+            "sun_exposure": data.get("sunExposure"),
+            "refDevice": data.get("refDevice"),
             "soil_type": data.get("soil_type"),
             "number_of_boxes": data.get("number_of_boxes"),
         })

@@ -162,7 +162,7 @@ class WateringBox(Model):
 
     @staticmethod
     def is_setup(data):
-        return data["flowerType"] and data["sunExposure"]
+        return data.get("flowerType") and data.get("sunExposure")
 
     @staticmethod
     def status_from_watering_date(watering_date):
