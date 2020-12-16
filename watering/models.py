@@ -244,20 +244,23 @@ class WateringBox(Model):
 
         for flowerbed in flowerbeds:
             # get entity id
-            box_id = flowerbed.get("boxId") or flowerbed["id"].split("urn:ngsi-ld:FlowerBed:FlowerBed-")[1]
+            try:
+                box_id = flowerbed.get("boxId") or flowerbed["id"].split("urn:ngsi-ld:FlowerBed:FlowerBed-")[1]
 
-            # update in flowerbed
-            flowerbed["boxId"] = box_id
+                # update in flowerbed
+                flowerbed["boxId"] = box_id
 
-            # add dates & setup
-            WateringBox.prepare(flowerbed)
+                # add dates & setup
+                WateringBox.prepare(flowerbed)
 
-            # add instance
-            boxes.append(WateringBox(
-                id=box_id,
-                data=flowerbed
-            ))
-
+                # add instance
+                boxes.append(WateringBox(
+                    id=box_id,
+                    data=flowerbed
+                ))
+            except:
+                print(f"Invalid flowerbed: {str(flowerbed)}")
+                
         return boxes
 
     @staticmethod
