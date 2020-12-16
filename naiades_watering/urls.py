@@ -33,4 +33,7 @@ urlpatterns = [
 
     # app
     path('watering/', include('watering.urls')),
+
+    # / redirect
+    path('', views.home_redirect, name='home-redirect')
 ]
