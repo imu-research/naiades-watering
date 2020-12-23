@@ -350,7 +350,7 @@ class Sensor(Model):
     TODO migrate to API
     """
     id = CharField(max_length=16, primary_key=True, db_index=True)
-    serialNumber = CharField(max_length=16, primary_key=True, db_index=True)
+    serialNumber = CharField(max_length=16, db_index=True)
 
     data = JSONField(blank=True, default=dict)
 
