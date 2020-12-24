@@ -205,7 +205,27 @@ class WateringBox(Model):
         ]
 
     @staticmethod
+    def extract_values_from_dicts(data):
+        value_keys = ["value", "coordinates"]
+
+        # extract from type/value dicts
+        for prop in data:
+
+            # ignore non-dicts
+            if type(data[prop]) != dict:
+                continue
+
+            # try all value keys
+            for value_key in value_keys:
+                if value_key in data[prop]:
+                    data[prop] = data[prop][value_key]
+                    break
+
+        return data
+
+    @staticmethod
     def prepare(data):
+        # include extra attributes
         data["isSetup"] = WateringBox.is_setup(data)
 
         for source_prop, target_prop in [
@@ -245,6 +265,10 @@ class WateringBox(Model):
         for flowerbed in flowerbeds:
             # get entity id
             try:
+                # extract values from type/value dicts
+                flowerbed = WateringBox.extract_values_from_dicts(data=flowerbed)
+
+                # get box id
                 box_id = flowerbed.get("boxId") or flowerbed["id"].split("urn:ngsi-ld:FlowerBed:FlowerBed-")[1]
 
                 # update in flowerbed
@@ -319,9 +343,13 @@ class WateringBox(Model):
         sensors = {}
 
         for flowerbed in flowerbeds:
+            # flatten value/type dicts
+            flowerbed = WateringBox.extract_values_from_dicts(data=flowerbed)
+
             # get sensor Id
             ref_device = flowerbed.get("refDevice")
 
+            # link with flowerbed
             if ref_device is not None:
                 try:
                     sensors[ref_device] = str(int(flowerbed["id"].split("-")[-1]))
