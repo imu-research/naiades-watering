@@ -90,31 +90,23 @@ $(function () {
 
             return $("<div />")
                 .addClass("popup-content")
-                .append($(`<div class="prop-label">`+window.MESSAGES.boxId+`:</div><div class="prop-value">${meter.boxId}</></div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.lastWatering+`:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.nextWatering+`:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.soil_type+`:</div><div class="prop-value"> ${meter.soil_type.replace("soil", "") || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.flowerType+`:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.sunExposure+`:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
-                // .append($(`<div class="prop-label">Wind exposure:</div><div class="prop-value"> ${meter.windExposure || '-'}</div><br>`))
-                //.append($(`<div class="prop-label">Installation date:</div><div class="prop-value">${meter.installationDate || '-'}</div><br>`))
-                //.append($(`<div class="prop-label">Box size:</div><div class="prop-value">${meter.boxSize || '-'}</div><br>`))
-                .append($(`<div class="prop-label">`+window.MESSAGES.humidity+`:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
-                //.append($('<div class="prop-label consumption-label">Amount of water:</div>'))
-                //.append($(`<div class="consumption">${consumption} m<sup>3</sup></div>`))
-                //.append($('<div class="prop-label">Box Id:</div>'))
-                //.append($(`<div class="prop-value">${meter.box_id}</div>`))
-                //.append($(`<a href="#" class="action">More Details</a>`))
-                .append($(`<button class="btn btn-primary btn-sm action btn--first">`+window.MESSAGES.moreDetails+`</button>`)
-                    .on("click", function() {
-                        location.href=`/watering/details?id=${meter.boxId}`
-                    })
+                .append($(`<div class="prop-label">${window.MESSAGES.boxId}:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${meter.soil_type.replace("soil", "") || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.flowerType}:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.sunExposure}:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.humidity}:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
+                .append($('<a />')
+                    .attr('href', `/watering/details?id=${meter.boxId}`)
+                    .addClass('btn btn-primary btn-sm action btn--first')
+                    .css('color', '#fff')
+                    .text(window.MESSAGES.moreDetails)
                 )
-                .append($(`<button class="btn btn-default btn-sm action">`+window.MESSAGES.reportProblem+`</button>`)
-                    .on("click", function() {
-                        //that.addToMeterChart(meter)
-                        location.href='/watering/report'
-                    })
+                .append($('<a />')
+                    .attr('href', `/watering/box/${meter.boxId}/issues/report/`)
+                    .addClass('btn btn-default btn-sm action')
+                    .text(window.MESSAGES.reportProblem)
                 )
                 .get(0)
         },
@@ -137,46 +129,39 @@ $(function () {
             });
         },
 
-        renderMap: function(measurements) {
+        renderMap: function(flowerbeds) {
             const map = this.map;
 
             // get max consumption
             //const maxConsumption = this.getMaxConsumption();
 
             const that = this;
-            $.each(measurements, function(idx, measurement) {
+            $.each(flowerbeds, function(idx, flowerbed) {
                 // calculate color
-                const color = that.getMeterColor(measurement);
+                const color = that.getMeterColor(flowerbed);
 
-                //Get sensor position
-                $.ajax({
-                    url: `/watering/api/sensor/${measurement.refDevice}/details`,
-                    success: function(response) {
-                        const sensor = response;
-                        const sensor_location = {
-                            lat: sensor.sensor.location.coordinates[1],
-                            lng: sensor.sensor.location.coordinates[0]
-                        };
-                        // create point
-                        const point = L.marker([sensor_location.lng, sensor_location.lat], {
-                            icon: that.getIcon(color),
-                            color: '#555',
-                            fillColor: color,
-                            fillOpacity: 0.8,
-                            radius: 30
-                        }).addTo(map).on("click", function(e) {
-                            const clickedCircle = e.target;
-                            if (!clickedCircle._popup) {
-                                clickedCircle
-                                    .bindPopup(that.getPopupContent(measurement))
-                                    .openPopup();
-                            }
-                        });
+                // create point if sensor data is provided
+                if (flowerbed.sensor) {
+                    const sensorLocation = flowerbed.sensor.location;
 
-                        // add to items
-                        that.items.push(point);
-                    }
-                });
+                    const point = L.marker([sensorLocation[0], sensorLocation[1]], {
+                        icon: that.getIcon(color),
+                        color: '#555',
+                        fillColor: color,
+                        fillOpacity: 0.8,
+                        radius: 30
+                    }).addTo(map).on("click", function(e) {
+                        const clickedCircle = e.target;
+                        if (!clickedCircle._popup) {
+                            clickedCircle
+                                .bindPopup(that.getPopupContent(flowerbed))
+                                .openPopup();
+                        }
+                    });
+
+                    // add to items
+                    that.items.push(point);
+                }
 
                 // create flowerbed polygon
                 const polygon = L.geoJSON([{
@@ -184,7 +169,7 @@ $(function () {
                     geometry: {
                         type: "Polygon",
                         coordinates: [
-                            measurement.location.map(position => [
+                            flowerbed.location.map(position => [
                                 position.lat, position.long
                             ])
                         ]

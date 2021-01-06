@@ -180,15 +180,6 @@ def list_view(request):
 
 def route_view(request):
     return show_watering_points(request, mode='route')
-# def view_route(request):
-#
-#     # get boxes for this user
-#     boxes = WateringBox.list()
-#
-#     # render
-#     return render(request, 'watering/route.html', {
-#         'boxes': boxes,
-#     })
 
 
 def box_edit(request):

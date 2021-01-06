@@ -57,6 +57,10 @@ ul.errorlist {
     display: inline-block;
 }
 
+#language-picker button {
+    border: none !important;
+}
+
 .stepper .stepper-arrow {
     height: 18px;
 }

@@ -224,7 +224,7 @@ class WateringBox(Model):
         return data
 
     @staticmethod
-    def prepare(data):
+    def prepare(data, sensor=None):
         # include extra attributes
         data["isSetup"] = WateringBox.is_setup(data)
 
@@ -237,9 +237,14 @@ class WateringBox(Model):
             else:
                 data[target_prop] = "UNKNOWN"
 
+        # add & format
         if "location" in data:
             data["location"] = WateringBox.format_location(data["location"])
 
+        # add sensor info
+        data["sensor"] = sensor
+
+        # set soil type & number of boxes from category field
         if "category" in data:
             category = data.pop("category")
 
@@ -259,9 +264,14 @@ class WateringBox(Model):
             if entity["type"] == WateringBox.type
         ]
 
+        # get sensors by id
+        sensors_idx = {
+            sensor["serialNumber"]: WateringBox.extract_values_from_dicts(data=sensor)
+            for sensor in Sensor.list()
+        }
+
         # create WateringBox instances
         boxes = []
-
         for flowerbed in flowerbeds:
             # get entity id
             try:
@@ -275,7 +285,10 @@ class WateringBox(Model):
                 flowerbed["boxId"] = box_id
 
                 # add dates & setup
-                WateringBox.prepare(flowerbed)
+                WateringBox.prepare(
+                    flowerbed,
+                    sensor=sensors_idx.get(flowerbed.get("refDevice", ""))
+                )
 
                 # add instance
                 boxes.append(WateringBox(

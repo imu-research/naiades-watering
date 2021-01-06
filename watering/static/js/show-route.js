@@ -47,15 +47,18 @@ $(function() {
                 if (status === google.maps.DirectionsStatus.OK) {
                     directionsDisplay.setDirections(response);
                     if(response["routes"][0]["waypoint_order"].length > 0){
-                        const next = response["routes"][0]["waypoint_order"][0]
+                        const next = response["routes"][0]["waypoint_order"][0];
 
-                        $( "#next-box-watering" ).append(
-                            $('<div />').text(window.MESSAGES.nextBox+`: `+window.MESSAGES.box+` #${wptdetails[next].meter.id.split("FlowerBed-")[1] || '-'}`)
-                        )
+
+                        $( "#next-box-watering" )
+                            .empty()
                             .append(
-                                $('<div />').text(window.MESSAGES.amount+`: ${wptdetails[next].meter.nextWateringAmountRecommendation || '-'} lt`)
+                                $('<div />').text(`${window.MESSAGES.nextBox}: ${window.MESSAGES.box} #${wptdetails[next].meter.id.split("FlowerBed-")[1] || '-'}`)
                             )
-                        $( "#next-box-watering" ).show();
+                            .append(
+                                $('<div />').text(`${window.MESSAGES.amount}: ${wptdetails[next].meter.nextWateringAmountRecommendation || '-'} lt`)
+                            )
+                            .show();
                     }
 
                 } else {
@@ -120,7 +123,7 @@ $(function() {
             const waypoints = [];
             const wptdetatils = [];
             $.each(meters, function(idx, meter) {
-                const point = new google.maps.LatLng(meter.location.coordinates[1], meter.location.coordinates[0]);
+                const point = new google.maps.LatLng(meter.sensor.location[0], meter.sensor.location[1]);
 
                 waypoints.push({
                     location: point,

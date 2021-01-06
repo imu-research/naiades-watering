@@ -24,11 +24,6 @@
     <div class="row" id="data" style="margin: 10px;">
     <div class="row" style="margin: 10px;">
          <div class="col-md-6">
-{#                    <div class="btn-group">#}
-{#                      <button type="button" class="btn btn-primary">Today</button>#}
-{#                      <button type="button" class="btn btn-primary">Tomorrow</button>#}
-{#                      <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-align-right"></i></button>#}
-{#                    </div>#}
              <form class="form-inline">
                  <div class="form-group">
                      <label for="next-watering">{% trans "Suggested watering day" %} </label>
@@ -50,16 +45,8 @@
              </form>
          </div>
 
-         {% if mode == "list" %}
-             <div class="col-md-3">
-                <!--<button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="window.print();">
-                        <i class="glyphicon glyphicon-print"></i>
-                      </button> -->
-             </div>
-         {% else %}
-             <div class="col-md-3">
-             </div>
-         {% endif %}
+         <div class="col-md-3">
+         </div>
 
          {% if mode != "route" %}
              <div class="col-md-3">
@@ -80,7 +67,7 @@
                     <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">{% trans "View suggested route for visiting boxes" %}</button>
                </div>
         </div>
-    {% elif TESTING %}
+    {% elif TESTING and False %}
         <div class="row" style="margin: 10px">
             <button type="button" class="btn btn-primary" id="test-route-btn">
                 {% trans "Start test route" %}
@@ -123,21 +110,10 @@
 
     <script>
         window.RENDERING_MODE = "{{ mode }}";
-
-        /*$(function exportReport() {
-                var divContents = $("#container").html();
-                let printWindow = window.open('', '', 'height=400,width=800');
-                printWindow.document.write(`<html><head><title>Daily Report</title>`);
-                printWindow.document.write('</head><body >');
-                printWindow.document.write(divContents);
-                printWindow.document.write('</body></html>');
-                printWindow.document.close();
-                printWindow.print();
-            })*/
     </script>
-    <script src="{% static 'js/render.js' %}"></script>
+    <script src="{% static 'js/render.js' %}?v=20210106.1"></script>
     {% if mode == "route" %}
-        <script src="{% static 'js/show-route.js' %}"></script>
+        <script src="{% static 'js/show-route.js' %}?v=20210106.1"></script>
         <script src="{% static 'js/location-manager.js' %}"></script>
         <script src="{% static 'js/geofencing.js' %}"></script>
         <script>
