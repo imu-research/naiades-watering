@@ -73,3 +73,11 @@ ul.errorlist {
     bottom: auto;
     top: 40px;
 }
+
+.text-color--green {
+    color: green;
+}
+
+.text-color--red {
+    color: red;
+}

@@ -26,6 +26,7 @@ urlpatterns = [
     # Boxes API
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
     path('api/boxes/<str:box_id>/delete/', views.box_api_delete, name='box-api-delete'),
+    path('api/boxes/<str:box_id>/start-watering/', views.box_api_start_watering, name='box-api-start-watering'),
 
     # List View
     path('route/', views.route_view, name='route'),

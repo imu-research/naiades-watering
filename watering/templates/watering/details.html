@@ -5,6 +5,15 @@
 
 {% block css %}
     <link href="{% static 'css/create.css' %}" rel="stylesheet">
+    <style>
+        #start-watering-info {
+            margin: 10px 0;
+        }
+
+        #start-watering-info i {
+            margin-left: 10px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -27,7 +36,7 @@
           </div> -->
 
         <div class="col-md-3">
-            <button type="button" class="btn btn-primary btn-block" onclick="location.href='#'">{% trans "Start Watering" %}</button>
+            <button id="start-watering" type="button" class="btn btn-primary btn-block">{% trans "Start Watering" %}</button>
         </div>
         <div class="col-md-9">
             <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | safe }} );">
@@ -103,11 +112,62 @@
     <script src="{% static 'js/report.js' %}"></script>
     <script>
         $(function() {
+            /* Start Watering */
+            $('#start-watering').on("click", function() {
+                const $btn = $(this);
+
+                // remove previous message
+                $('#start-watering-info').remove();
+
+                // set loading
+                $btn
+                    .attr("disabled", "disabled")
+                    .append($('<i />').addClass("fa fa-spinner fa-spin"));
+
+                // create info message
+                const $info = $('<div />')
+                    .attr('id', 'start-watering-info');
+
+                $.ajax({
+                    url: "/watering/api/boxes/{{ box.id }}/start-watering/",
+                    type: "POST",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function() {
+                        // show success message
+                        $info
+                            .addClass("text-color--green")
+                            .append($('<span />').text("Watering event simulated"))
+                            .append($('<i />').addClass("glyphicon glyphicon-check"));
+                    },
+                    error: function() {
+                        // show success message
+                        $info
+                            .addClass("text-color--red")
+                            .append($('<span />').text("An error occurred"))
+                            .append($('<i />').addClass("glyphicon glyphicon-warning-sign text-color--red"));
+                    },
+                    complete: function() {
+                        // show info message
+                        $info
+                            .insertAfter($btn);
+
+                        // enable button again
+                        $btn
+                            .removeAttr("disabled");
+                    }
+                });
+            });
+
+            /* Delete Box */
             $('#delete-box').on("click", function() {
+                // confirm
                 if (!window.confirm('Are you sure you want to delete box {{ box.id }}?')) {
                     return
                 }
 
+                // post to delete endpoint
                 $.ajax({
                     url: "/watering/api/boxes/{{ box.id }}/delete/",
                     type: "POST",
@@ -117,7 +177,7 @@
                     success: function() {
                         window.location.href = "/watering/list/";
                     }
-                })
+                });
             })
         });
     </script>

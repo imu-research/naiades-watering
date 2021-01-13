@@ -47,14 +47,14 @@ class OrionEntity(object):
                     response.get("description", "").lower() == "already exists":
                 exception = BoxAlreadyExists()
         except:
-            pass
+            response = response.content
 
         # raise specific exception if detected
         if exception:
             raise exception
 
         # raise generic exception
-        raise OrionError(response.content)
+        raise OrionError(response)
 
     def list(self, service):
         # list entities

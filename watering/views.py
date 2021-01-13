@@ -241,3 +241,26 @@ def sensor_api_details(request, refDevice):
     return JsonResponse({
         "sensor":  Sensor.get_device(refDevice)
     })
+
+
+def box_api_start_watering(request, box_id):
+    # only accept POST requests
+    if request.method != "POST":
+        return JsonResponse({
+            "error": f"Invalid method: only POST is allowed."
+        })
+
+    # patch box
+    WateringBox.post(
+        box_id=f"urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}",
+        data={
+            "dateLastWatering": {
+                "type": "DateTime",
+                "value": now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "metadata": {}
+            },
+        }
+    )
+
+    # success response
+    return JsonResponse({})
