@@ -22,6 +22,10 @@
             <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Box #" %}{{ box.id }} </h3>
         </div>
         <div class="col-xs-12 col-sm-3" style="text-align: right">
+            <a href="/watering/list" id="back-box"
+                    class="btn btn-secondary" style="margin-right: 12px;">
+                <i class="glyphicon glyphicon-chevron-left"></i> Back
+            </a>
             <button id="delete-box"
                     class="btn btn-danger {% if not box.can_be_deleted %}disabled{% endif %}"
                     {% if not box.can_be_deleted %}disabled{% endif %}
