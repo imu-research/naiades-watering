@@ -75,7 +75,10 @@ $(function() {
         // find measurements around
         const localMeasurements = NaiadesWateringData.measurements.filter(
             measurement => LocationManager.getDistance(
-                measurement.location.position, locationInfo.position
+                {
+                lat: measurement.sensor.location[0],
+                lng: measurement.sensor.location[1],
+            }, locationInfo.position
             ) < maxLocalRadius
         );
 

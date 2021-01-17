@@ -67,7 +67,7 @@
                     <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">{% trans "View suggested route for visiting boxes" %}</button>
                </div>
         </div>
-    {% elif TESTING and False %}
+    {% elif TESTING %}
         <div class="row" style="margin: 10px">
             <button type="button" class="btn btn-primary" id="test-route-btn">
                 {% trans "Start test route" %}
@@ -114,8 +114,8 @@
     <script src="{% static 'js/render.js' %}?v=20210106.1"></script>
     {% if mode == "route" %}
         <script src="{% static 'js/show-route.js' %}?v=20210106.1"></script>
-        <script src="{% static 'js/location-manager.js' %}"></script>
-        <script src="{% static 'js/geofencing.js' %}"></script>
+        <script src="{% static 'js/location-manager.js' %}?v=20210117.1"></script>
+        <script src="{% static 'js/geofencing.js' %}?v=20210117.1"></script>
         <script>
             $(function() {
                 $('#test-route-btn').on("click", function() {
