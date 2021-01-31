@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-13 21:13+0200\n"
+"POT-Creation-Date: 2021-01-31 19:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\templates\base.html:119
+#: .\templates\base.html:117
 msgid "of ICCS"
 msgstr "de ICCS"
 
-#: .\templates\base.html:120
+#: .\templates\base.html:118
 msgid "All rights reserved – developed in the NAIADES project"
 msgstr "Tous drois réservés - développé dans le cadre du projet NAIADES"
 
@@ -39,19 +39,17 @@ msgid "Login"
 msgstr ""
 
 #: .\templates\util\js-translations.html:5
-#: .\watering\templates\watering\route.html:21
-#: .\watering\templates\watering\view.html:40
+#: .\watering\templates\watering\view.html:22
 msgid "Today"
 msgstr "Aujourd'hui"
 
 #: .\templates\util\js-translations.html:6
-#: .\watering\templates\watering\route.html:22
-#: .\watering\templates\watering\view.html:41
+#: .\watering\templates\watering\view.html:23
 msgid "Tomorrow"
 msgstr "Demain"
 
 #: .\templates\util\js-translations.html:7
-#: .\watering\templates\watering\view.html:42
+#: .\watering\templates\watering\view.html:24
 #, fuzzy
 #| msgid "Later than tomorrow"
 msgid "Day after tomorrow"
@@ -66,7 +64,7 @@ msgid "Later than tomorrow"
 msgstr "Plus tard que demain"
 
 #: .\templates\util\js-translations.html:10
-#: .\watering\templates\watering\view.html:46
+#: .\watering\templates\watering\view.html:28
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -219,7 +217,7 @@ msgid "Watering Logs"
 msgstr "Registres d'arrosage"
 
 #: .\templates\util\js-translations.html:44
-#: .\watering\templates\watering\details.html:58
+#: .\watering\templates\watering\details.html:71
 msgid "Date"
 msgstr ""
 
@@ -228,9 +226,15 @@ msgid "Amount of water"
 msgstr "Quantité d'eau"
 
 #: .\templates\util\js-translations.html:46
-#: .\watering\templates\watering\details.html:60
+#: .\watering\templates\watering\details.html:73
 msgid "Comments"
 msgstr "Commentaires"
+
+#: .\templates\util\js-translations.html:47
+#, fuzzy
+#| msgid "Setup a new box"
+msgid "Next Box"
+msgstr "Configurer un nouveau bac"
 
 #: .\watering\forms.py:18
 msgid "Number of boxes"
@@ -279,21 +283,21 @@ msgstr "Configuration d'un bac - Infos"
 msgid "Create Box"
 msgstr "Configurer un nouveau bac"
 
-#: .\watering\templates\watering\details.html:13
+#: .\watering\templates\watering\details.html:22
 #: .\watering\templates\watering\edit.html:11
 #: .\watering\templates\watering\issues\index.html:12
 msgid "Box #"
 msgstr "Bac #"
 
-#: .\watering\templates\watering\details.html:26
+#: .\watering\templates\watering\details.html:39
 msgid "Date Filter"
 msgstr "Filtre Date"
 
-#: .\watering\templates\watering\details.html:30
+#: .\watering\templates\watering\details.html:43
 msgid "Start Watering"
 msgstr "Commencer arrosage"
 
-#: .\watering\templates\watering\details.html:59
+#: .\watering\templates\watering\details.html:72
 #, fuzzy
 #| msgid "Amount of water"
 msgid "Amount of watering"
@@ -408,40 +412,38 @@ msgid "Report"
 msgstr "Rapport"
 
 #: .\watering\templates\watering\view.html:16
-msgid "List"
-msgstr "Liste"
-
-#: .\watering\templates\watering\view.html:20
-msgid "Map"
-msgstr "Carte"
-
-#: .\watering\templates\watering\view.html:34
 msgid "Suggested watering day"
 msgstr "Jour d'arrosage suggeré"
 
-#: .\watering\templates\watering\view.html:37
+#: .\watering\templates\watering\view.html:19
 msgid "All"
 msgstr "Tous"
 
-#: .\watering\templates\watering\view.html:45
+#: .\watering\templates\watering\view.html:27
 msgid "Later in the future"
 msgstr "Ultérieurement"
 
-#: .\watering\templates\watering\view.html:66
+#: .\watering\templates\watering\view.html:39
 msgid "Configure a new Box"
 msgstr "Ajouter un bac"
 
-#: .\watering\templates\watering\view.html:80
-msgid "View suggested route for visiting boxes"
+#: .\watering\templates\watering\view.html:45
+msgid "View suggested route"
 msgstr "Voir le trajet suggéré"
 
-#: .\watering\templates\watering\view.html:86
+#: .\watering\templates\watering\view.html:56
 msgid "Start test route"
 msgstr "Démarrer trajet de test"
 
-#: .\watering\templates\watering\view.html:89
+#: .\watering\templates\watering\view.html:59
 msgid "Move to next position"
 msgstr "Aller à la position suivante"
+
+#~ msgid "List"
+#~ msgstr "Liste"
+
+#~ msgid "Map"
+#~ msgstr "Carte"
 
 #~ msgid "Humidity History Graph"
 #~ msgstr "Graphique historique humidité"

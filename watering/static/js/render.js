@@ -2,9 +2,24 @@ $(function () {
     window.NaiadesRender = {
         mode: window.RENDERING_MODE,
         containerId: 'container',
+        mapContainerId: 'map-container',
+
+        createMapContainer: function() {
+            const $mapContainer = $('<div />')
+                .attr("id", this.mapContainerId);
+
+            // append map container
+            $(`#${this.containerId}`).append($mapContainer);
+
+            return $mapContainer
+        },
 
         initializeMap: function() {
-            this.map = L.map(this.containerId).setView([46.1838136, 6.138625], 15);
+            // create map container
+            this.createMapContainer();
+
+            // initialize map
+            this.map = L.map(this.mapContainerId).setView([46.1838136, 6.138625], 15);
 
             L.tileLayer(
                 //'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -25,6 +40,10 @@ $(function () {
             });
         },
 
+        initializeRoute: function() {
+            this.createMapContainer();
+        },
+
         initializeList: function() {
             // TODO initialize table
             this.$table = $('<div id="StatusTable" />');
@@ -36,11 +55,17 @@ $(function () {
         initialize: function() {
             this.items = [];
 
-            if (this.mode === "map") {
-                return this.initializeMap();
+            if (this.mode.indexOf("map") >= 0) {
+                this.initializeMap();
             }
 
-            return this.initializeList();
+            if (this.mode.indexOf("route") >= 0) {
+                this.initializeRoute();
+            }
+
+            if (this.mode.indexOf("list") >= 0) {
+                this.initializeList();
+            }
         },
 
         clear: function() {
@@ -195,6 +220,13 @@ $(function () {
                 "UNKNOWN": window.MESSAGES.unknown
             };
 
+            // empty message
+            if (!measurements.length) {
+                return that.$table.append($('<div />')
+                    .addClass("boxes--empty-message")
+                    .text(`No boxes need watering ${$('#next-watering').val().toLowerCase()}.`)
+                )
+            }
             // for each next watering indication
             $.each(["TODAY", "TOMORROW", "DAY_AFTER_TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
                 // select measurements with this next watering indication
@@ -202,8 +234,6 @@ $(function () {
                     filter(meter => meter.nextWatering === nextWatering);
 
                 $.each(filteredMeasurements, function(idx, meter) {
-                    //const meter = measurement.box_id;
-
                     // calculate color
                     const color = that.getMeterColor(meter);
 
@@ -295,15 +325,17 @@ $(function () {
         },
 
         render: function(measurements) {
-            if (this.mode === "map") {
-                return this.renderMap(measurements);
+            if (this.mode.indexOf("map") >= 0) {
+                this.renderMap(measurements);
             }
 
-            if (this.mode === "route") {
-                return window.NaiadesRouter.renderRoute(measurements);
+            if (this.mode.indexOf("route") >= 0) {
+                window.NaiadesRouter.renderRoute(measurements);
             }
 
-            return this.renderList(measurements);
+            if (this.mode.indexOf("list") >= 0) {
+                this.renderList(measurements);
+            }
         }
     }
 });

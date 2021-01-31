@@ -7,17 +7,8 @@ urlpatterns = [
     # home
     path('', views.home, name='home'),
 
-    # box
-    path('boxes/create/', views.box_create, name='box-create'),
-
-    # List View
-    path('list/', views.list_view, name='box-list'),
-
     # Box Details
     path('details/', views.box_details, name='box-details'),
-
-    # Map View
-    path('map/', views.map_view, name='box-map'),
 
     # Report issues
     path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
@@ -31,7 +22,8 @@ urlpatterns = [
     # List View
     path('route/', views.route_view, name='route'),
 
-    # Box Edit
+    # Create and Update Box
+    path('boxes/create/', views.box_create, name='box-create'),
     path('edit/', views.box_edit, name='box-edit'),
 
     # Box Watered

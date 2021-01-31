@@ -86,6 +86,43 @@
     padding: 50px !important;
 }
 
+#map-container {
+    height: 500px;
+    margin-bottom: 10px;
+}
+
+#StatusTable {
+    background: white;
+}
+
+@media screen and (min-height: 700px) and (min-width: 1200px) {
+    #container {
+        height: calc(100vh - 340px);
+    }
+
+    #map-container,
+    #StatusTable {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    #map-container {
+        margin-right: 10px;
+    }
+
+    #StatusTable {
+        width: 30%;
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    #map-container {
+        width: calc(70% - 20px);
+        height: 100%;
+        margin-bottom: 0;
+    }
+}
+
 #data{
     padding: 50px 0 !important;
 }
@@ -96,4 +133,9 @@
     background: white;
     color: #777;
     box-shadow: 2px 2px 3px 3px #eee;
+}
+
+.boxes--empty-message {
+    color: #aaa;
+    padding: 10px;
 }

@@ -76,7 +76,7 @@ $(function() {
                 center: pointA
             };
 
-            this.map = new google.maps.Map(document.getElementById(NaiadesRender.containerId), myOptions);
+            this.map = new google.maps.Map(document.getElementById(NaiadesRender.mapContainerId), myOptions);
 
             // Instantiate a directions service.
             const directionsService = new google.maps.DirectionsService;

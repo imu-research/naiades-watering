@@ -14,19 +14,13 @@ from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists
 
 
 def home(request):
-    # get mode (map or list, defautls to map)
-    mode = request.GET.get("mode", "map")
-
     # get boxes for this user
     boxes = WateringBox.list()
 
-    if boxes:
-        return redirect(reverse('box-list'))
-
     # render
-    return render(request, 'watering/index.html', {
+    return render(request, 'watering/view.html', {
         'boxes': boxes,
-        'mode': mode,
+        'mode': "map-list",
     })
 
 
@@ -170,16 +164,8 @@ def show_watering_points(request, mode):
     })
 
 
-def map_view(request):
-    return show_watering_points(request, mode='map')
-
-
-def list_view(request):
-    return show_watering_points(request, mode='list')
-
-
 def route_view(request):
-    return show_watering_points(request, mode='route')
+    return show_watering_points(request, mode='route-list')
 
 
 def box_edit(request):

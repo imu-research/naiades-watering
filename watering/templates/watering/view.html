@@ -5,30 +5,17 @@
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
-    <link href="{% static 'css/view.css' %}" rel="stylesheet">
+    <link href="{% static 'css/view.css' %}?v=20210131.1" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-     <div class="row" style="margin: 10px;">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link{% if request.path == "/watering/list/" %} active{% endif %}" id="home-tab" href="/watering/list" role="tab" aria-controls="home"
-              aria-selected="true">{% trans "List" %}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link{% if request.path == "/watering/map/" %} active{% endif %}" id="profile-tab" href="/watering/map" role="tab" aria-controls="profile"
-              aria-selected="false">{% trans "Map" %}</a>
-          </li>
-        </ul>
-     </div>
-    <div class="row" id="data" style="margin: 10px;">
-    <div class="row" style="margin: 10px;">
+    <div class="row" style="margin: 20px;">
          <div class="col-md-6">
              <form class="form-inline">
                  <div class="form-group">
                      <label for="next-watering">{% trans "Suggested watering day" %} </label>
                      <select id="next-watering" class="form-control">
-                         {% if mode != "route" %}
+                         {% if "route" not in mode %}
                              <option value="">{% trans "All" %}</option>
                          {% endif %}
 
@@ -36,7 +23,7 @@
                          <option value="TOMORROW">{% trans "Tomorrow" %}</option>
                          <option value="DAY_AFTER_TOMORROW">{% trans "Day after tomorrow" %}</option>
 
-                         {% if mode != "route" %}
+                         {% if "route" not in mode %}
                              <option value="FUTURE">{% trans "Later in the future" %}</option>
                              <option value="UNKNOWN">{% trans "Unknown" %}</option>
                          {% endif %}
@@ -45,53 +32,46 @@
              </form>
          </div>
 
-         <div class="col-md-3">
-         </div>
 
-         {% if mode != "route" %}
+         {% if "route" not in mode %}
              <div class="col-md-3">
-                <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'box-create' %}'"><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Box" %}</button>
+                <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
+                    <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Box" %}
+                </button>
+             </div>
+
+             <div class="col-md-3">
+                 <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">
+                     {% trans "View suggested route" %}
+                 </button>
              </div>
          {% endif %}
      </div>
 
-    {% if mode != "route" %}
-        <div class="row" style="margin: 10px;">
-             <div class="col-md-4">
-             </div>
-              <div class="col-md-2">
-              </div>
-              <div class="col-md-2">
-             </div>
-               <div class="col-md-4">
-                    <button type="button" class="btn btn-primary btn-block" onclick="location.href='{% url 'route' %}'">{% trans "View suggested route for visiting boxes" %}</button>
-               </div>
-        </div>
-    {% elif TESTING %}
-        <div class="row" style="margin: 10px">
-            <button type="button" class="btn btn-primary" id="test-route-btn">
-                {% trans "Start test route" %}
-            </button>
-            <button type="button" class="btn btn-default disabled" disabled id="next-position-btn">
-                {% trans "Move to next position" %}
-            </button>
-        </div>
-    {% endif %}
+    {% if "route" in mode %}
 
-    {% if mode == "route" %}
-        <div class="row" style="margin: 10px;">
-        <div class="col-xs-12">
-             <div id="next-box-watering" style="display: none"></div>
-        </div>
-    </div>
+        {% if TESTING %}
+            <div class="row" style="margin: 10px 20px;">
+                <button type="button" class="btn btn-primary" id="test-route-btn">
+                    {% trans "Start test route" %}
+                </button>
+                <button type="button" class="btn btn-default disabled" disabled id="next-position-btn">
+                    {% trans "Move to next position" %}
+                </button>
+            </div>
+        {% endif %}
 
+        <div class="row" style="margin: 10px;">
+            <div class="col-xs-12">
+                 <div id="next-box-watering" style="display: none"></div>
+            </div>
+        </div>
     {% endif %}
 
     <div class="row" style="margin: 10px;">
         <div class="col-xs-12">
-             <div id="container" style="min-height: 500px;"></div>
+             <div id="container"></div>
         </div>
-    </div>
     </div>
 {% endblock %}
 
@@ -111,9 +91,9 @@
     <script>
         window.RENDERING_MODE = "{{ mode }}";
     </script>
-    <script src="{% static 'js/render.js' %}?v=20210106.1"></script>
-    {% if mode == "route" %}
-        <script src="{% static 'js/show-route.js' %}?v=20210106.1"></script>
+    <script src="{% static 'js/render.js' %}?v=20210131.1"></script>
+    {% if "route" in mode %}
+        <script src="{% static 'js/show-route.js' %}?v=20210131.1"></script>
         <script src="{% static 'js/location-manager.js' %}?v=20210117.1"></script>
         <script src="{% static 'js/geofencing.js' %}?v=20210117.1"></script>
         <script>
