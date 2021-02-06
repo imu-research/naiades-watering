@@ -5,18 +5,21 @@ from naiades_watering.settings import LOGIN_URL, LOGOUT_URL, ADMIN_URL, STATIC_U
 
 class AuthRequiredMiddleware(object):
 
+    whitelisted_prefixes = [
+        LOGIN_URL,
+        ADMIN_URL,
+        STATIC_URL,
+        "/watering/keyrock/",
+    ]
+
     def __init__(self, get_response):
         self.get_response = get_response
         # One-time configuration and initialization.
 
     def __call__(self, request):
-        if request.path.startswith(LOGIN_URL):
-            return self.get_response(request)
-
-        if request.path.startswith(ADMIN_URL):
-            return self.get_response(request)
-
-        if request.path.startswith(STATIC_URL):
+        if any(
+            [request.path.startswith(prefix) for prefix in self.whitelisted_prefixes]
+        ):
             return self.get_response(request)
 
         if not request.user.is_authenticated:

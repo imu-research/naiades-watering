@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 
     'watering',
 ]
@@ -74,7 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n'
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -156,6 +160,12 @@ LOGIN_URL = '/watering/login'
 LOGIN_REDIRECT_URL = '/watering/'
 LOGOUT_URL = '/watering/logout'
 ADMIN_URL = '/watering/admin'
+
+# KeyRock Authentication
+OAUTH_SERVER_BASEURL = 'http://5.53.108.182:3005'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/watering/login'
+SITE_ID = 1
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 APPEND_SLASH = True
 

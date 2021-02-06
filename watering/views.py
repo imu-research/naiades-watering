@@ -10,17 +10,25 @@ from django.utils.timezone import now
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
-from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists
+from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather
 
 
 def home(request):
     # get boxes for this user
     boxes = WateringBox.list()
 
+    #get weather
+    # We need temperature.value, relativeHumidity.value, from source.value current_condition.icon and fcst_day_1.icon
+    weather_observed = Weather.get_weather_observed()
+    # We need for id "urn:ngsi-ld:WeatherForecast:WeatherForecast-Day0-1" dayMaximum.value.temperature , dayMaximum.value.relativeHumidity, dayMinimum.value.temperature , dayMinimum.value.relativeHumidity
+    weather_forecast = Weather.get_weather_forecast()
+
     # render
     return render(request, 'watering/view.html', {
         'boxes': boxes,
         'mode': "map-list",
+        'weatherObserved': weather_observed,
+        'weatherForecast': weather_forecast
     })
 
 

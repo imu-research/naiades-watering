@@ -95,7 +95,8 @@
     background: white;
 }
 
-@media screen and (min-height: 700px) and (min-width: 1200px) {
+@media screen and (min-height: 440px) and (min-width: 360px) {
+/*@media screen {*/
     #container {
         height: calc(100vh - 340px);
     }
@@ -111,13 +112,13 @@
     }
 
     #StatusTable {
-        width: 30%;
+        width: 40%;
         height: 100%;
         overflow-y: scroll;
     }
 
     #map-container {
-        width: calc(70% - 20px);
+        width: calc(60% - 20px);
         height: 100%;
         margin-bottom: 0;
     }

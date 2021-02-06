@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 import django.contrib.auth.views as auth_views
+
+from allauth.socialaccount.providers.oauth2.urls import default_urlpatterns
+
 from naiades_watering import views
 
 urlpatterns = [
@@ -31,9 +34,12 @@ urlpatterns = [
     path('watering/login/', auth_views.login, name='login'),
     path('watering/logout/', views.logout, name='logout'),
 
+    # KeyRock
+    url(r'watering/keyrock/', include('keyrock.urls')),
+
     # app
     path('watering/', include('watering.urls')),
 
     # / redirect
-    path('', views.home_redirect, name='home-redirect')
+    path('', views.home_redirect, name='home-redirect'),
 ]

@@ -107,9 +107,9 @@ class OrionEntity(object):
         response = requests.get(
             f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/soilMoisture/value?lastN=100',
             headers={
-                    'Fiware-Service': 'carouge',
-                    'Fiware-ServicePath': '/',
-                    }
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            }
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -131,6 +131,34 @@ class OrionEntity(object):
             self.handle_error(response)
 
         # return list
+        return response.json()
+
+    def weather_observed(self, service):
+        # list entities
+        response = requests.get(
+            f'http://{self.endpoint}/v2/entities/urn:ngsi-ld:WeatherObserved:WeatherObserved/',
+            headers=self.get_headers(service=service)
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return weather observed
+        return response.json()
+
+    def weather_forecast(self, service):
+        # list entities
+        response = requests.get(
+            f'http://{self.endpoint}/v2/entities/?type=WeatherForecast',
+            headers=self.get_headers(service=service)
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return weather forecast
         return response.json()
 
 
@@ -297,7 +325,7 @@ class WateringBox(Model):
                 ))
             except:
                 print(f"Invalid flowerbed: {str(flowerbed)}")
-                
+
         return boxes
 
     @staticmethod
@@ -429,3 +457,21 @@ class Sensor(Model):
             ][0]
         except IndexError:
             raise Sensor.DoesNotExist()
+
+
+class Weather(Model):
+    """
+    Information about weather
+    """
+    data = JSONField(blank=True, default=dict)
+
+    @staticmethod
+    def get_weather_observed():
+
+        weather = OrionEntity().weather_observed(service='carouge')
+        return weather
+
+    @staticmethod
+    def get_weather_forecast():
+        weather = OrionEntity().weather_forecast(service='carouge')
+        return weather
