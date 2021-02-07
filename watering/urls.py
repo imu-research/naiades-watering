@@ -31,4 +31,7 @@ urlpatterns = [
 
     # Sensors API
     path('api/sensor/<str:refDevice>/details', views.sensor_api_details, name='sensor-api-details'),
+
+    # Weather API
+    path('api/weather/', views.weather, name='api-weather'),
 ]
