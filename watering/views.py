@@ -265,3 +265,19 @@ def weather(request):
         'observed': weather_observed,
         'forecasted': weather_forecast,
     })
+
+def cluster_details(request):
+    # get box id
+    box_id = request.GET.get("id")
+
+    # find box
+    box = WateringBox.get(box_id)
+
+    form = BoxForm.from_box(box=box)
+
+    # render
+    return render(request, 'watering/cluster-details.html', {
+        'id': box_id,
+        'box': box,
+        'form': form
+    })

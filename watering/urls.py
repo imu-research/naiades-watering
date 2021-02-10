@@ -10,6 +10,9 @@ urlpatterns = [
     # Box Details
     path('details/', views.box_details, name='box-details'),
 
+    # Cluster Details
+    path('cluster/', views.cluster_details, name='cluster-details'),
+
     # Report issues
     path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
     path('box/<str:box_id>/issues/', views.list_issues, name='list-issues'),

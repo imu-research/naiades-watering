@@ -5,7 +5,7 @@ $(function() {
 
         // collect forecasts
         const forecasts = [];
-        for (let idx=0; idx <= 4; idx ++) {
+        for (let idx=0; idx <= 2; idx ++) {
             forecasts.push(weatherInfo[`fcst_day_${idx}`]);
         }
 

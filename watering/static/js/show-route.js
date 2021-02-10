@@ -88,7 +88,7 @@ $(function() {
 
             //Find destination the farthest box from posit
             //const destination = this.findDestination(startLatLng, waypointsArray);
-            const destination = new google.maps.LatLng(46.181787,6.147807);
+            const destination = new google.maps.LatLng(46.18220, 6.14954);
 
             //Remove destination from waypoints
             /*if (!destination) {
