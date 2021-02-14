@@ -9,6 +9,8 @@ $(function() {
             forecasts.push(weatherInfo[`fcst_day_${idx}`]);
         }
 
+        const current_condition = weatherInfo.current_condition;
+
         // add component for each forecast
         $.each(forecasts, function(idx, forecast) {
             const $forecast = $('<div />')
@@ -20,9 +22,11 @@ $(function() {
                     .append($("<span />").addClass("date").text(forecast.date.replace(".2021", "")))
                     .append($("<div />")
                         .addClass("temperatures")
-                        .append($("<span />").addClass("from").text(forecast.tmin))
+                        .append($("<span />").addClass("from")
+                            .text(idx === 0 ? `${current_condition.tmp}°C`: `${forecast.tmin}°C`)
+                        )
                         .append($("<span />").addClass("separator"))
-                        .append($("<span />").addClass("to").text(forecast.tmax))
+                        .append($("<span />").addClass("to").text(idx === 0 ? `💧${current_condition.humidity}` :`${forecast.tmax}°C`))
                     )
                 );
 
