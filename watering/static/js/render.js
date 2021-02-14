@@ -182,6 +182,23 @@ $(function () {
                                 .bindPopup(that.getPopupContent(flowerbed))
                                 .openPopup();
                         }
+
+                        // mark as selected & scroll to the respective entry
+                        const $table = window.NaiadesRender.$table;
+
+                        if (!$table.length) {
+                            return
+                        }
+
+                        $table
+                            .find("> .entry")
+                            .removeClass("selected");
+
+                        $table
+                            .find(`.entry[data-id=${flowerbed.boxId}]`)
+                            .addClass("selected")
+                            .get(0)
+                            .scrollIntoView();
                     });
 
                     // add to items
@@ -240,6 +257,7 @@ $(function () {
                     // create row
                     const $entry = $('<div />')
                         .addClass("entry")
+                        .attr("data-id", meter.boxId)
                         .addClass((idx === filteredMeasurements.length - 1) && "last")
                         .append(
                             $('<div />').

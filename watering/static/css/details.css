@@ -1,0 +1,18 @@
+#details-menu {
+    position: fixed;
+    margin-bottom: 20px;
+}
+
+#details-menu > .item {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#details-menu > .item.active {
+    background: #eee;
+}
+
+#details-menu > .item > a {
+    display: block;
+    padding: 20px;
+}

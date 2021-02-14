@@ -53,9 +53,8 @@
     border-bottom: 1px solid #eee;
 }
 
-#StatusTable > .entry.last {
-    border-bottom-color: #aaa;
-    margin-bottom: 10px;
+#StatusTable > .entry.selected {
+    background: rgba(51, 181, 229, 0.4);
 }
 
 #StatusTable > .entry .title {
