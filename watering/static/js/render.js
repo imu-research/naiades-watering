@@ -54,6 +54,7 @@ $(function () {
 
         initialize: function() {
             this.items = [];
+            this.points = [];
 
             if (this.mode.indexOf("map") >= 0) {
                 this.initializeMap();
@@ -174,7 +175,8 @@ $(function () {
                         color: '#555',
                         fillColor: color,
                         fillOpacity: 0.8,
-                        radius: 30
+                        radius: 30,
+                        title:`${flowerbed.boxId}`
                     }).addTo(map).on("click", function(e) {
                         const clickedCircle = e.target;
                         if (!clickedCircle._popup) {
@@ -203,6 +205,8 @@ $(function () {
 
                     // add to items
                     that.items.push(point);
+                    //add to points
+                    that.points.push(point)
                 }
 
                 // create flowerbed polygon
@@ -244,6 +248,17 @@ $(function () {
                     .text(`No boxes need watering ${$('#next-watering').val().toLowerCase()}.`)
                 )
             }
+
+            function markerFunction(id, meter){
+                for (var i in that.points) {
+                    if(that.points[i].options) {
+                        var markerID = that.points[i].options.title;
+                        if (markerID == id){
+                            that.points[i].bindPopup(that.getPopupContent(meter)).openPopup();
+                        }
+                    }
+                }
+            }
             // for each next watering indication
             $.each(["TODAY", "TOMORROW", "DAY_AFTER_TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
                 // select measurements with this next watering indication
@@ -267,6 +282,17 @@ $(function () {
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
                                         .text(`Box #${meter.boxId}`)
                                 )
+                                .append(
+                                        $('<a />')
+                                            .attr('href', '#')
+                                            .css('margin-left', "65%")
+                                            .addClass('btn btn-sm btn-default')
+                                            .attr('title', 'View on map')
+                                            .append($('<i class="glyphicon glyphicon-map-marker" />'))
+                                            .on("click", function() {
+                                                markerFunction(meter.boxId, meter)
+                                            })
+                                    )
                         )
                         .append(
                             $('<div />').text(window.MESSAGES.humidityLevel+` : ${meter.soilMoisture.toFixed(2) || '-'}`)

@@ -53,6 +53,14 @@
                  </button>
              </div>
          {% endif %}
+         {% if "route" in mode %}
+             <div class="col-xs-12 col-sm-6" style="text-align: right">
+                <a href="/watering" id="back-box"
+                        class="btn btn-secondary" style="margin-right: 12px;">
+                    <i class="glyphicon glyphicon-chevron-left"></i> Back
+                </a>
+             </div>
+         {% endif %}
      </div>
 
     {% if "route" in mode %}

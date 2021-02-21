@@ -15,13 +15,16 @@
         <a href="{% url 'report-issue' box_id=box_id %}" class="btn btn-warning">
             {% trans "Report issue" %}
         </a>
+        <a href="/watering" id="back-box" class="btn btn-secondary" style="margin-right: 12px;">
+            <i class="glyphicon glyphicon-chevron-left"></i> Back
+        </a>
     </div>
 
      <div class="row">
         <div class="col-xs-12">
             <div id="container">
 
-                <div id="StatusTable">
+                <div id="StatusTable" style="width: 100%!important;">
                     {% for issue in issues %}
                         <div class="entry">
                             <div class="title">
