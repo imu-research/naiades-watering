@@ -161,6 +161,45 @@ class OrionEntity(object):
         # return weather forecast
         return response.json()
 
+    def subscribe(self, service, watering_server):
+        # create subscription
+        response = requests.post(
+            f'http://{self.endpoint}/v2/subscriptions/',
+            headers=self.get_headers(service=service),
+            json={
+                "description": "Naiades Watering App Subscription to `FlowerBed.consumption`.",
+                "subject": {
+                    "entities": [
+                        {
+                            "idPattern": ".*",
+                            "type": "FlowerBed"
+                        }
+                    ],
+                    "condition": {
+                        "attrs": [
+                            "consumption"
+                        ]
+                    }
+                },
+                "notification": {
+                    "http": {
+                        "url": f"{watering_server}/consumptions/"
+                    },
+                    "attrs": [
+                        "consumption"
+                    ],
+                    "attrsFormat": "keyValues"
+                },
+            }
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return created subscription
+        return response.json()
+
 
 class WateringBox(Model):
     """

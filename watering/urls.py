@@ -32,6 +32,9 @@ urlpatterns = [
     # Box Watered
     path('watered/', views.box_watered, name='box-watered'),
 
+    # Subscription callback
+    path('consumptions/', views.consumptions_create, name='consumptions-create'),
+
     # Sensors API
     path('api/sensor/<str:refDevice>/details', views.sensor_api_details, name='sensor-api-details'),
 

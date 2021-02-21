@@ -1,6 +1,5 @@
-import datetime
-from time import time, strftime
 import json
+import logging
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -219,6 +218,16 @@ def box_watered(request):
         box_id="urn:ngsi-ld:FlowerBed:FlowerBed-" + box_id,
         data={"dateLastWatering": last_watering}
     )
+
+    return JsonResponse({})
+
+
+def consumptions_create(request):
+    # log consumption
+    logging.warning(f"""
+        Unhandled consumption data:
+        {request.POST}
+    """)
 
     return JsonResponse({})
 
