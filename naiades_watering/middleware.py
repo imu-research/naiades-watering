@@ -10,6 +10,7 @@ class AuthRequiredMiddleware(object):
         ADMIN_URL,
         STATIC_URL,
         "/watering/keyrock/",
+        "/watering/consumptions/",
     ]
 
     def __init__(self, get_response):

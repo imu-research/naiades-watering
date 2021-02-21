@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.timezone import now
-
+from django.views.decorators.csrf import csrf_exempt
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
@@ -222,6 +222,7 @@ def box_watered(request):
     return JsonResponse({})
 
 
+@csrf_exempt
 def consumptions_create(request):
     # log consumption
     logging.warning(f"""

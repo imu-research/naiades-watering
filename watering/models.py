@@ -197,9 +197,6 @@ class OrionEntity(object):
         if response.status_code >= 400:
             self.handle_error(response)
 
-        # return created subscription
-        return response.json()
-
 
 class WateringBox(Model):
     """
