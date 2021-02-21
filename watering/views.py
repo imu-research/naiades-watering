@@ -224,10 +224,15 @@ def box_watered(request):
 
 @csrf_exempt
 def consumptions_create(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        data = request.body
+
     # log consumption
     logging.warning(f"""
         Unhandled consumption data:
-        {request.POST}
+        {data}
     """)
 
     return JsonResponse({})
