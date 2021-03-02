@@ -88,6 +88,9 @@ def box_details(request):
     # get humidity historic data
     history = box_history(box_id)
 
+    # get consumption historic data
+    consumption_history = box_consumption_history(box_id)
+
     if request.method == "POST":
         form = BoxForm(request.POST)
 
@@ -110,6 +113,7 @@ def box_details(request):
         'history': json.dumps(history),
         'sensors': Sensor.list(),
         'connected_sensors': WateringBox.sensors_list(),
+        'consumption_history': consumption_history,
     })
 
 
@@ -203,6 +207,18 @@ def box_history(box_id):
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.history(
+        box_id=box.data["id"]
+    )
+
+    # render
+    return historic_data
+
+
+def box_consumption_history(box_id):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.consumption_history(
         box_id=box.data["id"]
     )
 

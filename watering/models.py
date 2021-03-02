@@ -119,6 +119,23 @@ class OrionEntity(object):
         # return list
         return response.json()
 
+    def consumption_history(self, service, entity_id):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/consumption/value?lastN=30',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            }
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
     def sensor_list(self, service):
         # list entities
         response = requests.get(
@@ -391,6 +408,26 @@ class WateringBox(Model):
         # get humidity history of box id
         try:
             response = OrionEntity().history(
+                service=WateringBox.service,
+                entity_id=box_id
+            )
+        except OrionError:
+            return []
+
+        results = []
+        for idx, index in enumerate(response["index"]):
+            results.append({
+                "date": index,
+                "value": response["values"][idx],
+            })
+
+        return results
+
+    @staticmethod
+    def consumption_history(box_id):
+        # get humidity history of box id
+        try:
+            response = OrionEntity().consumption_history(
                 service=WateringBox.service,
                 entity_id=box_id
             )

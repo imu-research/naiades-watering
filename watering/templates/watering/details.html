@@ -75,25 +75,19 @@
                   <tr>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Amount of watering" %}</th>
-                    <th>{% trans "Comments" %}</th>
                   </tr>
                 </thead>
                 <tbody>
+                {% for con in consumption_history %}
                   <tr>
-                      <td> <a href="#">20/03/2020 15:30</a></td>
-                    <td>0.3 lt</td>
-                    <td>Comments</td>
+                      <td> <a href="#">{{ con.date }}</a></td>
+                      {% if con.value is None %}
+                        <td> - </td>
+                      {% else %}
+                          <td>{{ con.value }} lt</td>
+                      {% endif %}
                   </tr>
-                  <tr>
-                      <td><a href="#">21/03/2020 15:30</a></td>
-                    <td>0.4 lt</td>
-                    <td>Comments</td>
-                  </tr>
-                  <tr>
-                      <td><a href="#">22/03/2020 15:30</a></td>
-                    <td>0.2 lt</td>
-                      <td>Comments</td>
-                  </tr>
+                {%  endfor %}
                 </tbody>
               </table>
             </div>
