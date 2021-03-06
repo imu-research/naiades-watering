@@ -1,11 +1,13 @@
-import copy
+from decimal import Decimal
 
 import requests
 
+import dateutil.parser
 from datetime import datetime, timedelta
 
 from django.contrib.postgres.fields import JSONField
-from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField
+from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField, \
+    DecimalField
 from django.utils.timezone import now
 
 
@@ -477,7 +479,7 @@ class Issue(Model):
     """
     Issue reported about a specific box
     """
-    box_id = CharField(max_length=16, db_index=True)
+    box_id = CharField(max_length=64, db_index=True)
     issue_type = CharField(max_length=1024)
     created = DateTimeField(auto_now_add=True)
     updated = DateTimeField(auto_now=True)
@@ -548,3 +550,63 @@ class Weather(Model):
     def get_weather_forecast():
         weather = OrionEntity().weather_forecast(service='carouge')
         return weather
+
+
+class EventParseError(ValueError):
+    pass
+
+
+class Event(Model):
+    """
+    Watering event
+    """
+    box_id = CharField(max_length=64, db_index=True)
+    created = DateTimeField(auto_now_add=True)
+    start_date = DateTimeField()
+    end_date = DateTimeField()
+    consumption = DecimalField(max_digits=12, decimal_places=4)
+    extra_data = JSONField(blank=True, default=dict)
+
+    @staticmethod
+    def consume_event_data(data):
+        # parse
+        try:
+            box_id = data["id"]
+            start_date = dateutil.parser.isoparse(data["initDate"]["value"])
+            end_date = dateutil.parser.isoparse(data["endDate"]["value"])
+            consumption = Decimal(data["consumption"]["value"])
+        except (KeyError, ValueError):
+            raise EventParseError()
+
+        # get or create event
+        event = Event.objects.\
+            filter(
+                box_id=box_id,
+                start_date__lte=start_date,
+                start_date__gt=(start_date + timedelta(hours=1))
+            ).\
+            first()
+
+        if not event:
+            event = Event(
+                box_id=box_id,
+                start_date=start_date,
+                consumption=0,
+                extra_data={
+                    "messages": []
+                }
+            )
+
+        # set end time & consumption
+        event.end_date = end_date
+        event.consumption += consumption
+
+        # add message & save
+        event.extra_data["messages"].append(data)
+        event.save()
+
+    @staticmethod
+    def consume_event(payload):
+        # process all events in payload
+        for event_data in (payload or {}).get("data", []):
+            Event.consume_event_data(data=event_data)

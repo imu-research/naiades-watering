@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
-from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather
+from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather, Event, EventParseError
 
 
 def home(request):
@@ -241,15 +241,18 @@ def box_watered(request):
 @csrf_exempt
 def consumptions_create(request):
     try:
-        data = json.loads(request.body.decode("utf-8"))
+        payload = json.loads(request.body.decode("utf-8"))
     except (ValueError, UnicodeDecodeError):
-        data = request.body
+        payload = request.body
 
-    # log consumption
-    logging.warning(f"""
-        Unhandled consumption data:
-        {data}
-    """)
+    # save consumption event
+    try:
+        Event.consume_event(payload=payload)
+    except EventParseError:
+        logging.warning(f"""
+            Unhandled consumption data:
+            {payload}
+        """)
 
     return JsonResponse({})
 
