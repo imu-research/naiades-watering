@@ -553,6 +553,9 @@ class Weather(Model):
 
 
 class EventParseError(ValueError):
+    """
+    Exception raised when an event can not be parsed
+    """
     pass
 
 
@@ -583,7 +586,7 @@ class Event(Model):
             filter(
                 box_id=box_id,
                 start_date__lte=start_date,
-                start_date__gt=(start_date + timedelta(hours=1))
+                start_date__gt=(start_date - timedelta(hours=1))
             ).\
             first()
 
