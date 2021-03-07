@@ -29,24 +29,27 @@
         </div>
     </div>
     <div class="row" style="margin: 10px 0;">
-       <div class="col-md-12">
-           <h5>Predicted Required  Water Amount (Cluster):</h5>
-           <div class="progress progress-striped active">
-               <div class="progress">
-                   <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">30lt / 150 lt</div>
-               </div>
-           </div>
-       </div>
-    </div>
-    <div class="row" style="margin: 10px 0;">
-       <div class="col-md-12">
-           <h5>Predicted Required  Water Amount (Avg. per Box) :</h5>
-           <div class="progress progress-striped active">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">3lt / 20 lt</div>
-                </div>
-           </div>
-       </div>
-    </div>
+       <div class="col-md-12" id="cluster-details-container">
 
+       </div>
+    </div>
+{#    <div class="row" style="margin: 10px 0;">#}
+{#       <div class="col-md-12">#}
+{#           <h5>Predicted Required  Water Amount (Avg. per Box) :</h5>#}
+{#           <div class="progress progress-striped active">#}
+{#                <div class="progress">#}
+{#                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">3lt / 20 lt</div>#}
+{#                </div>#}
+{#           </div>#}
+{#       </div>#}
+{#    </div>#}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        window.RECOMMENDED_CONSUMPTION = {{ recommended_consumption }};
+        window.NUMBER_OF_BOXES = {{ number_of_boxes }};
+    </script>
+    <script src="{% static 'js/cluster-details.js' %}"></script>
 {% endblock %}

@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.postgres.fields import JSONField
 from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField, \
-    DecimalField
+    DecimalField, Q
 from django.utils.timezone import now
 
 
@@ -613,3 +613,19 @@ class Event(Model):
         # process all events in payload
         for event_data in (payload or {}).get("data", []):
             Event.consume_event_data(data=event_data)
+
+    @staticmethod
+    def fetch(box_id):
+        # load from db
+        events = Event.objects.\
+            filter(Q(box_id=box_id) | Q(box_id__endswith=f'-{box_id}')).\
+            filter(start_date__gt=now() - timedelta(hours=1))
+
+        # return serialized
+        return [
+            {
+                "event_id": event.pk,
+                "consumption": "%.4f" % event.consumption,
+            }
+            for event in events
+        ]

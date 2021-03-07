@@ -1,5 +1,6 @@
 import json
 import logging
+from decimal import Decimal
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -300,18 +301,24 @@ def weather(request):
         'forecasted': weather_forecast,
     })
 
+
 def cluster_details(request):
     # get box id
     box_id = request.GET.get("id")
 
+    # events?
+    if request.GET.get("events"):
+        return JsonResponse({
+            "events": Event.fetch(box_id=box_id),
+        })
+
     # find box
     box = WateringBox.get(box_id)
-
-    form = BoxForm.from_box(box=box)
 
     # render
     return render(request, 'watering/cluster-details.html', {
         'id': box_id,
         'box': box,
-        'form': form
+        'recommended_consumption': Decimal(box.data.get("nextWateringAmountRecommendation")),
+        'number_of_boxes': int(box.data.get("number_of_boxes")),
     })
