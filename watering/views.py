@@ -87,10 +87,10 @@ def box_details(request):
     box = WateringBox.get(box_id)
 
     # get humidity historic data
-    history = []  # box_history(box_id)
+    history = box_history(box_id)
 
     # get consumption historic data
-    consumption_history = []  # box_consumption_history(box_id)
+    consumption_history = box_consumption_history(box_id)
 
     if request.method == "POST":
         form = BoxForm(request.POST)
