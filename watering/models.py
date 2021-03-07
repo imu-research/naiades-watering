@@ -111,7 +111,8 @@ class OrionEntity(object):
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
-            }
+            },
+            timeout=2
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -128,7 +129,8 @@ class OrionEntity(object):
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
-            }
+            },
+            timeout=2
         )
 
         # raise exception if response code is in 4xx, 5xx

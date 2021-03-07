@@ -1,6 +1,8 @@
 import json
 import logging
+
 from decimal import Decimal
+from requests import ReadTimeout
 
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -8,9 +10,10 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
-from naiades_watering.settings import DEBUG
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
 from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather, Event, EventParseError
+
+from naiades_watering.settings import DEBUG
 
 
 def home(request):
@@ -87,10 +90,16 @@ def box_details(request):
     box = WateringBox.get(box_id)
 
     # get humidity historic data
-    history = box_history(box_id)
+    try:
+        history = box_history(box_id)
+    except ReadTimeout:
+        history = []
 
     # get consumption historic data
-    consumption_history = box_consumption_history(box_id)
+    try:
+        consumption_history = box_consumption_history(box_id)
+    except ReadTimeout:
+        consumption_history = []
 
     if request.method == "POST":
         form = BoxForm(request.POST)
