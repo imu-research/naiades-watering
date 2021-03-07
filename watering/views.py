@@ -87,10 +87,10 @@ def box_details(request):
     box = WateringBox.get(box_id)
 
     # get humidity historic data
-    history = box_history(box_id)
+    history = []  # box_history(box_id)
 
     # get consumption historic data
-    consumption_history = box_consumption_history(box_id)
+    consumption_history = []  # box_consumption_history(box_id)
 
     if request.method == "POST":
         form = BoxForm(request.POST)
@@ -271,17 +271,35 @@ def box_api_start_watering(request, box_id):
             "error": f"Invalid method: only POST is allowed."
         })
 
+    # get time
+    _now = now().strftime("%Y-%m-%dT%H:%M:%SZ")
+
     # patch box
     WateringBox.post(
         box_id=f"urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}",
         data={
             "dateLastWatering": {
                 "type": "DateTime",
-                "value": now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "value": _now,
                 "metadata": {}
             },
         }
     )
+
+    # on test environment, create watering event
+    if DEBUG:
+        Event.consume_event(payload={
+            "subscriptionId": "60326dae06f6591a8acedaf7",
+            "data": [
+                {
+                    "id": f"urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}",
+                    "test": True,
+                    "consumption": {"type": "Number", "value": 0.05, "metadata": {}},
+                    "endDate": {"type": "DateTime", "value": _now, "metadata": {}},
+                    "initDate": {"type": "DateTime", "value": _now, "metadata": {}},
+                },
+            ],
+        })
 
     # success response
     return JsonResponse({})
