@@ -91,7 +91,8 @@ def box_details(request):
 
     # get humidity historic data
     try:
-        history = box_history(box_id)
+        history_api = box_history(box_id)
+        history = history_preprocessing(history_api)
     except ReadTimeout:
         history = []
 
@@ -349,3 +350,19 @@ def cluster_details(request):
         'recommended_consumption': Decimal(box.data.get("nextWateringAmountRecommendation")),
         'number_of_boxes': int(box.data.get("number_of_boxes")),
     })
+
+def history_preprocessing(history):
+        new = []
+        i=0;
+        for h in history:
+            if (i>0):
+                new.append({"date":h['date'], "value":previous_humidity})
+            new.append(h)
+            previous_humidity = h['value']
+            i=i+1;
+        current_date = now().strftime("%Y-%m-%dT%H:%M:%S%Z")
+        new.append({"date": current_date, "value": previous_humidity})
+        return new
+
+
+
