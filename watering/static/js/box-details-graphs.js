@@ -41,7 +41,9 @@ var chart = AmCharts.makeChart("chart-history", {
         "title": "red line",
         "useLineColorForBulletBorder": true,
         "valueField": "value",
-        "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+        "balloonText": "<span style='font-size:18px;'>[[value]]</span>",
+        "fillAlphas": 0.3,
+        "fillColorsField": "#ffffff",
     }],
     "chartScrollbar": {
         "enable":true,
