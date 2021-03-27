@@ -273,6 +273,9 @@ $(function () {
                     const $entry = $('<div />')
                         .addClass("entry")
                         .attr("data-id", meter.boxId)
+                        .on("click", function() {
+                            markerFunction(meter.boxId, meter)
+                        })
                         .addClass((idx === filteredMeasurements.length - 1) && "last")
                         .append(
                             $('<div />').
@@ -282,17 +285,6 @@ $(function () {
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
                                         .text(`Box #${meter.boxId}`)
                                 )
-                                .append(
-                                        $('<a />')
-                                            .attr('href', '#')
-                                            .css('margin-left', "65%")
-                                            .addClass('btn btn-sm btn-default')
-                                            .attr('title', 'View on map')
-                                            .append($('<i class="glyphicon glyphicon-map-marker" />'))
-                                            .on("click", function() {
-                                                markerFunction(meter.boxId, meter)
-                                            })
-                                    )
                         )
                         .append(
                             $('<div />').text(window.MESSAGES.humidityLevel+` : ${meter.soilMoisture.toFixed(2) || '-'}`)

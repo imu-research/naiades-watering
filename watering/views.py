@@ -343,12 +343,22 @@ def cluster_details(request):
     # find box
     box = WateringBox.get(box_id)
 
+    # calculate recommended per box
+    recommended = Decimal(box.data.get("nextWateringAmountRecommendation"))
+    n_boxes = int(box.data.get("number_of_boxes"))
+
+    try:
+        recommended_per_box = recommended / n_boxes
+    except ZeroDivisionError:
+        recommended_per_box = None
+
     # render
     return render(request, 'watering/cluster-details.html', {
         'id': box_id,
         'box': box,
-        'recommended_consumption': Decimal(box.data.get("nextWateringAmountRecommendation")),
-        'number_of_boxes': int(box.data.get("number_of_boxes")),
+        'recommended_consumption': recommended,
+        'number_of_boxes': n_boxes,
+        'recommended_consumption_per_box': recommended_per_box,
     })
 
 def history_preprocessing(history):

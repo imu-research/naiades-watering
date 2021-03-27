@@ -6,6 +6,8 @@
 {% block css %}
     <link href="{% static 'css/create.css' %}" rel="stylesheet">
     <link href="{% static 'css/details.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.semanticui.min.css">
     <style>
         #start-watering-info {
             margin: 10px 0;
@@ -70,11 +72,12 @@
          <div class="col-md-12">
              <h3>Watering logs</h3>
             <div class="panel panel-primary">
-              <table class="table">
+              <table class="table ui celled" style="margin: 30px;width: 90%" id="watering-logs-table">
                 <thead>
                   <tr>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Amount of watering" %}</th>
+                    <th>{% trans "Time of watering" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,6 +89,7 @@
                       {% else %}
                           <td>{{ con.value }} lt</td>
                       {% endif %}
+                      <td> - </td>
                   </tr>
                 {%  endfor %}
                 </tbody>
@@ -107,6 +111,11 @@
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <!-- Datatables  -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.semanticui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script type="text/javascript">
         const history = {{history |safe}};
     </script>
@@ -182,6 +191,16 @@
                     }
                 });
             })
+
+            // enable datatables
+            $('#watering-logs-table').DataTable({
+                "order": [[ 0, "desc" ]],
+                "bFilter": false,
+                "info": false,
+                "ordering": false,
+                "bLengthChange": false,
+                "pageLength":10
+                });
         });
     </script>
 

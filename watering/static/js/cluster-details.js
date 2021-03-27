@@ -11,44 +11,8 @@ $(function() {
         REFRESH_INTERVAL: 5000,  // in milliseconds
 
         initialize: function($container) {
-            // create progress bar
-            this.$bar = $("<div />")
-                .addClass("progress-bar")
-                .attr("role", "progressbar")
-                .css("width", 0);
-
-            // create watering progress view element
-            this.$element = $("<div />")
-                .addClass("progress-container")
-                .append(
-                    $("<h5 />")
-                        .text("Predicted Required  Water Amount (Cluster):")
-                )
-                .append(
-                    $("<div />")
-                        .addClass("watering-value")
-                        .append(
-                            $("<span />")
-                                .addClass("value")
-                                .text("0 lt")
-                        )
-                        .append(
-                            $("<span />")
-                                .text(`/ ${window.RECOMMENDED_CONSUMPTION} lt`)
-                        )
-                )
-                .append(
-                    $("<div />")
-                        .addClass("progress progress-striped active")
-                        .append(
-                            $("<div />")
-                                .addClass("progress")
-                                .append(this.$bar)
-                        )
-                );
-
-            // add to container
-            $container.append(this.$element);
+            // initialize gauge
+            window.ClusterDetailsGauge.initialize(window.RECOMMENDED_CONSUMPTION);
 
             return this;
         },
@@ -62,16 +26,10 @@ $(function() {
             // set consumption
             this.consumption = consumption;
 
-            // set bar progress
-            this.$bar
-                .css("width", `${Math.min(Math.round(consumption * 100 / this.totalRecommendedConsumption), 100)}%`);
+            // set gauge value
+            window.ClusterDetailsGauge.setValue(this.consumption);
 
-            // update consumption text
-            this.$element
-                .find(".watering-value > span.value")
-                .text(`${consumption} lt`);
-
-            return this;
+            return this
         },
 
         update: function() {
@@ -119,6 +77,6 @@ $(function() {
 
     // initialize & listen
     WateringProgressView
-        .initialize($("#cluster-details-container"))
+        .initialize()
         .listen();
 });
