@@ -45,7 +45,6 @@ $(function () {
         },
 
         initializeList: function() {
-            // TODO initialize table
             this.$table = $('<div id="StatusTable" />');
 
             // add table to container
@@ -155,6 +154,25 @@ $(function () {
             });
         },
 
+        setSelected: function(boxId) {
+            // mark as selected & scroll to the respective entry
+            const $table = window.NaiadesRender.$table;
+
+            if (!$table.length) {
+                return
+            }
+
+            $table
+                .find("> .entry")
+                .removeClass("selected");
+
+            $table
+                .find(`.entry[data-id=${boxId}]`)
+                .addClass("selected")
+                .get(0)
+                .scrollIntoView();
+        },
+
         renderMap: function(flowerbeds) {
             const map = this.map;
 
@@ -185,22 +203,8 @@ $(function () {
                                 .openPopup();
                         }
 
-                        // mark as selected & scroll to the respective entry
-                        const $table = window.NaiadesRender.$table;
-
-                        if (!$table.length) {
-                            return
-                        }
-
-                        $table
-                            .find("> .entry")
-                            .removeClass("selected");
-
-                        $table
-                            .find(`.entry[data-id=${flowerbed.boxId}]`)
-                            .addClass("selected")
-                            .get(0)
-                            .scrollIntoView();
+                        // set as selected & scroll
+                        window.NaiadesRender.setSelected(flowerbed.boxId);
                     });
 
                     // add to items
@@ -249,16 +253,17 @@ $(function () {
                 )
             }
 
-            function markerFunction(id, meter){
-                for (var i in that.points) {
+            const markerFunction = function(id, meter){
+                for (const i in that.points) {
                     if(that.points[i].options) {
-                        var markerID = that.points[i].options.title;
-                        if (markerID == id){
+                        const markerID = that.points[i].options.title;
+                        if (markerID === id){
                             that.points[i].bindPopup(that.getPopupContent(meter)).openPopup();
                         }
                     }
                 }
-            }
+            };
+
             // for each next watering indication
             $.each(["TODAY", "TOMORROW", "DAY_AFTER_TOMORROW", "FUTURE", "UNKNOWN"], function(wmx, nextWatering) {
                 // select measurements with this next watering indication
@@ -274,7 +279,8 @@ $(function () {
                         .addClass("entry")
                         .attr("data-id", meter.boxId)
                         .on("click", function() {
-                            markerFunction(meter.boxId, meter)
+                            markerFunction(meter.boxId, meter);
+                            window.NaiadesRender.setSelected(meter.boxId);
                         })
                         .addClass((idx === filteredMeasurements.length - 1) && "last")
                         .append(
