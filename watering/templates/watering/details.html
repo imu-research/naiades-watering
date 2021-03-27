@@ -55,24 +55,34 @@
             </button>
         </div>
     </div>
-    <div id="chart-history" style="width:100%;height: 400px;"></div>
-    <div id="chart-prediction" style="width:100%;height: 400px;"></div>
 
-    <form action="/watering/details/?id={{ box.id }}" method="post" id="edit-form">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="chart-history" style="width:100%;height: 400px;"></div>
+        </div>
+    </div>
 
-        {% include 'watering/form.html' %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="chart-prediction" style="width:100%;height: 400px;"></div>
+        </div>
+    </div>
 
-    </form>
+    <div class="row">
+        <div class="col-xs-12">
+            <form action="/watering/details/?id={{ box.id }}" method="post" id="edit-form">
+                {% csrf_token %}
 
-    <!--<pre>
-        {{ history }}
-    </pre> -->
-    <div class="row" style="margin: 10px;" id="watering-logs">
-         <div class="col-md-12">
+                {% include 'watering/form.html' %}
+
+            </form>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 10px 0;" id="watering-logs">
+         <div class="col-xs-12">
              <h3>Watering logs</h3>
-            <div class="panel panel-primary">
-              <table class="table ui celled" style="margin: 30px;width: 90%" id="watering-logs-table">
+             <table class="table ui celled" id="watering-logs-table">
                 <thead>
                   <tr>
                     <th>{% trans "Date" %}</th>
@@ -94,10 +104,7 @@
                 {%  endfor %}
                 </tbody>
               </table>
-            </div>
-    </div>
-
-
+        </div>
     </div>
 {% endblock %}
 
