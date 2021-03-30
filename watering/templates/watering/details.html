@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load static %}
+{% load app_filters %}
 
 {% block css %}
     <link href="{% static 'css/create.css' %}" rel="stylesheet">
@@ -50,7 +51,7 @@
             <button id="start-watering" type="button" class="btn btn-primary btn-block">{% trans "Start Watering" %}</button>
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | safe }} );">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} );">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
             <a href="/watering/cluster/?id={{ box.id }}" id="back-box" class="btn btn-sm btn-default" style="margin-left: 10px;float: right">
