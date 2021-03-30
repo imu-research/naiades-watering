@@ -47,15 +47,39 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row" style="margin-bottom: 20px;">
+    <div class="row" style="margin-bottom: 10px;">
         <div class="col-xs-12 col-sm-9">
-            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster #" %}{{ box.id }} </h3>
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster " %}{{ box.data.name}} </h3>
         </div>
         <div class="col-xs-12 col-sm-3" style="text-align: right">
             <a href="/watering" id="back-box"
                     class="btn btn-primary" style="margin-right: 12px;">
-                Next Cluster: 1
+                {% trans "Next Cluster" %}: 1
             </a>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 10px 0;">
+        <div class="col-xs-12 col-md-6">
+
+             <div class="btn-group">
+                <a href="#" class="btn btn-sm btn-danger" title="Dry plants"><i class="glyphicon glyphicon-warning-sign"></i>
+                    <span style="margin-left: 5px;">{% trans "Dry plants" %}</span></a>
+                <a href="#" class="btn btn-sm btn-success" title="No watering required"><i class="glyphicon glyphicon-ok"></i>
+                    <span style="margin-left: 5px;">{% trans "No watering required" %}</span></a>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-md-6" style="text-align: right; padding: 0">
+
+           <div class="btn-group">
+                <a href="/watering/box/{{ box.id }}/issues/" class="btn btn-sm btn-default" title="List problems"><i class="glyphicon glyphicon-list"></i>
+                    <span style="margin-left: 5px;">{% trans "Issues" %}</span></a>
+                <a href="/watering/box/{{ box.id }}/issues/report/" class="btn btn-sm btn-default" title="Report new problem"><i class="glyphicon glyphicon-plus"></i>
+                    <span style="margin-left: 5px;">{% trans "Report new issue" %}</span></a>
+            </div>
+
+
         </div>
     </div>
 {#    <div class="row" style="margin: 10px 0;">#}
@@ -71,7 +95,7 @@
     <div class="row">
         <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Predicted Required  Water Amount (Cluster)</div>
+                <div class="panel-heading">{% trans "Predicted Required  Water Amount (Cluster)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         {{ recommended_consumption }} lt
@@ -81,7 +105,7 @@
         </div>
         <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Predicted Required  Water Amount (Avg. per Box)</div>
+                <div class="panel-heading">{% trans "Predicted Required  Water Amount (Avg. per Box)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         {{ recommended_consumption_per_box }} lt
@@ -93,7 +117,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Water used (cluster)</div>
+                <div class="panel-heading">{% trans "Water used (cluster)" %}</div>
                 <div class="panel-body">
                     <div id="cluster-details-gauge-container"></div>
                 </div>

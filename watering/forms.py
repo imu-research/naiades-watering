@@ -16,6 +16,7 @@ class BoxForm(Form):
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
     number_of_boxes = IntegerField(required=True, label=_('Number of boxes'))
+    name = CharField(required=True, label=_('Box Name'))
 
     @staticmethod
     def from_box(box):
@@ -27,6 +28,7 @@ class BoxForm(Form):
             "refDevice": data.get("refDevice"),
             "soil_type": data.get("soil_type"),
             "number_of_boxes": data.get("number_of_boxes"),
+            "name": data.get('name'),
         })
 
     def as_box(self):
@@ -38,6 +40,7 @@ class BoxForm(Form):
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
             ],
+            "name": self.data.get('name'),
         }
 
 
@@ -78,6 +81,7 @@ class BoxSetupForm(BoxForm):
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
             ],
+            "name": self.data.get('name'),
         })
 
         return data

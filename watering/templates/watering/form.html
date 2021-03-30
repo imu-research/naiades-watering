@@ -15,6 +15,15 @@
         </div>
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
+                <label for="id_box_name">{% trans "Box Name" %}:</label>
+                <input type="text" name="box_name" required="" id="id_box_name" class="form-control" value="{{ box.data.name }}" >
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
                 <label for="id_soil_type">{% trans "Type of soil" %}:</label>
                 <select name="soil_type" id="id_soil_type" class="form-control">
                   <option value="" {% if not form.data.soil_type %}selected{% endif %}></option>
@@ -26,9 +35,7 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_flowers_type">{% trans "Type of flowers" %}:</label>
@@ -43,7 +50,11 @@
             </div>
         </div>
 
-        <div class="col-lg-6 col-xs-12 ">
+    </div>
+
+    <div class="row">
+
+         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
                 <label for="id_sun_exposure">{% trans "Exposure to sun" %}:</label>
 
@@ -58,32 +69,16 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 
-    <div class="row">
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_number_of_boxes">Number of boxes:</label>
+                <label for="id_number_of_boxes">{% trans "Number of boxes" %}:</label>
                 <input type="number" step="1" name="number_of_boxes" required="" id="id_number_of_boxes" class="form-control" value="{{ form.data.number_of_boxes }}">
                 {% if form.errors.number_of_boxes %}
                     <span class="o-red">{{ form.errors.number_of_boxes }}</span>
                 {% endif %}
             </div>
         </div>
-
-        <div class="col-lg-6 col-xs-12 ">
-            <div class="form-group">
-                <label for="id_refDevice">{% trans "Sensor ID" %}:</label>
-                <select name="refDevice" id="id_refDevice" class="form-control">
-                  <option value="{{ form.data.refDevice }}" {% if form.data.refDevice %}selected{% endif %}>{{ form.data.refDevice }}</option>
-                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>{% trans "None" %}</option>
-                </select>
-                {% if form.errors.refDevice %}
-                    <span class="o-red">{{ form.errors.refDevice }}</span>
-                {% endif %}
-            </div>
-        </div>
-
 
         <!--<div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
@@ -98,6 +93,23 @@
                 {% endif %}
             </div>
         </div>-->
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_refDevice">{% trans "Sensor ID" %}:</label>
+                <select name="refDevice" id="id_refDevice" class="form-control">
+                  <option value="{{ form.data.refDevice }}" {% if form.data.refDevice %}selected{% endif %}>{{ form.data.refDevice }}</option>
+                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>{% trans "None" %}</option>
+                </select>
+                {% if form.errors.refDevice %}
+                    <span class="o-red">{{ form.errors.refDevice }}</span>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 
     <div class="row">

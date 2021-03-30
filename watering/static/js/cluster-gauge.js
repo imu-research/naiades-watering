@@ -15,31 +15,31 @@ window.ClusterDetailsGauge = {
     setGrades: function() {
         this.grades = [
             {
-                title: "Dry",
+                title: window.MESSAGES.dry,
                 color: "#ee1f25",
                 lowScore: 0,
                 highScore: this.fromRatio(0.5)
             },
             {
-                title: "Reduced",
+                title: window.MESSAGES.reduced,
                 color: "#f3eb0c",
                 lowScore: this.fromRatio(0.5),
                 highScore: this.fromRatio(0.8)
             },
             {
-                title: "Recommended",
+                title: window.MESSAGES.recommended,
                 color: "#54b947",
                 lowScore: this.fromRatio(0.8),
                 highScore: this.fromRatio(1.1)
             },
             {
-                title: "Excessive",
+                title: window.MESSAGES.excessive,
                 color: "#f3eb0c",
                 lowScore: this.fromRatio(1.1),
                 highScore: this.fromRatio(1.5)
             },
             {
-                title: "Overwhelming",
+                title: window.MESSAGES.overwhelming,
                 color: "#ee1f25",
                 lowScore: this.fromRatio(1.5),
                 highScore: this.fromRatio(this.maxWateringRatio)

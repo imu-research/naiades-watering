@@ -249,7 +249,7 @@ $(function () {
             if (!measurements.length) {
                 return that.$table.append($('<div />')
                     .addClass("boxes--empty-message")
-                    .text(`No boxes need watering ${$('#next-watering').val().toLowerCase()}.`)
+                    .text(window.MESSAGES.noMoreWater+` ${$('#next-watering').val().toLowerCase()}.`)
                 )
             }
 
