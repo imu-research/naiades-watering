@@ -69,35 +69,35 @@
                         </form>
                     </div>
                 </li>
-                    <!-- /.dropdown -->
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-user fa-fw"></i>
-                            {% if request.user.first_name %}
-                                {{ request.user.first_name }}
-                            {% elif request.user.username %}
-                                {{ request.user.username }}
-                            {% else %}
-                                Guest
-                            {% endif %}
-                            <i class="fa fa-caret-down"></i>
-                        </a>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>
+                        {% if request.user.first_name %}
+                            {{ request.user.first_name }}
+                        {% elif request.user.username %}
+                            {{ request.user.username }}
+                        {% else %}
+                            Guest
+                        {% endif %}
+                        <i class="fa fa-caret-down"></i>
+                    </a>
 
-                        <ul class="dropdown-menu dropdown-user">
+                    <ul class="dropdown-menu dropdown-user">
 
-                            {% if request.user.is_authenticated %}
-                                <li>
-                                    <a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                                </li>
-                            {% else %}
-                                <li>
-                                    <a href="{% url 'login' %}"><i class="fa fa-sign-out fa-fw"></i> Login</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                        <!-- /.dropdown-user -->
-                    </li>
-                    <!-- /.dropdown -->
+                        {% if request.user.is_authenticated %}
+                            <li>
+                                <a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{% url 'login' %}"><i class="fa fa-sign-out fa-fw"></i> Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
             </ul>
           </div>
         </div>
@@ -107,6 +107,8 @@
             <div class="row">
                 <div class="col col-xs-12">
                     {% block content %}
+                    {% endblock %}
+                    {% block post_content %}
                     {% endblock %}
                 </div>
             </div>
@@ -141,6 +143,9 @@
 
     {% include 'util/js-translations.html' %}
     {% block js %}
+    {% endblock %}
+
+    {% block post_js %}
     {% endblock %}
   </body>
 </html>

@@ -142,6 +142,7 @@ $(function () {
                 '#E9573F': 'red',
                 '#AAB2BD': 'grey',
                 '#8EC760': 'green',
+                '#4fc1e9': 'blue'
             }[color];
 
             return new L.Icon({

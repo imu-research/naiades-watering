@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "watering/location-base.html" %}
 
 {% load i18n %}
 {% load static %}
@@ -64,18 +64,6 @@
      </div>
 
     {% if "route" in mode %}
-
-        {% if TESTING %}
-            <div class="row" style="margin: 10px 20px;">
-                <button type="button" class="btn btn-primary" id="test-route-btn">
-                    {% trans "Start test route" %}
-                </button>
-                <button type="button" class="btn btn-default disabled" disabled id="next-position-btn">
-                    {% trans "Move to next position" %}
-                </button>
-            </div>
-        {% endif %}
-
         <div class="row" style="margin: 10px;">
             <div class="col-xs-12">
                  <div id="next-box-watering" style="display: none"></div>
@@ -109,26 +97,6 @@
     <script src="{% static 'js/render.js' %}?v=20210327.1"></script>
     {% if "route" in mode %}
         <script src="{% static 'js/show-route.js' %}?v=20210131.1"></script>
-        <script src="{% static 'js/location-manager.js' %}?v=20210117.1"></script>
-        <script src="{% static 'js/geofencing.js' %}?v=20210117.1"></script>
-        <script>
-            $(function() {
-                $('#test-route-btn').on("click", function() {
-                    // start location manager
-                    LocationManager.setModeAndRestart("dev");
-
-                    // enable next position button
-                    $('#next-position-btn')
-                        .removeClass('disabled')
-                        .removeAttr('disabled');
-                });
-
-                $('#next-position-btn').on('click', function() {
-                    LocationManager.moveToNextDevLocation();
-                });
-            });
-        </script>
     {% endif %}
-    <script src="{% static 'js/load-data.js' %}?v=20201215.1"></script>
     <script src="{% static 'js/weather.js' %}"></script>
 {% endblock %}

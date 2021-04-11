@@ -9,24 +9,27 @@ $(function() {
         intervalRef: null,
         positionUpdateCallbacks: {},
 
-        updateLocationInfo: function() {
-            const locationInfo = {
-                mode: this.mode,
-                position: null
-            };
-
+        requestLocationInfo: function() {
             if (this.mode === "dev") {
-                locationInfo.position = this.devLocations[this.devLocationsIdx];
+                this.updateLocationInfo(this.devLocations[this.devLocationsIdx]);
             } else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position){
-                        locationInfo.position = {
+                        window.LocationManager.updateLocationInfo({
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
-                        }
+                        });
                     });
                 }
             }
+        },
+
+        updateLocationInfo: function(position) {
+            // create location info object
+            const locationInfo = {
+                mode: this.mode,
+                position: position
+            };
 
             // check if position changed
             if (!(
@@ -59,7 +62,7 @@ $(function() {
 
             // listen for location changes
             this.intervalRef = setInterval(function() {
-                LocationManager.updateLocationInfo()
+                LocationManager.requestLocationInfo()
             }, this.interval);
         },
 

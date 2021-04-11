@@ -1,6 +1,40 @@
 $(function() {
     const maxLocalRadius = 0.03; // 30 meters
 
+    const setRoutePositionMarker = function(controller, position) {
+        const mapsPosition = new google.maps.LatLng(position.lat, position.lng);
+
+        if (!controller.currentPositionMarker) {
+            controller.currentPositionMarker = new google.maps.Marker({
+                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                position: mapsPosition,
+                title: window.MESSAGES.currentLocation,
+                map: controller.map,
+            });
+        } else {
+            controller.currentPositionMarker.setPosition(mapsPosition);
+        }
+    };
+
+    const setRenderPositionMarker = function(controller, position) {
+        const color = '#4fc1e9';
+
+        // remove previous marker
+        if (controller.currentPositionMarker) {
+            controller.currentPositionMarker.remove();
+        }
+
+        // add marker based on current location
+        controller.currentPositionMarker = L.marker([position.lat, position.lng], {
+            icon: controller.getIcon(color),
+            color: '#555',
+            fillColor: color,
+            fillOpacity: 0.8,
+            radius: 30,
+            title: "Your current location"
+        }).addTo(controller.map)
+    };
+
     const notificationUI = {
         $container: $('#geofencing-notification-container'),
 
@@ -8,52 +42,59 @@ $(function() {
             this.$container.empty();
         },
 
-        notify(localMeasurements) {
+        notify(localMeasurements, automaticRedirect) {
             // clear old notifications
             this.clear();
 
             // get container
             const $container  = this.$container;
 
-            // show notification for each box
-            $.each(localMeasurements, function(idx, measurement) {
-                const onHideNotification = function() {
-                    $notification.remove();
-                    //location.href="/"
-                };
+            const redirectTo = function(measurement) {
+                window.location.href = `/watering/cluster/?id=${measurement.boxId}`
+            };
 
-                const onYESNotification = function () {
-                    const that = this;
-                    $.ajax({
-                        url: `/watering/watered?id=${measurement.boxId}`,
-                        success: function (response) {
+            // no options - nothing to do
+            if (localMeasurements.length === 0) {
+                return
+            }
 
-                        }
-                    });
-                    $notification.remove();
+            // automatically redirect if only one is present
+            if ((localMeasurements.length === 1) && automaticRedirect) {
+                return redirectTo(localMeasurements[0]);
+            }
 
+            // show dialog to select from many
+            const $notification = $('<div />')
+                .addClass('notification')
+                .append($('<div />')
+                    .addClass('message')
+                    .text("Please select the box you're about to start watering.")
+                );
 
-                };
-
-                const $notification = $('<div />')
-                    .addClass('notification')
-                    .append($('<div />')
-                        .addClass('message')
-                        .text(window.MESSAGES.wateringQuestion+` #${measurement.boxId}?`)
-                    )
+            // show an option for each local measurement
+            $.each(localMeasurements, function (idx, localMeasurement) {
+                $notification
                     .append($('<button />')
                         .addClass('btn btn-success')
-                        .text(window.MESSAGES.yes)
-                        .on('click', onYESNotification)
-                    )
-                    .append($('<button />')
-                        .addClass('btn btn-danger')
-                        .text(window.MESSAGES.no)
-                        .on('click', onHideNotification)
+                        .css("margin-right", "10px")
+                        .text(`Box ${localMeasurement.boxId}`)
+                        .on('click', function () {
+                            redirectTo(localMeasurement);
+                        })
                     );
-
-                $container.append($notification);
             });
+
+            // add skip option
+            $notification
+                .append($('<button />')
+                    .addClass('btn btn-error pull-right')
+                    .text(`Close`)
+                    .on('click', function () {
+                        $notification.remove();
+                    })
+                );
+
+            $container.append($notification);
         }
     };
 
@@ -62,14 +103,16 @@ $(function() {
 
         if (!locationInfo) {
             // empty notifications
-            notificationUI.notify([]);
-
-            return
+            return notificationUI.notify([], false);
         }
 
-        // show current position
+        // show current position in router & render maps
         if (window.NaiadesRouter) {
-            window.NaiadesRouter.setCurrentPositionMarker(locationInfo.position);
+            setRoutePositionMarker(window.NaiadesRouter, locationInfo.position);
+        }
+
+        if (window.NaiadesRender) {
+            setRenderPositionMarker(window.NaiadesRender, locationInfo.position);
         }
 
         // find measurements around
@@ -83,7 +126,7 @@ $(function() {
         );
 
         // show notifications
-        notificationUI.notify(localMeasurements);
+        notificationUI.notify(localMeasurements, locationInfo.mode !== "dev");
     };
 
     // get measurements

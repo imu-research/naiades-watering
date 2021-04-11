@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+
+{% block post_content %}
+    {% if TESTING %}
+        <div class="row" style="margin: 10px 20px;">
+            <button type="button" class="btn btn-primary" id="test-route-btn">
+                {% trans "Start test route" %}
+            </button>
+            <button type="button" class="btn btn-default disabled" disabled id="next-position-btn">
+                {% trans "Move to next position" %}
+            </button>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block post_js %}
+    <script src="{% static 'js/load-data.js' %}?v=20201215.1"></script>
+    <script src="{% static 'js/show-route.js' %}?v=20210131.1"></script>
+    <script src="{% static 'js/location-manager.js' %}?v=20210117.1"></script>
+    <script src="{% static 'js/geofencing.js' %}?v=20210117.1"></script>
+    <script>
+        $(function() {
+            // start location manager in normal mode
+            LocationManager.setModeAndRestart("normal");
+        });
+    </script>
+    {% if TESTING %}
+        <script>
+            $(function() {
+                $('#test-route-btn').on("click", function() {
+                    // start location manager in dev mode
+                    LocationManager.setModeAndRestart("dev");
+
+                    // enable next position button
+                    $('#next-position-btn')
+                        .removeClass('disabled')
+                        .removeAttr('disabled');
+                });
+
+                $('#next-position-btn').on('click', function() {
+                    LocationManager.moveToNextDevLocation();
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

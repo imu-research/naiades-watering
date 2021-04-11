@@ -104,21 +104,6 @@ $(function() {
             );
         },
 
-        setCurrentPositionMarker(position) {
-            const mapsPosition = new google.maps.LatLng(position.lat, position.lng);
-
-            if (!this.currentPositionMarker) {
-                this.currentPositionMarker = new google.maps.Marker({
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                    position: mapsPosition,
-                    title: window.MESSAGES.currentLocation,
-                    map: this.map,
-                });
-            } else {
-                this.currentPositionMarker.setPosition(mapsPosition);
-            }
-        },
-
         renderRoute: function(meters) {
             const waypoints = [];
             const wptdetatils = [];

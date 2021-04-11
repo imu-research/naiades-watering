@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import requests
+import json
 
 import dateutil.parser
 from datetime import datetime, timedelta
@@ -139,6 +140,24 @@ class OrionEntity(object):
 
         # return list
         return response.json()
+
+    def consumption_history_list(self):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/consumption',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        ),
+
+        # raise exception if response code is in 4xx, 5xx
+        '''if response.status_code >= 400:
+            self.handle_error(response)'''
+
+        # return list
+        return response
 
     def sensor_list(self, service):
         # list entities
@@ -446,6 +465,15 @@ class WateringBox(Model):
             })
 
         return results
+
+    @staticmethod
+    def consumption_history_list():
+        # get humidity history of box id
+        try:
+            response = OrionEntity().consumption_history_list()
+            return response
+        except OrionError:
+            return []
 
     @staticmethod
     def sensors_list():

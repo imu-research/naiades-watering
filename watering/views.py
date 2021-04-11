@@ -361,6 +361,29 @@ def cluster_details(request):
         'recommended_consumption_per_box': recommended_per_box,
     })
 
+def box_monthly_report(request):
+
+
+    # get boxes for this user
+
+    '''boxes = JsonResponse({
+        "boxes": [box.data for box in WateringBox.list()]
+    })'''
+    boxes = WateringBox.list()
+
+    # get consumption historic data
+    try:
+        consumption_history = WateringBox.consumption_history_list()
+    except ReadTimeout:
+        consumption_history = []
+
+    # render
+    return render(request, 'watering/monthly-report.html', {
+        'boxes': boxes,
+        'consumption_history': consumption_history,
+    })
+
+
 def history_preprocessing(history):
         new = []
         i=0;

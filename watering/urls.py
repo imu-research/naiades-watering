@@ -13,6 +13,9 @@ urlpatterns = [
     # Cluster Details
     path('cluster/', views.cluster_details, name='cluster-details'),
 
+    # Monthly Report
+    path('monthlyReport/', views.box_monthly_report, name='monthly-report'),
+
     # Report issues
     path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
     path('box/<str:box_id>/issues/', views.list_issues, name='list-issues'),
