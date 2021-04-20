@@ -5,49 +5,128 @@
 
 {% block css %}
     <link href="{% static 'css/create.css' %}" rel="stylesheet">
+    <style>
+        .btn-squared-default
+        {
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .btn-squared-default-plain
+        {
+            font-size: 10px;
+        }
+
+        #issue-type-selector .glyphicon {
+            font-size: 14px;
+        }
+
+        #issue-type-selector .btn {
+            margin-right: 5px;
+        }
+
+        #issue-type-selector .btn span {
+            vertical-align: top;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        #issue-type-selector .btn {
+            background: white;
+        }
+
+        #issue-type-selector .btn-warning {
+            color: #f6bb42;
+            background: white;
+        }
+
+        #issue-type-selector .btn-warning.selected {
+            background-color: #f6bb42;
+            color: white;
+        }
+
+        #issue-type-selector .btn-danger {
+            color: #d43f3a;
+            background: white;
+        }
+
+        #issue-type-selector .btn-danger.selected {
+            background-color: #d43f3a;
+            color: white;
+        }
+
+        #issue-type-selector .btn-success {
+            color: #8cc152;
+            background: white;
+        }
+
+        #issue-type-selector .btn-success.selected {
+            background-color: #8cc152;
+            color: white;
+        }
+
+        #issue-type-selector .btn-primary {
+            color: #3bafda;
+            background: white;
+        }
+
+        #issue-type-selector .btn-primary.selected {
+            background-color: #3bafda;
+            color: white;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
-    <h3 style="margin-top:0px;margin-bottom: 20px;">{% trans "Report a problem" %}</h3>
+    <div class="row">
+        <div class="col-xs-9">
+            <h3 style="margin-top:0px;margin-bottom: 20px;">{% trans "Report a problem" %}</h3>
+        </div>
+        <div class="col-xs-3" style="text-align: right">
+            <a href="{% url 'list-issues' box_id=box_id %}" class="btn btn-sm btn-default">
+                ‹ {% trans "Back to Box" %} #{{ box_id }} {% trans "issues" %}
+            </a>
+        </div>
+    </div>
 
     <div class="panel">
         <div class="panel-body">
             <form class="row" style="padding: 40px; margin: 20px 0;" action="." method="POST">
                 {% csrf_token %}
 
-                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
-                  <div class="col-md-12" style="text-align: right">
-                      <a href="{% url 'list-issues' box_id=box_id %}" class="btn btn-sm btn-default">
-                          {% trans "Back to Box" %} #{{ box_id }} {% trans "issues" %}
-                      </a>
-                  </div>
+                <div class="row" id="issue-type-selector">
+                    <div class="col-lg-12">
+                        <div>
+                            <label>Issue Type:</label>
+                        </div>
+                        <input type="hidden" name="issue_type" />
+                        <button type="button" data-value="Broken sensor" class="btn btn-squared-default btn-warning">
+                            <i class="glyphicon glyphicon-dashboard"></i>
+                            <span>{% trans "Broken sensor" %}</span>
+                        </button>
+                        <button type="button" data-value="Dry plants" class="btn btn-squared-default btn-danger">
+                            <i class="glyphicon glyphicon-tint"></i>
+                            <span>{% trans "Dry plants" %}</span>
+                        </button>
+                        <button type="button" data-value="No watering required" class="btn btn-squared-default btn-success">
+                            <i class="glyphicon glyphicon-ok"></i>
+                            <span>{% trans "No watering required" %}</span>
+                        </button>
+                        <button type="button" data-value="Wrong data" class="btn btn-squared-default-plain btn-primary">
+                            <i class="glyphicon glyphicon-remove"></i>
+                            <span>{% trans "Wrong data" %}</span>
+                        </button>
+                        <button type="button" data-value="Problem with the box" class="btn btn-squared-default-plain btn-warning">
+                            <i class="glyphicon glyphicon-inbox"></i>
+                            <span>{% trans "Problem with the box" %}</span>
+                        </button>
+                        <button type="button" data-value="Flowers destroyed" class="btn btn-squared-default-plain btn-danger">
+                            <i class="glyphicon glyphicon-leaf"></i>
+                            <span>{% trans "Flowers destroyed" %}</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="row" style="margin-top: 10px;margin-bottom: 10px;">
-                  <div class="col-md-12">
-                      <label for="report_type">{% trans "Issue type" %}:</label>
-                  </div>
-                  <div class="col-md-12">
-                    <select class="selecter_3 selecter-element" name="issue_type">
-                        <option value="Broken sensor" selected>{% trans "Broken sensor" %}</option>
-                        <option value="Dry plants" selected>{% trans "Dry plants" %}</option>
-                        <option value="No watering required">{% trans "No watering required" %}</option>
-                        <option value="Wrong data">{% trans "Wrong data" %}</option>
-                        <option value="Problem with the box">{% trans "Problem with the box" %}</option>
-                        <option value="Flowers destroyed">{% trans "Flowers destroyed" %}</option>
-                        <option value="Other">{% trans "Other" %}</option>
-                    </select>
-                    <!--<div class="selecter  cover closed" tabindex="0"><select name="selecter_basic" class="selecter_3 selecter-element" data-selecter-options="{&quot;cover&quot;:&quot;true&quot;}" tabindex="-1">
-                        <option value="1" selected>Broken sensor</option>
-                        <option value="2">Wrong data</option>
-                        <option value="3">Problem with the box</option>
-                        <option value="4">Flowers destroyed</option>
-                        <option value="5">Other</option>
-                    </select>-->
-                        <!--<span class="selecter-selected">Broken sensor</span><div class="selecter-options"><span class="selecter-item selected" data-value="1">One</span><span class="selecter-item" data-value="2">Two</span><span class="selecter-item" data-value="3">Three</span><span class="selecter-item" data-value="4">Four</span><span class="selecter-item" data-value="5">Five</span></div></div>
-                  -->
-                  </div>
-                </div>
                 <div class="row" style="margin-top: 10px;">
                   <div class="col-md-12">
                       <label for="report">{% trans "Description" %}:</label>
@@ -67,6 +146,33 @@
             </form>
         </div>
     </div>
+{% endblock %}
 
+{% block js %}
+    <script>
+        $(function() {
+            $("#issue-type-selector .btn").on("click", function() {
+                const $this = $(this);
 
+                // ignore if already selected
+                if ($this.hasClass("selected")) {
+                    return
+                }
+
+                // remove from others
+                $this
+                    .closest("#issue-type-selector")
+                    .find(".btn")
+                    .removeClass("selected");
+
+                // add class to the clicked button
+                $this
+                    .addClass("selected");
+
+                // change hidden input's value
+                $('input[name="issue_type"]')
+                    .val($this.data("value"));
+            });
+        })
+    </script>
 {% endblock %}

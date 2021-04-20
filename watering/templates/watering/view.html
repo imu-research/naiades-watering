@@ -41,6 +41,33 @@
 
 
          {% if "route" not in mode %}
+             <div class="col-md-4"></div>
+             <div class="btn-group col-md-2">
+              <button type="button" class="btn btn-primary" style="width: 82%">Report</button>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Daily Report</a></li>
+                <li><a href="/watering/monthlyReport/">Monthly Report</a></li>
+              </ul>
+            </div>
+
+         {% endif %}
+         {% if "route" in mode %}
+             <div class="col-xs-12 col-sm-6" style="text-align: right">
+                <a href="/watering" id="back-box"
+                        class="btn btn-secondary" style="margin-right: 12px;">
+                    <i class="glyphicon glyphicon-chevron-left"></i> Back
+                </a>
+             </div>
+         {% endif %}
+     </div>
+
+    {% if "route" not in mode %}
+        <div class="col-md-6"></div>
+        <div class="row" style="margin: 20px">
              <div class="col-md-3">
                 <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
                     <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Box" %}
@@ -52,16 +79,9 @@
                      {% trans "View suggested route" %}
                  </button>
              </div>
-         {% endif %}
-         {% if "route" in mode %}
-             <div class="col-xs-12 col-sm-6" style="text-align: right">
-                <a href="/watering" id="back-box"
-                        class="btn btn-secondary" style="margin-right: 12px;">
-                    <i class="glyphicon glyphicon-chevron-left"></i> Back
-                </a>
-             </div>
-         {% endif %}
-     </div>
+
+        </div>
+    {% endif %}
 
     {% if "route" in mode %}
         <div class="row" style="margin: 10px;">
