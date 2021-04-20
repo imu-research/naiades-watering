@@ -124,6 +124,10 @@
                             <i class="glyphicon glyphicon-leaf"></i>
                             <span>{% trans "Flowers destroyed" %}</span>
                         </button>
+                        <button type="button" data-value="Other" class="btn btn-squared-default-plain btn-primary">
+                            <i class="glyphicon glyphicon-comment"></i>
+                            <span>{% trans "Other" %}</span>
+                        </button>
                     </div>
                 </div>
 
@@ -132,7 +136,7 @@
                       <label for="report">{% trans "Description" %}:</label>
                   </div>
                    <div class="col-md-12">
-                      <textarea class="form-control" rows="5" name="description"></textarea>
+                      <textarea class="form-control" rows="5" name="description" required></textarea>
                   </div>
 
                 </div>
