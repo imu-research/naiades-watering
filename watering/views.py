@@ -1,5 +1,6 @@
 import json
 import logging
+from _decimal import InvalidOperation
 
 from decimal import Decimal
 from requests import ReadTimeout
@@ -91,8 +92,16 @@ def box_details(request):
 
     # get humidity historic data
     try:
-        history_api = box_history(box_id)
-        history = history_preprocessing(history_api)
+        history = merge_histories(
+            old_history=box_history(box_id, "refDevice"),
+            new_history=box_history(box_id, "refNewDevice"),
+            preprocessing=preprocessed_history
+        )
+
+        # history_old = history_preprocessing(history_old_api)
+        # history = history_preprocessing(history_new_api)
+        '''for h in history_old:
+            history.append({"date":h['date'], "value2":h['value']})'''
     except ReadTimeout:
         history = []
 
@@ -213,12 +222,12 @@ def box_edit(request):
     })
 
 
-def box_history(box_id):
+def box_history(box_id, attr):
     # find box
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.history(
-        box_id=box.data["id"]
+        refDevice=box.data[attr][-4:]
     )
 
     # render
@@ -344,7 +353,11 @@ def cluster_details(request):
     box = WateringBox.get(box_id)
 
     # calculate recommended per box
-    recommended = Decimal(box.data.get("nextWateringAmountRecommendation"))
+    try:
+        recommended = Decimal(box.data.get("nextWateringAmountRecommendation"))
+    except InvalidOperation:
+        recommended = 0
+
     n_boxes = int(box.data.get("number_of_boxes"))
 
     try:
@@ -379,23 +392,68 @@ def box_monthly_report(request):
 
     # render
     return render(request, 'watering/monthly-report.html', {
-        'boxes': boxes,
+        'boxes': [
+            box.data
+            for box in boxes
+        ],
         'consumption_history': consumption_history,
     })
 
 
-def history_preprocessing(history):
-        new = []
-        i=0;
-        for h in history:
-            if (i>0):
-                new.append({"date":h['date'], "value":previous_humidity})
-            new.append(h)
-            previous_humidity = h['value']
-            i=i+1;
-        current_date = now().strftime("%Y-%m-%dT%H:%M:%S%Z")
-        new.append({"date": current_date, "value": previous_humidity})
-        return new
+def merge_histories(old_history, new_history, preprocessing=None):
+    # check if a callable has been passed for preprocessing
+    if preprocessing:
+        old_history = preprocessing(old_history)
+        new_history = preprocessing(new_history)
+
+    # key/value pairs for old history
+    history = {
+        entry["date"]: {
+            "value_old": entry["value"],
+            "value_new": None,
+        }
+        for entry in old_history
+    }
+
+    # add new history values
+    for entry in new_history:
+        if entry["date"] not in history:
+            history[entry["date"]] = {
+                "value_old": None,
+                "value_new": None,
+            }
+
+        history[entry["date"]]["value_new"] = entry["value"]
+
+    # flatten & return
+    return sorted([
+        {
+            "date": entry_date,
+            "value_old": entry["value_old"],
+            "value_new": entry["value_new"],
+        }
+        for entry_date, entry in history.items()
+    ], key=lambda entry: entry["date"])
 
 
+def preprocessed_history(history):
+    preprocessed = []
+    previous_humidity = None
 
+    for idx, entry in enumerate(history):
+        if idx > 0:
+            preprocessed.append({
+                "date": entry['date'],
+                "value": previous_humidity
+            })
+
+        preprocessed.append(entry)
+        previous_humidity = entry['value']
+
+    # add an entry for right now, with previous humidity
+    preprocessed.append({
+        "date": now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+        "value": previous_humidity
+    })
+
+    return preprocessed

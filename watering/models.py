@@ -108,7 +108,7 @@ class OrionEntity(object):
     def history(self, service, entity_id):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/soilMoisture/value?lastN=100',
+            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Device-{entity_id}/attrs/value?lastN=100',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -427,12 +427,12 @@ class WateringBox(Model):
         )
 
     @staticmethod
-    def history(box_id):
-        # get humidity history of box id
+    def history(refDevice):
+        # get humidity history of refDevice
         try:
             response = OrionEntity().history(
                 service=WateringBox.service,
-                entity_id=box_id
+                entity_id=refDevice
             )
         except OrionError:
             return []

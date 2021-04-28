@@ -5,6 +5,12 @@ register = django.template.Library()
 
 @register.filter
 def exclude_none(data):
+    if type(data) == list:
+        return [
+            exclude_none(datum)
+            for datum in data
+        ]
+
     if type(data) != dict:
         return data
 

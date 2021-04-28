@@ -3,10 +3,14 @@ var chart = AmCharts.makeChart("chart-history", {
     "type": "serial",
     "hideCredits":true,
     "theme": "none",
+    "legend": {
+        "useGraphSettings": true
+    },
+    "synchronizeGrid":true,
     "marginRight": 40,
     "marginLeft": 40,
     "autoMarginOffset": 20,
-    "mouseWheelZoomEnabled":true,
+    //"mouseWheelZoomEnabled":true,
     "dataDateFormat": "YYYY-MM-DD"+'T'+"JJ:NN:SS.QQQ",
     "titles": [
                     {
@@ -17,15 +21,52 @@ var chart = AmCharts.makeChart("chart-history", {
                 ],
     "valueAxes": [{
         "id": "v1",
-        "axisAlpha": 0,
+        //"axisAlpha": 0,
+        "axisColor": "#FF6600",
+        "axisThickness": 2,
+        "axisAlpha": 1,
         "position": "left",
-        "ignoreAxisWidth":true
-    }],
+        "title": "Water requirement (cb)",
+    }, {
+        "id":"v2",
+        "axisColor": "#FCD202",
+        "axisThickness": 2,
+        "axisAlpha": 1,
+        //"axisAlpha": 0,
+        "position": "right",
+        "title": "Humidity (%)",
+    },
+    ],
     "balloon": {
         "borderThickness": 1,
         "shadowAlpha": 0
     },
     "graphs": [{
+        "valueAxis": "v1",
+        "lineColor": "#FF6600",
+        "bullet": "round",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Dragino Sensor",
+        "valueField": "value_new",
+        "legendValueText": "[[value]] %",
+        "balloonText": "[[value]] %",
+        "lineThickness": 1.5,
+    "fillAlphas": 0
+    }, {
+        "valueAxis": "v2",
+        "lineColor": "#FCD202",
+        "bullet": "square",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Old Sensor",
+        "valueField": "value_old",
+        "legendValueText": "[[value]] cb",
+        "balloonText": "[[value]] cb",
+        "lineThickness": 1.5,
+    "fillAlphas": 0
+    }],
+    /*"graphs": [{
         "id": "g1",
         "balloon":{
           "drop":true,
@@ -44,34 +85,20 @@ var chart = AmCharts.makeChart("chart-history", {
         "balloonText": "<span style='font-size:18px;'>[[value]]</span>",
         "fillAlphas": 0.3,
         "fillColorsField": "#ffffff",
-    }],
+    }],*/
     "chartScrollbar": {
         "enable":true,
-        /*"graph": "g1",
-        "oppositeAxis":false,
-        "offset":30,
-        "scrollbarHeight": 80,
-        "backgroundAlpha": 0,
-        "selectedBackgroundAlpha": 0.1,
-        "selectedBackgroundColor": "#888888",
-        "graphFillAlpha": 0,
-        "graphLineAlpha": 0.5,
-        "selectedGraphFillAlpha": 0,
-        "selectedGraphLineAlpha": 1,
-        "autoGridCount":true,
-        "color":"#AAAAAA"*/
     },
     "chartCursor": {
         "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
         "cursorPosition": "mouse",
-        //"pan": true,
-        "valueLineEnabled": true,
-        "valueLineBalloonEnabled": true,
-        "cursorAlpha":1,
-        "cursorColor":"#258cbb",
-        "limitToGraph":"g1",
-        "valueLineAlpha":0.2,
-        "valueZoomable":true
+        //"valueLineEnabled": true,
+        //"valueLineBalloonEnabled": true,
+        //"cursorAlpha":1,
+        //"cursorColor":"#258cbb",
+        //"limitToGraph":"g1",
+        //"valueLineAlpha":0.2,
+        //"valueZoomable":true
     },
     /*"valueScrollbar":{
       "oppositeAxis":false,
@@ -82,8 +109,9 @@ var chart = AmCharts.makeChart("chart-history", {
     "categoryAxis": {
         "parseDates": true,
         //"dashLength": 1,
-        //"minorGridEnabled": true,
+        "minorGridEnabled": true,
         "minPeriod": "mm",
+        "axisColor": "#DADADA",
     },
     "export": {
         "enabled": true,
@@ -309,24 +337,12 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
      }
 });
 
-chart.addListener("rendered", zoomChart);
-chart2.addListener("rendered", zoomChart);
-
-zoomChart();
-
-
-function zoomChart() {
-    chart.zoomToIndexes(chart.dataProvider.length - 60, chart.dataProvider.length - 1);
-    //chart2.zoomToIndexes(chart.dataProvider.length - 10, chart.dataProvider.length - 1);
-}
-
-
-/*var chart2 = AmCharts.makeChart("chart-prediction", {
+const chart3 = AmCharts.makeChart("chart-ec", {
     "type": "serial",
     "hideCredits":true,
     "theme": "none",
     "marginRight": 40,
-    "marginLeft": 40,
+    "marginLeft": 60,
     "autoMarginOffset": 20,
     "mouseWheelZoomEnabled":true,
     "dataDateFormat": "YYYY-MM-DD",
@@ -334,7 +350,7 @@ function zoomChart() {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": window.MESSAGES.predictionGraph
+                        "text": "Soil Electroconductivity (EC)"
                     }
                 ],
     "valueAxes": [{
@@ -343,6 +359,7 @@ function zoomChart() {
         "position": "left",
         "ignoreAxisWidth":true,
         "axisColor": "#67b7dc",
+        "title": "EC (S/m)",
     }],
     "balloon": {
         "borderThickness": 1,
@@ -365,7 +382,7 @@ function zoomChart() {
         "title": "red line",
         "useLineColorForBulletBorder": true,
         "valueField": "value",
-        "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+        "balloonText": "<span style='font-size:18px;'>[[value]] "+"S/m"+"</span>"
     }],
     "chartScrollbar": {
         "enable":true,
@@ -381,6 +398,230 @@ function zoomChart() {
         "menu":[],
     },
     "dataProvider": [{
+        "date": "2020-07-27",
+        "value": 13
+    }, {
+        "date": "2020-07-28",
+        "value": 11
+    }, {
+        "date": "2020-07-29",
+        "value": 15
+    }, {
+        "date": "2020-07-30",
+        "value": 16
+    }, {
+        "date": "2020-07-31",
+        "value": 18
+    }],
+});
+
+const chart4 = AmCharts.makeChart("chart-soil-temp", {
+    "type": "serial",
+    "hideCredits":true,
+    "theme": "light",
+    "marginRight": 40,
+    "marginLeft": 60,
+    "autoMarginOffset": 20,
+    "mouseWheelZoomEnabled":true,
+    "dataDateFormat": "YYYY-MM-DD",
+    "titles": [
+                    {
+                        "id": "Title-1",
+                        "size": 15,
+                        "text": "Soil Temperature"
+                    }
+                ],
+    "valueAxes": [{
+        "id": "v1",
+        "axisAlpha": 0,
+        "position": "left",
+        "ignoreAxisWidth":true,
+        "axisColor": "#67b7dc",
+        "title": "Soil temperature (°C)"
+    }],
+    "balloon": {
+        "borderThickness": 1,
+        "shadowAlpha": 0
+    },
+    "graphs": [{
+        "id": "g1",
+        "lineColor": "#ff0000",
+        "balloon":{
+          "drop":true,
+          "adjustBorderColor":false,
+          "color":"#ffffff"
+        },
+        "bullet": "round",
+        "bulletBorderAlpha": 1,
+        "bulletColor": "#FFFFFF",
+        "bulletSize": 5,
+        "hideBulletsCount": 50,
+        "lineThickness": 2,
+        "title": "red line",
+        "useLineColorForBulletBorder": true,
+        "valueField": "value",
+        "balloonText": "<span style='font-size:18px;'>[[value]]"+"°C"+"</span>"
+    }],
+    "chartScrollbar": {
+        "enable":true,
+    },
+    "categoryField": "date",
+    "categoryAxis": {
+        "parseDates": true,
+        "dashLength": 1,
+        "minorGridEnabled": true
+    },
+    "export": {
+        "enabled": true,
+        "menu":[],
+    },
+    "dataProvider": [{
+        "date": "2020-07-27",
+        "value": 13
+    }, {
+        "date": "2020-07-28",
+        "value": 11
+    }, {
+        "date": "2020-07-29",
+        "value": 15
+    }, {
+        "date": "2020-07-30",
+        "value": 16
+    }, {
+        "date": "2020-07-31",
+        "value": 18
+    }],
+});
+
+const chart5 = AmCharts.makeChart("chart-battery", {
+    "type": "serial",
+    "hideCredits":true,
+    "theme": "none",
+    "legend": {
+        "useGraphSettings": true
+    },
+    "synchronizeGrid":true,
+    "marginRight": 40,
+    "marginLeft": 40,
+    "autoMarginOffset": 20,
+    //"mouseWheelZoomEnabled":true,
+    "dataDateFormat": "YYYY-MM-DD"+'T'+"JJ:NN:SS.QQQ",
+    "titles": [
+                    {
+                        "id": "Title-1",
+                        "size": 15,
+                        "text": "Battery"
+                    }
+                ],
+    "valueAxes": [{
+        "id": "v1",
+        "axisAlpha": 0,
+        "position": "left",
+        "title": "Battery (%)",
+    }
+    ],
+    "balloon": {
+        "borderThickness": 1,
+        "shadowAlpha": 0
+    },
+    "graphs": [{
+        "valueAxis": "v1",
+        "lineColor": "#FF6600",
+        "bullet": "round",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Dragino Sensor",
+        "valueField": "value_new",
+        "legendValueText": "[[value]] %",
+        "balloonText": "[[value]] %",
+        "lineThickness": 1.5,
+    "fillAlphas": 0
+    }, {
+        "valueAxis": "v2",
+        "lineColor": "#FCD202",
+        "bullet": "square",
+        "bulletBorderThickness": 1,
+        "hideBulletsCount": 30,
+        "title": "Old Sensor",
+        "valueField": "value_old",
+        "legendValueText": "[[value]] %",
+        "balloonText": "[[value]] %",
+        "lineThickness": 1.5,
+    "fillAlphas": 0
+    }],
+    "chartScrollbar": {
+        "enable":true,
+    },
+    "chartCursor": {
+        "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
+        "cursorPosition": "mouse",
+        //"valueLineEnabled": true,
+        //"valueLineBalloonEnabled": true,
+        //"cursorAlpha":1,
+        //"cursorColor":"#258cbb",
+        //"limitToGraph":"g1",
+        //"valueLineAlpha":0.2,
+        //"valueZoomable":true
+    },
+    /*"valueScrollbar":{
+      "oppositeAxis":false,
+      "offset":50,
+      "scrollbarHeight":10
+    },*/
+    "categoryField": "date",
+    "categoryAxis": {
+        "parseDates": true,
+        //"dashLength": 1,
+        "minorGridEnabled": true,
+        "minPeriod": "mm",
+        "axisColor": "#DADADA",
+    },
+    "export": {
+        "enabled": true,
+        "menu":[],
+    },
+    "dataProvider": history
+});
+
+chart.addListener("rendered", zoomChart);
+chart2.addListener("rendered", zoomChart);
+chart5.addListener("rendered", zoomChart);
+
+zoomChart();
+
+
+function zoomChart() {
+    chart.zoomToIndexes(chart.dataProvider.length - 60, chart.dataProvider.length - 1);
+    chart5.zoomToIndexes(chart.dataProvider.length - 60, chart.dataProvider.length - 1);
+}
+
+AmCharts.checkEmptyData = function (chart) {
+    if ( 0 == chart.dataProvider.length ) {
+        // set min/max on the value axis
+        chart.valueAxes[0].minimum = 0;
+        chart.valueAxes[0].maximum = 100;
+
+        // add dummy data point
+        var dataPoint = {
+            dummyValue: 0
+        };
+        dataPoint[chart.categoryField] = '';
+        chart.dataProvider = [dataPoint];
+
+        // add label
+        chart.addLabel(0, '50%', window.MESSAGES.noData, 'center');
+
+        // set opacity of the chart div
+        chart.chartDiv.style.opacity = 0.5;
+
+        // redraw it
+        chart.validateNow();
+    }
+}
+
+AmCharts.checkEmptyData(chart);
+
+var data = [{
         "date": "2020-07-27",
         "value": 13
     }, {
@@ -1084,31 +1325,4 @@ function zoomChart() {
     }, {
         "date": "2021-03-18",
         "value": 78
-    }]
-});
-*/
-AmCharts.checkEmptyData = function (chart) {
-    if ( 0 == chart.dataProvider.length ) {
-        // set min/max on the value axis
-        chart.valueAxes[0].minimum = 0;
-        chart.valueAxes[0].maximum = 100;
-
-        // add dummy data point
-        var dataPoint = {
-            dummyValue: 0
-        };
-        dataPoint[chart.categoryField] = '';
-        chart.dataProvider = [dataPoint];
-
-        // add label
-        chart.addLabel(0, '50%', window.MESSAGES.noData, 'center');
-
-        // set opacity of the chart div
-        chart.chartDiv.style.opacity = 0.5;
-
-        // redraw it
-        chart.validateNow();
-    }
-}
-
-AmCharts.checkEmptyData(chart);
+    }];

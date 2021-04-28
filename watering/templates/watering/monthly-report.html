@@ -35,14 +35,10 @@
     </style>
 {% endblock %}
 
-{% block navigation %}
-    {% include 'watering/details-menu.html' %}
-{% endblock %}
-
 {% block content %}
 <div class="row" style="margin-bottom: 20px;">
         <div class="col-xs-12 col-sm-9">
-            <h2 style="margin-top:0%; margin-left: 10px;">Monthly Report </h2>
+            <h2 style="margin-top:0%; margin-left: 10px;">{% trans "March Monthly Report" %}</h2>
         </div>
         <div class="col-xs-12 col-sm-3" style="text-align: right">
             <a href="/watering" id="back-box"
@@ -56,16 +52,58 @@
         <div class="col-md-3">
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} );">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportMonthlyReport( {{ boxes | exclude_none | safe }} );">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12 col-sm-6">
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Overall " %} </h3>
+        </div>
+
+        </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans "Total Monthly Water Consumption" %}</div>
+                <div class="panel-body">
+                    <div class="recommended-value">
+                        493 lt
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans "Total Monthly Watering Time" %}</div>
+                <div class="panel-body">
+                    <div class="recommended-value">
+                        11 hrs
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="chart-prediction-overall" style="width:100%;height: 400px;"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="chart-km" style="width:100%;height: 400px;"></div>
         </div>
     </div>
 
     {% for box in boxes %}
     <div class="row" style="margin-bottom: 20px;">
         <div class="col-xs-12 col-sm-6">
-            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster " %}{{ box.data.name }} </h3>
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster " %}{{ box.name }} </h3>
         </div>
 
         </div>
@@ -102,37 +140,13 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <div id="chart-prediction-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
+            <div id="chart-prediction-{{ box.boxId }}" style="width:100%;height: 400px;"></div>
         </div>
     </div>
 
      <div class="row">
-        <div class="col-xs-4">
-            <div id="chart-consumption-cluster-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-        <div class="col-xs-4">
-            <div id="chart-time-cluster-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-        <div class="col-xs-4">
-            <div id="chart-km-cluster-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-6">
-            <div id="chart-monthly-cluster-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-        <div class="col-xs-6">
-            <div id="chart-monthly-box-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-6">
-            <div id="chart-monthly-time-cluster-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
-        </div>
-        <div class="col-xs-6">
-            <div id="chart-monthly-time-box-{{ box.data.boxId }}" style="width:100%;height: 400px;"></div>
+        <div class="col-xs-12">
+            <div id="chart-consumption-box-{{ box.boxId }}" style="width:100%;height: 400px;"></div>
         </div>
     </div>
 
@@ -190,7 +204,7 @@
     </script>
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/monthly-report-graphs.js' %}"></script>
-    <script src="{% static 'js/report.js' %}"></script>
+    <script src="{% static 'js/monthly-report.js' %}"></script>
 
 
 {% endblock %}

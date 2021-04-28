@@ -26,6 +26,7 @@ class BoxForm(Form):
             "flowers_type": data.get("flowerType"),
             "sun_exposure": data.get("sunExposure"),
             "refDevice": data.get("refDevice"),
+            "refNewDevice": data.get("refNewDevice"),
             "soil_type": data.get("soil_type"),
             "number_of_boxes": data.get("number_of_boxes"),
             "name": data.get('name'),
@@ -36,6 +37,7 @@ class BoxForm(Form):
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
             "refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
+            "refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
             "category": [
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
@@ -77,6 +79,7 @@ class BoxSetupForm(BoxForm):
             "soilMoisture": 0,
             "sunExposure": self.data.get('sun_exposure'),
             "refDevice": self.data.get('refDevice'),
+            "refNewDevice": self.data.get('refNewDevice'),
             "category": [
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
