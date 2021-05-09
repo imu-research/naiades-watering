@@ -105,10 +105,10 @@ class OrionEntity(object):
         if response.status_code >= 400:
             self.handle_error(response)
 
-    def history(self, service, entity_id):
+    def history(self, service, entity_id, attr):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Device-{entity_id}/attrs/value?lastN=100',
+            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Device-{entity_id}/attrs/{attr}?lastN=100',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -427,12 +427,13 @@ class WateringBox(Model):
         )
 
     @staticmethod
-    def history(refDevice):
+    def history(refDevice, attr):
         # get humidity history of refDevice
         try:
             response = OrionEntity().history(
                 service=WateringBox.service,
-                entity_id=refDevice
+                entity_id=refDevice,
+                attr=attr
             )
         except OrionError:
             return []

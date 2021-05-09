@@ -95,10 +95,13 @@ function exportMonthlyReport(box_data) {
         "fit": [523, 600]
     });
 
-    for (var i = 1; i < 9; i++) {
+    //for (var i = 1; i < 9; i++) {
+    for (var box in box_data)  {
+
+        var i = box_data[box].boxId;
 
         layout.content.push({
-            text: 'Cluster #'+i+' Monthly Report', fontSize: 14, bold: true, margin: [0, 20, 0, 10], alignment: 'center'
+            text: 'Cluster '+box_data[box].name+' Monthly Report', fontSize: 14, bold: true, margin: [0, 20, 0, 10], alignment: 'center'
         });
 
         layout.content.push({

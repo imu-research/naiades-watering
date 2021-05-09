@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load app_filters %}
+
+{% block css %}
+    <link href="{% static 'css/create.css' %}" rel="stylesheet">
+    <link href="{% static 'css/details.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/dataTables.semanticui.min.css">
+    <style>
+        #start-watering-info {
+            margin: 10px 0;
+        }
+
+        #start-watering-info i {
+            margin-left: 10px;
+        }
+
+         .panel-heading {
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .recommended-value {
+            font-size: 52px;
+            font-weight: 700;
+            color: #777;
+            width: 100%;
+            margin: 30px auto;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12 col-sm-9">
+            <h2 style="margin-top:0%; margin-left: 10px;">{% trans "Today's Report" %}</h2>
+        </div>
+        <div class="col-xs-12 col-sm-3" style="text-align: right">
+            <a href="/watering" id="back-box"
+                    class="btn btn-secondary" style="margin-right: 12px;">
+                <i class="glyphicon glyphicon-chevron-left"></i> {% trans "Back" %}
+            </a>
+        </div>
+    </div>
+    <div class="row" style="margin: 10px 0;">
+
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-9">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportDailyReport( {{ boxes | exclude_none | safe }} );">
+                <i class="glyphicon glyphicon-print"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 20px;">
+        <div class="col-xs-12 col-sm-6">
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Overall " %} </h3>
+        </div>
+
+        </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans "Today's Water Consumption" %}</div>
+                <div class="panel-body">
+                    <div class="recommended-value">
+                        30 lt
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans "Today's Watering Time" %}</div>
+                <div class="panel-body">
+                    <div class="recommended-value">
+                        2 hrs
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div class="row" style="margin: 10px 0;" id="reports">
+         <div class="col-xs-12">
+             <h3>{% trans "Watered Today" %}</h3>
+             <table class="table ui celled" id="watering-logs-table">
+                <thead>
+                  <tr>
+                    <th>{% trans "Box Id" %}</th>
+                    <th>{% trans "Humidity Level" %}</th>
+                    <th>{% trans "Amount of watering" %}</th>
+                    <th>{% trans "Time of watering" %}</th>
+                    <th>{% trans "Next watering amount" %}</th>
+                    <th>{% trans "Amount of previous watering" %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for box in boxes %}
+                  {% if box.lastWatering == "TODAY" %}
+                  <tr>
+                      <td>{{ box.boxId }}</td>
+                      <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
+                      <td> - </td>
+                      <td> - </td>
+                      <td>{{ box.nextWateringAmountRecommendation }} lt </td>
+                      <td> - </td>
+                  </tr>
+                  {% endif %}
+                {%  endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="chartdiv" style="width:100%;height: 400px;"></div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <!-- AmCharts JavaScript -->
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/animate/animate.min.js"></script>
+    <script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/chalk.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <!-- Datatables  -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.semanticui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+    <script type="text/javascript">
+        const history = {{history |safe}};
+    </script>
+    {% include 'watering/sensor-js.html' %}
+    <script src="{% static 'js/daily-report-graphs.js' %}"></script>
+    <script src="{% static 'js/daily-reports.js' %}"></script>
+
+
+{% endblock %}

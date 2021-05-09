@@ -16,6 +16,10 @@ urlpatterns = [
     # Monthly Report
     path('monthlyReport/', views.box_monthly_report, name='monthly-report'),
 
+    # Daily Report
+    path('dailyReport/', views.box_daily_report, name='daily-report'),
+
+
     # Report issues
     path('box/<str:box_id>/issues/report/', views.report_issue, name='report-issue'),
     path('box/<str:box_id>/issues/', views.list_issues, name='list-issues'),

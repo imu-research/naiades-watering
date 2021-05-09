@@ -144,6 +144,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script type="text/javascript">
         const history = {{history |safe}};
+        const battery_history = {{ battery_history |safe }}
+        const ec_history = {{ ec_history |safe }}
+        const soil_temp_history = {{ soil_temp_history |safe }}
     </script>
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/box-details-graphs.js' %}"></script>

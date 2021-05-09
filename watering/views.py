@@ -93,10 +93,19 @@ def box_details(request):
     # get humidity historic data
     try:
         history = merge_histories(
-            old_history=box_history(box_id, "refDevice"),
-            new_history=box_history(box_id, "refNewDevice"),
+            old_history=box_history(box_id, "refDevice", "value"),
+            new_history=box_history(box_id, "refNewDevice", "value"),
             preprocessing=preprocessed_history
         )
+
+        battery_history = merge_histories(
+            old_history=box_history(box_id, "refDevice", "batteryLevel"),
+            new_history=box_history(box_id, "refNewDevice", "batteryLevel"),
+            preprocessing=preprocessed_history
+        )
+
+        ec_history = box_history(box_id, "refNewDevice", "soilMoistureEc")
+        soil_temp_history = box_history(box_id, "refNewDevice", "soilTemperature"),
 
         # history_old = history_preprocessing(history_old_api)
         # history = history_preprocessing(history_new_api)
@@ -104,6 +113,9 @@ def box_details(request):
             history.append({"date":h['date'], "value2":h['value']})'''
     except ReadTimeout:
         history = []
+        battery_history = []
+        ec_history = []
+        soil_temp_history = []
 
     # get consumption historic data
     try:
@@ -134,6 +146,10 @@ def box_details(request):
         'sensors': Sensor.list(),
         'connected_sensors': WateringBox.sensors_list(),
         'consumption_history': consumption_history,
+        'battery_history': json.dumps(battery_history),
+        'ec_history': json.dumps(ec_history),
+        'soil_temp_history': json.dumps(soil_temp_history),
+
     })
 
 
@@ -160,6 +176,7 @@ def report_issue(request, box_id):
             # fill in context
             issue.box_id = box_id
             issue.submitted_by = request.user
+            print(issue)
 
             # save
             issue.save()
@@ -222,12 +239,13 @@ def box_edit(request):
     })
 
 
-def box_history(box_id, attr):
+def box_history(box_id, ref_device_attr, attr):
     # find box
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.history(
-        refDevice=box.data[attr][-4:]
+        refDevice=box.data[ref_device_attr][-4:],
+        attr=attr
     )
 
     # render
@@ -361,9 +379,9 @@ def cluster_details(request):
     n_boxes = int(box.data.get("number_of_boxes"))
 
     try:
-        recommended_per_box = recommended / n_boxes
+        recommended_per_cluster = recommended * n_boxes
     except ZeroDivisionError:
-        recommended_per_box = None
+        recommended_per_cluster = None
 
     # render
     return render(request, 'watering/cluster-details.html', {
@@ -371,7 +389,7 @@ def cluster_details(request):
         'box': box,
         'recommended_consumption': recommended,
         'number_of_boxes': n_boxes,
-        'recommended_consumption_per_box': recommended_per_box,
+        'recommended_consumption_per_cluster': recommended_per_cluster,
     })
 
 def box_monthly_report(request):
@@ -397,6 +415,21 @@ def box_monthly_report(request):
             for box in boxes
         ],
         'consumption_history': consumption_history,
+    })
+
+def box_daily_report(request):
+
+
+    # get boxes for this user
+    boxes = WateringBox.list()
+
+
+    # render
+    return render(request, 'watering/daily-report.html', {
+        'boxes': [
+            box.data
+            for box in boxes
+        ],
     })
 
 

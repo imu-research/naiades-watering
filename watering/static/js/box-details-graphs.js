@@ -397,22 +397,7 @@ const chart3 = AmCharts.makeChart("chart-ec", {
         "enabled": true,
         "menu":[],
     },
-    "dataProvider": [{
-        "date": "2020-07-27",
-        "value": 13
-    }, {
-        "date": "2020-07-28",
-        "value": 11
-    }, {
-        "date": "2020-07-29",
-        "value": 15
-    }, {
-        "date": "2020-07-30",
-        "value": 16
-    }, {
-        "date": "2020-07-31",
-        "value": 18
-    }],
+    "dataProvider": ec_history
 });
 
 const chart4 = AmCharts.makeChart("chart-soil-temp", {
@@ -580,7 +565,7 @@ const chart5 = AmCharts.makeChart("chart-battery", {
         "enabled": true,
         "menu":[],
     },
-    "dataProvider": history
+    "dataProvider": battery_history
 });
 
 chart.addListener("rendered", zoomChart);
