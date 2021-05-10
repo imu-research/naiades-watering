@@ -37,10 +37,14 @@
 
 {% block content %}
 <div class="row" style="margin-bottom: 20px;">
-        <div class="col-xs-12 col-sm-9">
-            <h2 style="margin-top:0%; margin-left: 10px;">{% trans "March Monthly Report" %}</h2>
+        <div class="col-xs-12 col-sm-3">
+            <h2 style="margin-top:0%; margin-left: 10px;">{% trans "Periodic Report" %}</h2>
         </div>
-        <div class="col-xs-12 col-sm-3" style="text-align: right">
+        <div  class="col-sm-3" id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;">
+            <i class="glyphicon glyphicon-calendar"></i>&nbsp;
+            <span></span> <i class="glyphicon glyphicon-chevron-down"></i>
+        </div>
+        <div class="col-xs-12 col-sm-6" style="text-align: right">
             <a href="/watering" id="back-box"
                     class="btn btn-secondary" style="margin-right: 12px;">
                 <i class="glyphicon glyphicon-chevron-left"></i> {% trans "Back" %}
@@ -68,7 +72,7 @@
     <div class="row">
         <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{% trans "Total Monthly Water Consumption" %}</div>
+                <div class="panel-heading">{% trans "Total Periodic Water Consumption" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         493 lt
@@ -78,7 +82,7 @@
         </div>
          <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{% trans "Total Monthly Watering Time" %}</div>
+                <div class="panel-heading">{% trans "Total Periodic Watering Time" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         11 hrs
@@ -100,10 +104,12 @@
         </div>
     </div>
 
+    <hr class="solid">
+
     {% for box in boxes %}
-    <div class="row" style="margin-bottom: 20px;">
-        <div class="col-xs-12 col-sm-6">
-            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster " %}{{ box.name }} </h3>
+    <div class="row" style="margin-bottom: 20px;margin-top: 60px;">
+        <div class="col-xs-12">
+            <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Periodic Report for the Cluster " %}{{ box.name }} {% trans "(1st - 30th March)" %} </h3>
         </div>
 
         </div>
@@ -111,7 +117,7 @@
     <div class="row">
         <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{% trans "Total Monthly Water Consumption (Cluster)" %}</div>
+                <div class="panel-heading">{% trans "Total Periodic Water Consumption (Cluster)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         493 lt
@@ -121,7 +127,7 @@
         </div>
         <div class="col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{% trans "Total Monthly Water Consumption (Avg. per Box)" %}</div>
+                <div class="panel-heading">{% trans "Total Periodic Water Consumption (Avg. per Box)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         11 lt
@@ -178,6 +184,8 @@
         </div>
     </div>
 
+    <hr class="dotted">
+
 
 
     {% endfor %}
@@ -205,6 +213,39 @@
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/monthly-report-graphs.js' %}"></script>
     <script src="{% static 'js/monthly-report.js' %}"></script>
+
+    //Date range picker
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <script type="text/javascript">
+        $(function() {
+
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 14 Days': [moment().subtract(13, 'days'), moment()],
+                   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                   'This Month': [moment().startOf('month'), moment().endOf('month')],
+                   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+
+            cb(start, end);
+
+        });
+    </script>
 
 
 {% endblock %}
