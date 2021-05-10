@@ -8,7 +8,7 @@ for (var i = 1; i < 9; i++) {
             {
                 "id": "Title-1",
                 "size": 15,
-                "text": "Monthly Water Consumption (Cluster)"
+                "text": "Periodic Water Consumption (Cluster)"
             }
         ],
         "legend": {
@@ -257,7 +257,7 @@ for (var i = 1; i < 9; i++) {
             {
                 "id": "Title-1",
                 "size": 15,
-                "text": "Monthly Water Consumption (Avg. per Box)"
+                "text": "Periodic Water Consumption (Avg. per Box)"
             }
         ],
         "legend": {
@@ -694,7 +694,7 @@ var chart6 = AmCharts.makeChart("chart-prediction-overall", {
             {
                 "id": "Title-1",
                 "size": 15,
-                "text": "Total Monthly Water Consumption"
+                "text": "Total Periodic Water Consumption"
             }
         ],
         "legend": {
