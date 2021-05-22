@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 from _decimal import InvalidOperation
@@ -90,22 +91,28 @@ def box_details(request):
     # find box
     box = WateringBox.get(box_id)
 
+    now = datetime.datetime.now().isoformat()
+
+    start_date = datetime.datetime.now() - datetime.timedelta(30)
+    start_date = start_date.isoformat()
+
+
     # get humidity historic data
     try:
         history = merge_histories(
-            old_history=box_history(box_id, "refDevice", "value"),
-            new_history=box_history(box_id, "refNewDevice", "value"),
+            old_history=box_history(box_id, "refDevice", "value", start_date, now),
+            new_history=box_history(box_id, "refNewDevice", "value", start_date, now),
             preprocessing=preprocessed_history
         )
 
         battery_history = merge_histories(
-            old_history=box_history(box_id, "refDevice", "batteryLevel"),
-            new_history=box_history(box_id, "refNewDevice", "batteryLevel"),
+            old_history=box_history(box_id, "refDevice", "batteryLevel", start_date, now),
+            new_history=box_history(box_id, "refNewDevice", "batteryLevel", start_date, now),
             preprocessing=preprocessed_history
         )
 
-        ec_history = box_history(box_id, "refNewDevice", "soilMoistureEc")
-        soil_temp_history = box_history(box_id, "refNewDevice", "soilTemperature"),
+        ec_history = box_history(box_id, "refNewDevice", "soilMoistureEc", start_date, now)
+        soil_temp_history = box_history(box_id, "refNewDevice", "soilTemperature", start_date, now),
 
         # history_old = history_preprocessing(history_old_api)
         # history = history_preprocessing(history_new_api)
@@ -119,9 +126,41 @@ def box_details(request):
 
     # get consumption historic data
     try:
-        consumption_history = box_consumption_history(box_id)
+        consumption_history = box_consumption_history(box_id, start_date, now)
     except ReadTimeout:
         consumption_history = []
+
+    # get prediction historic data
+    try:
+        prediction_history = box_prediction_history(box_id, start_date, now)
+    except ReadTimeout:
+        prediction_history = []
+
+    # get watering duration historic data
+    try:
+        watering_duration = box_watering_duration_history(box_id)
+    except ReadTimeout:
+        watering_duration = []
+
+    # get watering predictions historic data
+    try:
+        prediction_history = merge_histories(
+            old_history=consumption_history,
+            new_history=prediction_history,
+            preprocessing=None
+        )
+    except ReadTimeout:
+        prediction_history = []
+
+    # get watering logs historic data
+    try:
+        watering_logs_history = merge_histories(
+            old_history=consumption_history,
+            new_history=watering_duration,
+            preprocessing=None
+        )
+    except ReadTimeout:
+        watering_logs_history = []
 
     if request.method == "POST":
         form = BoxForm(request.POST)
@@ -149,6 +188,8 @@ def box_details(request):
         'battery_history': json.dumps(battery_history),
         'ec_history': json.dumps(ec_history),
         'soil_temp_history': json.dumps(soil_temp_history),
+        'prediction_history': json.dumps(prediction_history),
+        'watering_logs_history': watering_logs_history,
 
     })
 
@@ -239,24 +280,66 @@ def box_edit(request):
     })
 
 
-def box_history(box_id, ref_device_attr, attr):
+def box_history(box_id, ref_device_attr, attr, fromdate, to):
     # find box
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.history(
         refDevice=box.data[ref_device_attr][-4:],
-        attr=attr
+        attr=attr,
+        fromDate=fromdate,
+        to=to
+    )
+
+    #if attr == "batteryLevel":
+
+    # render
+    return historic_data
+
+
+def box_consumption_history(box_id, fromDate, to):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.consumption_history(
+        box_id=box.data["id"],
+        fromDate=fromDate,
+        to=to
     )
 
     # render
     return historic_data
 
 
-def box_consumption_history(box_id):
+def box_watering_duration_history(box_id):
     # find box
     box = WateringBox.get(box_id)
 
-    historic_data = WateringBox.consumption_history(
+    historic_data = WateringBox.watering_duration_history(
+        box_id=box.data["id"]
+    )
+
+    # render
+    return historic_data
+
+
+def box_prediction_history(box_id, fromDate, to):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.prediction_history(
+        box_id=box.data["id"], fromDate=fromDate, to=to
+    )
+
+    # render
+    return historic_data
+
+
+def box_truck_location_history(box_id):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.truck_location_history(
         box_id=box.data["id"]
     )
 

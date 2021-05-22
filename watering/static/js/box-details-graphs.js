@@ -1,4 +1,5 @@
 console.log(history);
+console.log(prediction_history)
 var chart = AmCharts.makeChart("chart-history", {
     "type": "serial",
     "hideCredits":true,
@@ -138,7 +139,8 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
         "valueAlign": "left",
         "valueWidth": 120
     },
-    "dataProvider": [{
+    "dataProvider": prediction_history,
+    /*"dataProvider": [{
         "date": "2021-03-01",
         "actual": 20,
         "predicted": 22
@@ -263,7 +265,7 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
         "actual": 0,
         "predicted": 22
     }
-    ],
+    ],*/
     "valueAxes": [{
         "id": "distanceAxis",
         "axisAlpha": 0,
@@ -279,7 +281,8 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
         "legendValueText": "[[value]] lt",
         "title": window.MESSAGES.actual,
         "type": "column",
-        "valueField": "actual",
+        //"valueField": "actual",
+        "valueField": "value_old",
         "valueAxis": "distanceAxis"
     }, {
         /*"bullet": "square",
@@ -293,7 +296,8 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
         "title": window.MESSAGES.predicted,
         //"fillAlphas": 0,
         "fillAlphas": 0.6,
-        "valueField": "predicted",
+        //"valueField": "predicted",
+        "valueField": "value_new",
         "valueAxis": "distanceAxis"
     }],
     "chartCursor": {
@@ -345,7 +349,7 @@ const chart3 = AmCharts.makeChart("chart-ec", {
     "marginLeft": 60,
     "autoMarginOffset": 20,
     "mouseWheelZoomEnabled":true,
-    "dataDateFormat": "YYYY-MM-DD",
+    "dataDateFormat": "YYYY-MM-DD"+'T'+"JJ:NN:SS.QQQ",
     "titles": [
                     {
                         "id": "Title-1",
@@ -368,11 +372,11 @@ const chart3 = AmCharts.makeChart("chart-ec", {
     "graphs": [{
         "id": "g1",
         "lineColor": "#67b7dc",
-        "balloon":{
+        /*"balloon":{
           "drop":true,
           "adjustBorderColor":false,
           "color":"#ffffff"
-        },
+        },*/
         "bullet": "round",
         "bulletBorderAlpha": 1,
         "bulletColor": "#FFFFFF",
@@ -382,16 +386,22 @@ const chart3 = AmCharts.makeChart("chart-ec", {
         "title": "red line",
         "useLineColorForBulletBorder": true,
         "valueField": "value",
-        "balloonText": "<span style='font-size:18px;'>[[value]] "+"S/m"+"</span>"
+        "balloonText": "<span style='font-size:12px;'>[[value]] "+"S/m"+"</span>"
     }],
     "chartScrollbar": {
         "enable":true,
     },
+     "chartCursor": {
+         "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
+         "cursorPosition": "mouse",
+         "cursorColor": "#67b7dc"
+     },
     "categoryField": "date",
     "categoryAxis": {
         "parseDates": true,
-        "dashLength": 1,
-        "minorGridEnabled": true
+        //"dashLength": 1,
+        "minorGridEnabled": true,
+        "minPeriod": "mm"
     },
     "export": {
         "enabled": true,
@@ -408,7 +418,7 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
     "marginLeft": 60,
     "autoMarginOffset": 20,
     "mouseWheelZoomEnabled":true,
-    "dataDateFormat": "YYYY-MM-DD",
+    "dataDateFormat": "YYYY-MM-DD"+'T'+"JJ:NN:SS.QQQ",
     "titles": [
                     {
                         "id": "Title-1",
@@ -431,11 +441,11 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
     "graphs": [{
         "id": "g1",
         "lineColor": "#ff0000",
-        "balloon":{
+        /*"balloon":{
           "drop":true,
           "adjustBorderColor":false,
           "color":"#ffffff"
-        },
+        },*/
         "bullet": "round",
         "bulletBorderAlpha": 1,
         "bulletColor": "#FFFFFF",
@@ -450,17 +460,24 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
     "chartScrollbar": {
         "enable":true,
     },
+     "chartCursor": {
+         "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
+         "cursorPosition": "mouse",
+         "cursorColor": "#ff0000"
+     },
     "categoryField": "date",
     "categoryAxis": {
         "parseDates": true,
-        "dashLength": 1,
-        "minorGridEnabled": true
+        //"dashLength": 1,
+        "minorGridEnabled": true,
+        "minPeriod": "mm"
     },
     "export": {
         "enabled": true,
         "menu":[],
     },
-    "dataProvider": [{
+    "dataProvider": soil_temp_history[0],
+    /*"dataProvider": [{
         "date": "2020-07-27",
         "value": 13
     }, {
@@ -469,13 +486,7 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
     }, {
         "date": "2020-07-29",
         "value": 15
-    }, {
-        "date": "2020-07-30",
-        "value": 16
-    }, {
-        "date": "2020-07-31",
-        "value": 18
-    }],
+    }],*/
 });
 
 const chart5 = AmCharts.makeChart("chart-battery", {

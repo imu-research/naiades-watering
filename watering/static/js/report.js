@@ -1,10 +1,10 @@
-function exportReport(box_data) {
+function exportReport(box_data, watering_logs) {
 
   // So that we know export was started
   console.log("Starting export...");
 
   // Define IDs of the charts we want to include in the report
-  var ids = ["chart-history", "chart-prediction"];
+  var ids = ["chart-history", "chart-prediction", "chart-ec", "chart-soil-temp", "chart-battery"];
   //var ids = ["chartdiv1", "chartdiv2", "chartdiv3", "chartdiv4"];
 
   // Collect actual chart objects out of the AmCharts.charts array
@@ -32,7 +32,7 @@ function exportReport(box_data) {
           charts_remaining--;
 
           // Check if we got all of the charts
-          if (charts_remaining == 0) {
+          if (charts_remaining === 0) {
             // Yup, we got all of them
             // Let's proceed to putting PDF together
             generatePDF(box_data);
@@ -41,6 +41,31 @@ function exportReport(box_data) {
         });
       });
     }
+  }
+
+  function getLogEntriesBody(wateringLog) {
+      // start with headers
+      const logEntries=[
+          [
+              { text: window.MESSAGES.date2, style: 'tableHeader'},
+              { text: window.MESSAGES.waterAmount, style: 'tableHeader' },
+              { text: window.MESSAGES.predicted, style: 'tableHeader' }
+          ]
+      ];
+
+      // add one entry for each log
+      $.each(watering_logs, function(idx, log) {
+          const logEntry =[log.date];
+
+          // add date, old, & new values
+          logEntry.push(log.value_old || '-');
+          logEntry.push(log.value_new || '-');
+
+          // add to logs
+          logEntries.push(logEntry);
+      });
+
+      return logEntries
   }
 
   function generatePDF(data) {
@@ -60,20 +85,38 @@ function exportReport(box_data) {
        "alignment": "center"
     });
 
+    layout.content.push({
+            text: 'Box '+box_data.name, fontSize: 14, bold: true, margin: [0, 20, 0, 10], alignment: 'center'
+        });
+
     // Now let's grab actual content from our <p> intro tag
     /*layout.content.push({
       "text": document.getElementById("intro").innerHTML
     }); */
 
-    // Put two next charts side by side in columns
+    // Put next charts
     layout.content.push({
         "image": charts["chart-history"].exportedImage,
-        "fit": [523, 300]
+        "fit": [523, 600]
     });
 
      layout.content.push({
       "image": charts["chart-prediction"].exportedImage,
-      "fit": [523, 300]
+      "fit": [523, 600]
+    });
+
+     layout.content.push({
+        "image": charts["chart-ec"].exportedImage,
+        "fit": [523, 200]
+    });
+
+     layout.content.push({
+      "image": charts["chart-soil-temp"].exportedImage,
+      "fit": [523, 200]
+    });
+    layout.content.push({
+      "image": charts["chart-battery"].exportedImage,
+      "fit": [523, 600]
     });
 
      layout.content.push({
@@ -94,54 +137,25 @@ function exportReport(box_data) {
       layout: 'noBorders'
     });
 
-    // Let's add table
-
+    // Let's add a table for watering logs
     layout.content.push({
-      text: window.MESSAGES.wateringLogs+':', fontSize: 14, bold: true, margin: [0, 20, 0, 8]
+      text: `${window.MESSAGES.wateringLogs}:`, fontSize: 14, bold: true, margin: [0, 20, 0, 8]
     });
 
     layout.content.push({
       table: {
-				//headerRows: 1,
-				// dontBreakRows: true,
-				// keepWithHeaderRows: 1,
-                widths: [150, 150, 150],
-				body: [
-					[{ text: window.MESSAGES.date2, style: 'tableHeader'}, { text: window.MESSAGES.waterAmount, style: 'tableHeader' }, { text: window.MESSAGES.comments, style: 'tableHeader' }],
-					['20/10/2020', '0.5 lt', 'Comments'],
-                    ['23/10/2020', '0.5 lt', 'Comments'],
-                    ['25/10/2020', '0.5 lt', 'Comments']
-				]
-			},
+        widths: [150, 150, 150],
+        body: getLogEntriesBody(watering_logs)
+      },
       layout: 'lightHorizontalLines'
     });
 
-
-    // Add chart and text next to each other
-    /*layout.content.push({
-      "columns": [{
-        "width": "25%",
-        "image": charts["chartdiv4"].exportedImage,
-        "fit": [125, 300]
-      }, {
-        "width": "*",
-        "stack": [
-          document.getElementById("note1").innerHTML,
-          "\n\n",
-          document.getElementById("note2").innerHTML
-        ]
-      }],
-      "columnGap": 10
-    });*/
-    var now = new Date();
+    const now = new Date();
 
     // Trigger the generation and download of the PDF
     // We will use the first chart as a base to execute Export on
     chart["export"].toPDF(layout, function(data) {
       this.download(data, "application/pdf", "Report-"+now+".pdf");
     });
-
-
   }
-
 }

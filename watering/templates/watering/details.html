@@ -51,7 +51,7 @@
             <button id="start-watering" type="button" class="btn btn-primary btn-block">{% trans "Start Watering" %}</button>
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} );">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} , {{ watering_logs_history | exclude_none | safe }});">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
             <a href="/watering/cluster/?id={{ box.id }}" id="back-box" class="btn btn-sm btn-default" style="margin-left: 10px;float: right">
@@ -110,15 +110,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                {% for con in consumption_history %}
+                {% for con in watering_logs_history %}
                   <tr>
                       <td> <a href="#">{{ con.date }}</a></td>
-                      {% if con.value is None %}
+                      {% if con.value_old is None %}
                         <td> - </td>
                       {% else %}
-                          <td>{{ con.value }} lt</td>
+                          <td>{{ con.value_old }} lt</td>
                       {% endif %}
-                      <td> - </td>
+                      {% if con.value_new is None %}
+                        <td> - </td>
+                      {% else %}
+                      <td>{{ con.value_new }} </td>
+                      {% endif %}
                   </tr>
                 {%  endfor %}
                 </tbody>
@@ -147,6 +151,7 @@
         const battery_history = {{ battery_history |safe }}
         const ec_history = {{ ec_history |safe }}
         const soil_temp_history = {{ soil_temp_history |safe }}
+        const prediction_history = {{ prediction_history | safe }}
     </script>
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/box-details-graphs.js' %}"></script>
