@@ -326,7 +326,7 @@ $(function () {
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
                                     meter.nextWateringAmountRecommendation &&
-                                    meter.nextWateringAmountRecommendation.indexOf("1970-") !== 0 &&
+                                    //meter.nextWateringAmountRecommendation.indexOf("1970-") !== 0 &&
                                     $('<div />')
                                         .text(
                                             window.MESSAGES.amount+`: ` +

@@ -144,7 +144,7 @@ class OrionEntity(object):
     def prediction_history(self, service, entity_id, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountRecommendation/value?fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountAdvice/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -159,10 +159,64 @@ class OrionEntity(object):
         # return list
         return response.json()
 
-    def watering_duration_history(self, service, entity_id):
+    def watering_duration_history(self, service, entity_id, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/duration/value?lastN=30',
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/duration/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
+    def consumption_history_list_values(self, service, from_date, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/consumption/value?aggrMethod=avg&aggrPeriod=day&fromDate={from_date}&toDate={to}',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
+    def prediction_history_list(self, service, fromDate, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/nextWateringAmountAdvice/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
+    def watering_duration_history_list(self, service, fromDate, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/duration/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -207,8 +261,8 @@ class OrionEntity(object):
         ),
 
         # raise exception if response code is in 4xx, 5xx
-        '''if response.status_code >= 400:
-            self.handle_error(response)'''
+        if response.status_code >= 400:
+            self.handle_error(response)
 
         # return list
         return response
@@ -548,12 +602,14 @@ class WateringBox(Model):
         return results
 
     @staticmethod
-    def watering_duration_history(box_id):
+    def watering_duration_history(box_id, fromDate, to):
         # get watering duration history of box id
         try:
             response = OrionEntity().watering_duration_history(
                 service=WateringBox.service,
-                entity_id=box_id
+                entity_id=box_id,
+                fromDate=fromDate,
+                to=to
             )
         except OrionError:
             return []
@@ -566,6 +622,52 @@ class WateringBox(Model):
             })
 
         return results
+
+    @staticmethod
+    def format_list_response(response):
+        values = []
+        for value in response["values"]:
+            value_item = {
+                "entity_id": value["entityId"],
+                "results": []
+            }
+            for idx, index in enumerate(value["index"]):
+                value_item["results"].append({
+                    "date": index,
+                    "value": value["index"][idx],
+                })
+
+            values.append(value_item)
+
+        return values
+
+    @staticmethod
+    def prediction_history_list(fromDate, to):
+        # get prediction history of box id
+        try:
+            response = OrionEntity().prediction_history_list(
+                service=WateringBox.service,
+                fromDate=fromDate,
+                to=to
+            )
+        except OrionError:
+            return []
+
+        return WateringBox.format_list_response(response)
+
+    @staticmethod
+    def watering_duration_history_list(fromDate, to):
+        # get watering duration history of box id
+        try:
+            response = OrionEntity().watering_duration_history_list(
+                service=WateringBox.service,
+                fromDate=fromDate,
+                to=to
+            )
+        except OrionError:
+            return []
+
+        return WateringBox.format_list_response(response)
 
     @staticmethod
     def truck_location_history(box_id):
@@ -587,13 +689,24 @@ class WateringBox(Model):
 
         return results
 
-
     @staticmethod
     def consumption_history_list():
         # get humidity history of box id
         try:
-            response = OrionEntity().consumption_history_list()
-            return response
+            return WateringBox.format_list_response(OrionEntity().consumption_history_list())
+        except OrionError:
+            return []
+
+
+    @staticmethod
+    def consumption_history_list_values(from_date, to):
+        # get humidity history of box id
+        try:
+            return WateringBox.format_list_response(OrionEntity().consumption_history_list_values(
+                service=None,
+                from_date=from_date,
+                to=to
+            ))
         except OrionError:
             return []
 

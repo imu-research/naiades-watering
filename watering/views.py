@@ -138,7 +138,7 @@ def box_details(request):
 
     # get watering duration historic data
     try:
-        watering_duration = box_watering_duration_history(box_id)
+        watering_duration = box_watering_duration_history(box_id, start_date, now)
     except ReadTimeout:
         watering_duration = []
 
@@ -311,12 +311,14 @@ def box_consumption_history(box_id, fromDate, to):
     return historic_data
 
 
-def box_watering_duration_history(box_id):
+def box_watering_duration_history(box_id, fromDate, to):
     # find box
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.watering_duration_history(
-        box_id=box.data["id"]
+        box_id=box.data["id"],
+        fromDate=fromDate,
+        to=to
     )
 
     # render
@@ -329,6 +331,38 @@ def box_prediction_history(box_id, fromDate, to):
 
     historic_data = WateringBox.prediction_history(
         box_id=box.data["id"], fromDate=fromDate, to=to
+    )
+
+    # render
+    return historic_data
+
+
+def consumption_history_list(from_date, to):
+
+    historic_data = WateringBox.consumption_history_list(
+        from_date=from_date,
+        to=to
+    )
+
+    # render
+    return historic_data
+
+
+def watering_duration_history_list(fromDate, to):
+
+    historic_data = WateringBox.watering_duration_history_list(
+        fromDate=fromDate,
+        to=to
+    )
+
+    # render
+    return historic_data
+
+
+def prediction_history_list(fromDate, to):
+
+    historic_data = WateringBox.prediction_history_list(
+        fromDate=fromDate, to=to
     )
 
     # render
@@ -485,11 +519,44 @@ def box_monthly_report(request):
     })'''
     boxes = WateringBox.list()
 
-    # get consumption historic data
+    '''# get consumption historic data
     try:
         consumption_history = WateringBox.consumption_history_list()
     except ReadTimeout:
+        consumption_history = []'''
+
+    now = datetime.datetime.now().isoformat()
+
+    start_date = datetime.datetime.now() - datetime.timedelta(30)
+    start_date = start_date.isoformat()
+
+    # get consumption historic data
+    try:
+        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=now)
+    except ReadTimeout:
         consumption_history = []
+
+    # get prediction historic data
+    try:
+        prediction_history = WateringBox.prediction_history_list(start_date, now)
+    except ReadTimeout:
+        prediction_history = []
+
+    # get watering duration historic data
+    try:
+        watering_duration = WateringBox.watering_duration_history_list(start_date, now)
+    except ReadTimeout:
+        watering_duration = []
+
+    # get watering predictions historic data
+    try:
+        prediction_history = merge_histories(
+            old_history=consumption_history,
+            new_history=prediction_history,
+            preprocessing=None
+        )
+    except ReadTimeout:
+        prediction_history = []
 
     # render
     return render(request, 'watering/monthly-report.html', {
@@ -498,6 +565,7 @@ def box_monthly_report(request):
             for box in boxes
         ],
         'consumption_history': consumption_history,
+        'prediction_history': prediction_history
     })
 
 def box_daily_report(request):
