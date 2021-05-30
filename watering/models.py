@@ -634,7 +634,7 @@ class WateringBox(Model):
             for idx, index in enumerate(value["index"]):
                 value_item["results"].append({
                     "date": index,
-                    "value": value["index"][idx],
+                    "value": value["values"][idx],
                 })
 
             values.append(value_item)

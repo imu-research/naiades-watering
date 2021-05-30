@@ -89,6 +89,8 @@ var chart = AmCharts.makeChart("chart-history", {
     }],*/
     "chartScrollbar": {
         "enable":true,
+        //"oppositeAxis": true,
+        //"offset": 30
     },
     "chartCursor": {
         "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
@@ -309,9 +311,9 @@ var chart2 = AmCharts.makeChart("chart-prediction", {
         "zoomable": true
 
     },
-    "chartScrollbar": {
+    /*"chartScrollbar": {
         "enable":true,
-    },
+    },*/
     "dataDateFormat": "YYYY-MM-DD",
     "categoryField": "date",
     "categoryAxis": {
@@ -388,9 +390,9 @@ const chart3 = AmCharts.makeChart("chart-ec", {
         "valueField": "value",
         "balloonText": "<span style='font-size:12px;'>[[value]] "+"S/m"+"</span>"
     }],
-    "chartScrollbar": {
+    /*"chartScrollbar": {
         "enable":true,
-    },
+    },*/
      "chartCursor": {
          "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
          "cursorPosition": "mouse",
@@ -457,9 +459,9 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
         "valueField": "value",
         "balloonText": "<span style='font-size:18px;'>[[value]]"+"°C"+"</span>"
     }],
-    "chartScrollbar": {
+    /*"chartScrollbar": {
         "enable":true,
-    },
+    },*/
      "chartCursor": {
          "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
          "cursorPosition": "mouse",
@@ -545,9 +547,9 @@ const chart5 = AmCharts.makeChart("chart-battery", {
         "lineThickness": 1.5,
     "fillAlphas": 0
     }],
-    "chartScrollbar": {
+    /*"chartScrollbar": {
         "enable":true,
-    },
+    },*/
     "chartCursor": {
         "categoryBalloonDateFormat": "JJ:NN, DD MMMM",
         "cursorPosition": "mouse",
@@ -579,16 +581,34 @@ const chart5 = AmCharts.makeChart("chart-battery", {
     "dataProvider": battery_history
 });
 
-chart.addListener("rendered", zoomChart);
-chart2.addListener("rendered", zoomChart);
-chart5.addListener("rendered", zoomChart);
+var charts = [];
+charts.push(chart);
+charts.push(chart2);
+charts.push(chart3);
+charts.push(chart4);
+charts.push(chart5);
 
-zoomChart();
-
+for (var x in charts) {
+  charts[x].addListener("rendered", zoomChart);
+  charts[x].addListener("zoomed", syncZoom);
+}
 
 function zoomChart() {
-    chart.zoomToIndexes(chart.dataProvider.length - 60, chart.dataProvider.length - 1);
-    chart5.zoomToIndexes(chart.dataProvider.length - 60, chart.dataProvider.length - 1);
+    for (x in charts) {
+        charts[x].zoomToIndexes(charts[x].dataProvider.length - 600, charts[x].dataProvider.length - 1);
+    }
+}
+
+function syncZoom(event) {
+  for (x in charts) {
+    if (charts[x].ignoreZoom) {
+      charts[x].ignoreZoom = false;
+    }
+    if (event.chart != charts[x]) {
+      charts[x].ignoreZoom = true;
+      charts[x].zoomToDates(event.startDate, event.endDate);
+    }
+  }
 }
 
 AmCharts.checkEmptyData = function (chart) {

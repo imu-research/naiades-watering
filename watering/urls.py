@@ -14,6 +14,7 @@ urlpatterns = [
     path('cluster/', views.cluster_details, name='cluster-details'),
 
     # Monthly Report
+    path('monthlyReport/data/', views.box_monthly_report_data, name='monthly-report-data'),
     path('monthlyReport/', views.box_monthly_report, name='monthly-report'),
 
     # Daily Report
@@ -28,6 +29,8 @@ urlpatterns = [
     path('api/boxes/list', views.box_api_list, name='box-api-list'),
     path('api/boxes/<str:box_id>/delete/', views.box_api_delete, name='box-api-delete'),
     path('api/boxes/<str:box_id>/start-watering/', views.box_api_start_watering, name='box-api-start-watering'),
+    path('api/boxes/<str:box_id>/dry-plants-feedback/', views.box_api_dry_plants_feedback, name='box-api-dry-plants'),
+    path('api/boxes/<str:box_id>/no-watering-feedback/', views.box_api_no_watering_feedback, name='box-api-no-watering'),
 
     # List View
     path('route/', views.route_view, name='route'),

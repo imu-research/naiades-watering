@@ -36,7 +36,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="row" style="margin-bottom: 20px;">
+    <div class="row" style="margin-bottom: 20px;">
         <div class="col-xs-12 col-sm-9">
             <h2 style="margin-top:0%; margin-left: 10px;">{% trans "Today's Report" %}</h2>
         </div>
@@ -71,7 +71,7 @@
                 <div class="panel-heading">{% trans "Today's Water Consumption" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        30 lt
+                        {{ total_consumption }} lt
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 <div class="panel-heading">{% trans "Today's Watering Time" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        2 hrs
+                        {{ total_time }} s
                     </div>
                 </div>
             </div>
@@ -99,7 +99,6 @@
                     <th>{% trans "Amount of watering" %}</th>
                     <th>{% trans "Time of watering" %}</th>
                     <th>{% trans "Next watering amount" %}</th>
-                    <th>{% trans "Amount of previous watering" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,10 +107,9 @@
                   <tr>
                       <td>{{ box.boxId }}</td>
                       <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
-                      <td> - </td>
-                      <td> - </td>
-                      <td>{{ box.nextWateringAmountRecommendation }} lt </td>
-                      <td> - </td>
+                      <td> {{ box.consumption }} </td>
+                      <td> {{ box.duration }} </td>
+                      <td>{{ box.nextWateringAmountAdvice }} lt </td>
                   </tr>
                   {% endif %}
                 {%  endfor %}
@@ -145,7 +143,8 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.semanticui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script type="text/javascript">
-        const history = {{history |safe}};
+        history = '{{history |safe}}';
+        graph_data = {{ graph_data |safe }};
     </script>
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/daily-report-graphs.js' %}"></script>

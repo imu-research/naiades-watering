@@ -458,6 +458,51 @@ def box_api_start_watering(request, box_id):
     # success response
     return JsonResponse({})
 
+def box_api_dry_plants_feedback(request, box_id):
+    # only accept POST requests
+    if request.method != "POST":
+        return JsonResponse({
+            "error": f"Invalid method: only POST is allowed."
+        })
+
+    # patch box
+    WateringBox.post(
+        box_id=f"urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}",
+        data={
+            "feedback": {
+                "type": "Text",
+                "value": "Dry plants",
+                "metadata": {}
+            },
+        }
+    )
+
+    # success response
+    return JsonResponse({})
+
+def box_api_no_watering_feedback(request, box_id):
+    # only accept POST requests
+    if request.method != "POST":
+        return JsonResponse({
+            "error": f"Invalid method: only POST is allowed."
+        })
+
+    # patch box
+    WateringBox.post(
+        box_id=f"urn:ngsi-ld:FlowerBed:FlowerBed-{box_id}",
+        data={
+            "feedback": {
+                "type": "Text",
+                "value": "No watering required",
+                "metadata": {}
+            },
+        }
+    )
+
+    # success response
+    return JsonResponse({})
+
+
 
 def weather(request):
     # We need temperature.value, relativeHumidity.value, from source.value current_condition.icon and fcst_day_1.icon
@@ -509,9 +554,77 @@ def cluster_details(request):
         'recommended_consumption_per_cluster': recommended_per_cluster,
     })
 
+
+def box_monthly_report_data(request):
+    _now = datetime.datetime.now().isoformat()
+
+    start_date = datetime.datetime.now() - datetime.timedelta(30)
+    start_date = start_date.isoformat()
+
+    # get consumption historic data
+    try:
+        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=_now)
+    except ReadTimeout:
+        consumption_history = []
+
+    # get prediction historic data
+    try:
+        prediction_history = WateringBox.prediction_history_list(start_date, _now)
+    except ReadTimeout:
+        prediction_history = []
+
+    # get watering duration historic data
+    try:
+        watering_duration = WateringBox.watering_duration_history_list(start_date, _now)
+    except ReadTimeout:
+        watering_duration = []
+
+    # group by entity
+    by_entity = merge(
+        key_field="entity_id",
+        value_field="results",
+        results_lists=[
+            prediction_history,
+            consumption_history,
+            watering_duration,
+        ],
+        prop_names=["predictions", "consumptions", "durations"]
+    )
+
+    # for each entity, group by date
+    entities_data = []
+    for entity in by_entity:
+        data_by_date = merge_by_date(
+            results_lists=[
+                entity["predictions"],
+                entity["consumptions"],
+                entity["durations"],
+            ],
+            prop_names=["prediction", "consumption", "duration"]
+        )
+
+        # ignore hour part, format metrics
+        for datum in data_by_date:
+            datum["date"] = datum["date"].split("T")[0]
+
+            for prop in ["consumption", "prediction"]:
+                datum[prop] = round(datum[prop], 2) if datum[prop] is not None else None
+
+            datum["duration"] = datum["duration"] / 1000 if datum["duration"] is not None else None
+
+        entities_data.append({
+            "entity_id": entity["entity_id"],
+            "box_id": entity["entity_id"].split("ld:FlowerBed:FlowerBed-")[-1],
+            "data": data_by_date,
+        })
+
+    # return as json response
+    return JsonResponse({
+        "data": entities_data,
+    })
+
+
 def box_monthly_report(request):
-
-
     # get boxes for this user
 
     '''boxes = JsonResponse({
@@ -525,38 +638,16 @@ def box_monthly_report(request):
     except ReadTimeout:
         consumption_history = []'''
 
-    now = datetime.datetime.now().isoformat()
-
-    start_date = datetime.datetime.now() - datetime.timedelta(30)
-    start_date = start_date.isoformat()
-
-    # get consumption historic data
-    try:
-        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=now)
-    except ReadTimeout:
-        consumption_history = []
-
-    # get prediction historic data
-    try:
-        prediction_history = WateringBox.prediction_history_list(start_date, now)
-    except ReadTimeout:
-        prediction_history = []
-
-    # get watering duration historic data
-    try:
-        watering_duration = WateringBox.watering_duration_history_list(start_date, now)
-    except ReadTimeout:
-        watering_duration = []
-
     # get watering predictions historic data
-    try:
-        prediction_history = merge_histories(
-            old_history=consumption_history,
-            new_history=prediction_history,
-            preprocessing=None
-        )
-    except ReadTimeout:
-        prediction_history = []
+    # TODO implement prediction history, by entity id
+    # try:
+    #     prediction_history = merge_histories(
+    #         old_history=consumption_history,
+    #         new_history=prediction_history,
+    #         preprocessing=None
+    #     )
+    # except ReadTimeout:
+    #     prediction_history = []
 
     # render
     return render(request, 'watering/monthly-report.html', {
@@ -564,15 +655,25 @@ def box_monthly_report(request):
             box.data
             for box in boxes
         ],
-        'consumption_history': consumption_history,
-        'prediction_history': prediction_history
     })
+
 
 def box_daily_report(request):
 
 
     # get boxes for this user
     boxes = WateringBox.list()
+
+    # calculate total watering consumption and time
+    total_consumption = 0
+    total_time = 0
+    data = []
+    for box in boxes:
+        if box.data['lastWatering'] == "TODAY":
+            total_consumption = total_consumption + box.data['consumption']
+            total_time = total_time + box.data['duration']
+
+        data.append({"box": "Box"+box.data['boxId'], "this_watering": box.data['consumption'], "last_watering": 3})
 
 
     # render
@@ -581,10 +682,19 @@ def box_daily_report(request):
             box.data
             for box in boxes
         ],
+        'total_consumption': total_consumption,
+        'total_time': total_time,
+        'graph_data': json.dumps(data),
     })
 
 
 def merge_histories(old_history, new_history, preprocessing=None):
+    return merge_by_date(
+        results_lists=[old_history, new_history],
+        prop_names=["value_old", "value_new"],
+        preprocessing=preprocessing
+    )
+    """
     # check if a callable has been passed for preprocessing
     if preprocessing:
         old_history = preprocessing(old_history)
@@ -618,6 +728,49 @@ def merge_histories(old_history, new_history, preprocessing=None):
         }
         for entry_date, entry in history.items()
     ], key=lambda entry: entry["date"])
+    """
+
+
+def merge_by_date(results_lists, prop_names, preprocessing=None):
+    return merge(
+        key_field="date",
+        value_field="value",
+        results_lists=results_lists,
+        prop_names=prop_names,
+        preprocessing=preprocessing
+    )
+
+
+def merge(key_field, value_field, results_lists, prop_names, preprocessing=None):
+    if len(results_lists) != len(prop_names):
+        raise ValueError("Invalid prop_names parameter.")
+
+    # check if a callable has been passed for preprocessing
+    if preprocessing:
+        results_lists = [
+            preprocessing(result)
+            for result in results_lists
+        ]
+
+    merged = {}
+    for idx, results in enumerate(results_lists):
+        for entry in results:
+
+            # new entry for this key
+            if entry[key_field] not in merged:
+                merged[entry[key_field]] = {
+                    prop_name: None
+                    for prop_name in prop_names
+                }
+
+                # also add key
+                merged[entry[key_field]][key_field] = entry[key_field]
+
+            # set relevant prop
+            merged[entry[key_field]][prop_names[idx]] = entry[value_field]
+
+    # return sorted by key
+    return sorted(list(merged.values()), key=lambda entry: entry[key_field])
 
 
 def preprocessed_history(history):

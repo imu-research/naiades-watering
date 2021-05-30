@@ -272,18 +272,18 @@ var chart2 = AmCharts.makeChart("chartdiv", {
       "fillAlphas": 0.8,
       "id": "AmGraph-1",
       "lineAlpha": 0.2,
-      "title": "Income",
+      "title": "This watering",
       "type": "column",
-      "valueField": "income"
+      "valueField": "this_watering"
     },
     {
       "balloonText": "Previous watering:[[value]]",
       "fillAlphas": 0.8,
       "id": "AmGraph-2",
       "lineAlpha": 0.2,
-      "title": "Expenses",
+      "title": "Previous watering",
       "type": "column",
-      "valueField": "expenses"
+      "valueField": "last_watering"
     }
   ],
   "guides": [],
@@ -297,7 +297,8 @@ var chart2 = AmCharts.makeChart("chartdiv", {
   "allLabels": [],
   "balloon": {},
   //"titles": [],
-  "dataProvider": [
+  "dataProvider": graph_data,
+    /*[
     {
       "box": "Box 1",
       "income": 23.5,
@@ -323,7 +324,7 @@ var chart2 = AmCharts.makeChart("chartdiv", {
       "income": 24.6,
       "expenses": 25
     }
-  ],
+  ],*/
     "export": {
     	"enabled": true,
         "menu":[]

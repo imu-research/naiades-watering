@@ -110,6 +110,22 @@
             </div>
         </div>
 
+         <div class="col-lg-6 col-xs-12 ">
+            <div class="form-group">
+                <label for="id_device_state">{% trans "Device Status" %}:</label>
+
+                <select name="device_state" id="id_device_state" class="form-control">
+                  <option value="" {% if not form.data.device_state %}selected{% endif %}></option>
+                  <option value="Active" {% if form.data.device_state == "Active" %}selected{% endif %}>{% trans "Active" %}</option>
+                  <option value="Maintenance" {% if form.data.device_state == "Maintenance" %}selected{% endif %}>{% trans "Maintenance" %}</option>
+                  <option value="Disabled" {% if form.data.device_state == "Disabled" %}selected{% endif %}>{% trans "Disabled" %}</option>
+                </select>
+                {% if form.errors.device_state %}
+                    <span class="o-red">{{ form.errors.device_state }}</span>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 
     <div class="row">
