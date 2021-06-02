@@ -110,6 +110,11 @@ def box_details(request):
             new_history=box_history(box_id, "refNewDevice", "batteryLevel", start_date, now),
             preprocessing=preprocessed_history
         )
+        print(battery_history)
+        # Multiply battery by 100
+        for battery in battery_history:
+            battery["value_old"] = round(battery["value_old"] * 100, 2) if battery["value_old"] is not None else None
+            battery["value_new"] = round(battery["value_new"] * 100, 2) if battery["value_new"] is not None else None
 
         ec_history = box_history(box_id, "refNewDevice", "soilMoistureEc", start_date, now)
         soil_temp_history = box_history(box_id, "refNewDevice", "soilTemperature", start_date, now),
@@ -664,6 +669,27 @@ def box_daily_report(request):
     # get boxes for this user
     boxes = WateringBox.list()
 
+    _now = datetime.datetime.now().isoformat()
+
+    start_date = datetime.datetime.now() - datetime.timedelta(30)
+    start_date = start_date.isoformat()
+
+    # get consumption historic data
+    try:
+        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=_now)
+    except ReadTimeout:
+        consumption_history = []
+    # Get the last watering value
+    cons = []
+    for box in consumption_history:
+        try:
+            results = [item for item in reversed(box['results']) if item["value"] is not None][0]
+        except IndexError:
+            results = None
+        if results:
+            value = results['value']
+            cons.append({'entity_id': box['entity_id'], 'value': value})
+
     # calculate total watering consumption and time
     total_consumption = 0
     total_time = 0
@@ -673,7 +699,12 @@ def box_daily_report(request):
             total_consumption = total_consumption + box.data['consumption']
             total_time = total_time + box.data['duration']
 
-        data.append({"box": "Box"+box.data['boxId'], "this_watering": box.data['consumption'], "last_watering": 3})
+            last_watering = 0
+            for c in cons:
+                if c["entity_id"] == box.data['id']:
+                    last_watering = round(c["value"], 2)
+
+            data.append({"box": "Box"+box.data['boxId'], "this_watering": box.data['consumption'], "last_watering": last_watering})
 
 
     # render

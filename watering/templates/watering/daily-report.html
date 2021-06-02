@@ -52,7 +52,7 @@
         <div class="col-md-3">
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportDailyReport( {{ boxes | exclude_none | safe }} );">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportDailyReport( {{ boxes | exclude_none | safe }}, {{ total_consumption }}, {{ total_time }} );">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
         </div>
@@ -104,13 +104,13 @@
                 <tbody>
                 {% for box in boxes %}
                   {% if box.lastWatering == "TODAY" %}
-                  <tr>
-                      <td>{{ box.boxId }}</td>
-                      <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
-                      <td> {{ box.consumption }} </td>
-                      <td> {{ box.duration }} </td>
-                      <td>{{ box.nextWateringAmountAdvice }} lt </td>
-                  </tr>
+                      <tr>
+                          <td>{{ box.boxId }}</td>
+                          <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
+                          <td> {{ box.consumption }} </td>
+                          <td> {{ box.duration }} </td>
+                          <td>{{ box.nextWateringAmountAdvice }} lt </td>
+                      </tr>
                   {% endif %}
                 {%  endfor %}
                 </tbody>
@@ -145,6 +145,12 @@
     <script type="text/javascript">
         history = '{{history |safe}}';
         graph_data = {{ graph_data |safe }};
+        $(document).ready(function() {
+            if ($('#reports tbody tr').length == 0) {
+                $("#reports tbody").append('<tr> <td>-</td> <td>-</td> <td>-</td> <td>-</td> <td>-</td></tr>');
+            }
+        });
+
     </script>
     {% include 'watering/sensor-js.html' %}
     <script src="{% static 'js/daily-report-graphs.js' %}"></script>

@@ -1,4 +1,4 @@
-function exportDailyReport(box_data) {
+function exportDailyReport(box_data, consumption, time) {
 
   // So that we know export was started
   console.log("Starting export...");
@@ -42,6 +42,42 @@ function exportDailyReport(box_data) {
     }
   }
 
+  function getEntriesBody(box_data) {
+      // start with headers
+      const logEntries=[
+          [
+              {text: window.MESSAGES.boxId, style: 'tableHeader'},
+              {text: window.MESSAGES.humidityLevel, style: 'tableHeader'},
+              {text: window.MESSAGES.amountOfWatering, style: 'tableHeader'},
+              {text: window.MESSAGES.timeOfWatering, style: 'tableHeader'},
+              {text: window.MESSAGES.nextAmount, style: 'tableHeader'},
+          ]
+      ];
+
+      // add one entry for each log
+      $.each(box_data, function(idx, log) {
+          if(log.lastWatering == "TODAY"){
+              const logEntry =[log.boxId];
+
+              // add date, old, & new values
+              logEntry.push(log.soilMoisture+' '+log.moistureUnit || '-');
+              logEntry.push(log.consumption || '-');
+              logEntry.push(log.duration || '-');
+              logEntry.push(log.nextWateringAmountAdvice || '-');
+
+              // add to logs
+              logEntries.push(logEntry);
+
+          }
+
+          if(logEntries.length == 1){
+              logEntries.push(['-', '-', '-', '-', '-']);
+          }
+      });
+
+      return logEntries
+  }
+
   //generatePDF(box_data);
 
   function generatePDF(data) {
@@ -80,7 +116,7 @@ function exportDailyReport(box_data) {
                         text: 'Todays Water Consumption',
                         style: 'tableHeader'
                     }, {text: 'Todays Watering Time', style: 'tableHeader'}],
-                    ['30 lt', '2 hrs']
+                    [consumption+' lt', time+' s']
                 ]
             },
             layout: 'noBorders'
@@ -100,18 +136,7 @@ function exportDailyReport(box_data) {
                 // dontBreakRows: true,
                 // keepWithHeaderRows: 1,
                 widths: [75, 85, 85, 85, 85, 85],
-                body: [
-                    [{text: window.MESSAGES.boxId, style: 'tableHeader'}, {
-                        text: window.MESSAGES.humidityLevel,
-                        style: 'tableHeader'
-                    }, {text: window.MESSAGES.amountOfWatering, style: 'tableHeader'},
-                      {text: window.MESSAGES.timeOfWatering, style: 'tableHeader'},
-                      {text: window.MESSAGES.nextAmount, style: 'tableHeader'},
-                      {text: window.MESSAGES.previousAmount, style: 'tableHeader'}
-                    ],
-                    ['-', '-', '-', '-', '-', '-'],
-
-                ]
+                body: getEntriesBody(box_data)
             },
             layout: 'lightHorizontalLines'
         });
