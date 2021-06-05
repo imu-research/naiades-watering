@@ -1,9 +1,11 @@
 import datetime
 import json
+import requests
 import logging
 from _decimal import InvalidOperation
 
 from decimal import Decimal
+
 from requests import ReadTimeout
 
 from django.http import JsonResponse
@@ -584,6 +586,14 @@ def box_monthly_report_data(request):
     except ReadTimeout:
         watering_duration = []
 
+    # get truck location data
+    '''try:
+        truck_location_history = WateringBox.truck_location_history(start_date, _now)
+    except ReadTimeout:
+        truck_location_history = []'''
+
+    # calculate_driving_distance():
+
     # group by entity
     by_entity = merge(
         key_field="entity_id",
@@ -654,12 +664,21 @@ def box_monthly_report(request):
     # except ReadTimeout:
     #     prediction_history = []
 
+    # prepare issues
+    issues_by_box = {}
+    for issue in Issue.objects.filter():
+        if issue.box_id not in issues_by_box:
+            issues_by_box[issue.box_id] = []
+
+        issues_by_box[issue.box_id].append(issue)
+
     # render
     return render(request, 'watering/monthly-report.html', {
         'boxes': [
             box.data
             for box in boxes
         ],
+        'issues_by_box': issues_by_box,
     })
 
 
@@ -825,3 +844,19 @@ def preprocessed_history(history):
     })
 
     return preprocessed
+
+def calculate_driving_distance():
+    lon_1 = 13.388860
+    lat = 52.517037
+    lon_2 = 13.397634
+    lat_2 = 52.529407
+    # call the OSMR API
+    #r = requests.get(f"http://router.project-osrm.org/route/v1/car/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false""")
+    r = requests.get(f"http://router.project-osrm.org/route/v1/car/{lon_1},{lat};{lon_2},{lat_2}?overview=false""")
+    # then you load the response using the json libray
+    # by default you get only one alternative so you access 0-th element of the `routes`
+    routes = json.loads(r.content)
+    route_1 = routes.get("routes")[0]
+    distance = route_1.get("distance")
+    print(distance)
+    return distance

@@ -132,16 +132,95 @@ $(function() {
             }
         });
     }
+
+    function addToOverall(overallByDate, boxData) {
+        $.each(boxData, function(idx, boxDatum) {
+            // new date
+            if (!overallByDate[boxDatum.date]) {
+                overallByDate[boxDatum.date] = {
+                    prediction: null,
+                    consumption: null,
+                    duration: null
+                };
+            }
+
+            // for each property
+            $.each(["prediction", "consumption", "duration"], function(pdx, prop) {
+                // ignore if empty/unset/zero
+                if (!boxDatum[prop]) {
+                    return
+                }
+
+                // add value
+                overallByDate[boxDatum.date][prop] = (overallByDate[boxDatum.date][prop] || 0) + boxDatum[prop];
+            });
+        });
+    }
+
+    function renderEntity(boxId, boxData) {
+        const $container = $(`#box-container-${boxId}`);
+        const nBoxes = $container.data("nboxes");
+
+        // show charts (total, by box)
+        renderChartData(boxId, boxData.data);
+        renderChartData(boxId, boxData.data, nBoxes);
+
+        // calculate total consumption
+        let totalConsumption = 0;
+        try {
+            totalConsumption = boxData
+                .data
+                .map(entry => entry.consumption)
+                .filter(value => value && value)
+                .reduce((a, b) => a + b);
+        } catch(err) {}
+
+        // show values
+        $container
+            .find("> .row > .col-xs-6:nth-of-type(1) .recommended-value")
+            .text(`${totalConsumption.toFixed(2)} lt`);
+
+        $container
+            .find("> .row > .col-xs-6:nth-of-type(2) .recommended-value")
+            .text(`${(totalConsumption / nBoxes).toFixed(2)} lt`);
+    }
+
+    function renderOverall(overallByDate) {
+        // prepare values by date by reformatting into flat list
+        const overallData = [];
+        for (const date of Object.keys(overallByDate)) {
+            // get & round all props to second decimal
+            const dataValues = overallByDate[date];
+            for (const prop of Object.keys(dataValues)) {
+                dataValues[prop] = dataValues[prop] ? Math.round(dataValues[prop], 2) : dataValues[prop];
+            }
+
+            // add date & push
+            dataValues.date = date;
+            overallData.push(dataValues);
+        }
+
+        // render overall chart
+        renderChartData("overall", overallData);
+    }
+
     // get monthly report data
     $.get({
         url: "/watering/monthlyReport/data/",
         success: function({data}) {
-            $.each(data, function(idx, boxData) {
-                const boxId = boxData["box_id"];
+            const overallByDate = {};
 
-                renderChartData(boxId, boxData["data"]);
-                renderChartData(boxId, boxData["data"], $(`#box-container-${boxId}`).data("nboxes"))
+            $.each(data, function(idx, boxData) {
+                const boxId = boxData.box_id;
+
+                // populate charts for this entity
+                renderEntity(boxId, boxData);
+
+                // add to overall
+                addToOverall(overallByDate, boxData.data);
             });
+
+            renderOverall(overallByDate);
         }
     });
 });

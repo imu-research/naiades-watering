@@ -19,3 +19,8 @@ def exclude_none(data):
         for key, value in data.items()
         if value is not None
     }
+
+
+@register.filter
+def get_issues_by_box(issues_by_box, box):
+    return issues_by_box.get(box['boxId'], [])

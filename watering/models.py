@@ -231,10 +231,10 @@ class OrionEntity(object):
         # return list
         return response.json()
 
-    def truck_location_history(self, service, entity_id):
+    def truck_location_history(self, service, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/truckLocation/value?lastN=30',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/truckLocation/value?fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -670,12 +670,13 @@ class WateringBox(Model):
         return WateringBox.format_list_response(response)
 
     @staticmethod
-    def truck_location_history(box_id):
+    def truck_location_history(fromDate, to):
         # get truck location history of box id
         try:
             response = OrionEntity().truck_location_history(
                 service=WateringBox.service,
-                entity_id=box_id
+                fromDate=fromDate,
+                to=to
             )
         except OrionError:
             return []

@@ -75,7 +75,7 @@
                 <div class="panel-heading">{% trans "Total Periodic Water Consumption" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        493 lt
+                        &nbsp;
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 <div class="panel-heading">{% trans "Total Periodic Watering Time" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        11 hrs
+                        &nbsp;
                     </div>
                 </div>
             </div>
@@ -123,9 +123,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans "Total Periodic Water Consumption (Cluster)" %}</div>
                         <div class="panel-body">
-                            <div class="recommended-value">
-                                493 lt
-                            </div>
+                            <div class="recommended-value">&nbsp;</div>
                         </div>
                     </div>
                 </div>
@@ -134,7 +132,7 @@
                         <div class="panel-heading">{% trans "Total Periodic Water Consumption (Avg. per Box)" %}</div>
                         <div class="panel-body">
                             <div class="recommended-value">
-                                11 lt
+                                &nbsp;
                             </div>
                         </div>
                     </div>
@@ -172,17 +170,17 @@
                           </tr>
                         </thead>
                         <tbody>
-                        {% for con in consumption_history %}
-                          <tr>
-                              <td> <a href="#">{{ con.date }}</a></td>
-                              {% if con.value is None %}
-                                <td> - </td>
-                              {% else %}
-                                  <td>{{ con.value }} lt</td>
-                              {% endif %}
-                              <td> - </td>
-                          </tr>
-                        {%  endfor %}
+                            {% for issue in issues_by_box|get_issues_by_box:box %}
+                                <tr>
+                                    <td>{{ issue.issue_type }}</td>
+                                    <td>{{ issue.description }}</td>
+                                    <td>{{ issue.created }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="3" style="text-align: center;">No issues reported</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                       </table>
                 </div>
