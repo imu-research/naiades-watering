@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
 from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather, Event, EventParseError
+from watering.managers import ReportDataManager
+from watering.utils import merge_histories
 
 from naiades_watering.settings import DEBUG
 
@@ -586,29 +588,7 @@ def get_report_range(request):
 def box_monthly_report_data(request):
     date_range = get_report_range(request=request)
 
-    # get consumption historic data
-    try:
-        consumption_history = WateringBox.consumption_history_list_values(
-            from_date=date_range["formatted"]["from"], to=date_range["formatted"]["to"]
-        )
-    except ReadTimeout:
-        consumption_history = []
 
-    # get prediction historic data
-    try:
-        prediction_history = WateringBox.prediction_history_list(
-            date_range["formatted"]["from"], date_range["formatted"]["to"]
-        )
-    except ReadTimeout:
-        prediction_history = []
-
-    # get watering duration historic data
-    try:
-        watering_duration = WateringBox.watering_duration_history_list(
-            date_range["formatted"]["from"], date_range["formatted"]["to"]
-        )
-    except ReadTimeout:
-        watering_duration = []
 
     # get truck location data
     '''try:
@@ -618,48 +598,11 @@ def box_monthly_report_data(request):
 
     # calculate_driving_distance():
 
-    # group by entity
-    by_entity = merge(
-        key_field="entity_id",
-        value_field="results",
-        results_lists=[
-            prediction_history,
-            consumption_history,
-            watering_duration,
-        ],
-        prop_names=["predictions", "consumptions", "durations"]
-    )
-
-    # for each entity, group by date
-    entities_data = []
-    for entity in by_entity:
-        data_by_date = merge_by_date(
-            results_lists=[
-                entity["predictions"],
-                entity["consumptions"],
-                entity["durations"],
-            ],
-            prop_names=["prediction", "consumption", "duration"]
-        )
-
-        # ignore hour part, format metrics
-        for datum in data_by_date:
-            datum["date"] = datum["date"].split("T")[0]
-
-            for prop in ["consumption", "prediction"]:
-                datum[prop] = round(datum[prop], 2) if datum[prop] is not None else None
-
-            datum["duration"] = datum["duration"] / 1000 if datum["duration"] is not None else None
-
-        entities_data.append({
-            "entity_id": entity["entity_id"],
-            "box_id": entity["entity_id"].split("ld:FlowerBed:FlowerBed-")[-1],
-            "data": data_by_date,
-        })
+    manager = ReportDataManager(date_range=date_range)
 
     # return as json response
     return JsonResponse({
-        "data": entities_data,
+        "data": manager.get_entities_data(),
     })
 
 
@@ -741,91 +684,6 @@ def box_daily_report(request):
         'total_time': total_time,
         'graph_data': json.dumps(data),
     })
-
-
-def merge_histories(old_history, new_history, preprocessing=None):
-    return merge_by_date(
-        results_lists=[old_history, new_history],
-        prop_names=["value_old", "value_new"],
-        preprocessing=preprocessing
-    )
-    """
-    # check if a callable has been passed for preprocessing
-    if preprocessing:
-        old_history = preprocessing(old_history)
-        new_history = preprocessing(new_history)
-
-    # key/value pairs for old history
-    history = {
-        entry["date"]: {
-            "value_old": entry["value"],
-            "value_new": None,
-        }
-        for entry in old_history
-    }
-
-    # add new history values
-    for entry in new_history:
-        if entry["date"] not in history:
-            history[entry["date"]] = {
-                "value_old": None,
-                "value_new": None,
-            }
-
-        history[entry["date"]]["value_new"] = entry["value"]
-
-    # flatten & return
-    return sorted([
-        {
-            "date": entry_date,
-            "value_old": entry["value_old"],
-            "value_new": entry["value_new"],
-        }
-        for entry_date, entry in history.items()
-    ], key=lambda entry: entry["date"])
-    """
-
-
-def merge_by_date(results_lists, prop_names, preprocessing=None):
-    return merge(
-        key_field="date",
-        value_field="value",
-        results_lists=results_lists,
-        prop_names=prop_names,
-        preprocessing=preprocessing
-    )
-
-
-def merge(key_field, value_field, results_lists, prop_names, preprocessing=None):
-    if len(results_lists) != len(prop_names):
-        raise ValueError("Invalid prop_names parameter.")
-
-    # check if a callable has been passed for preprocessing
-    if preprocessing:
-        results_lists = [
-            preprocessing(result)
-            for result in results_lists
-        ]
-
-    merged = {}
-    for idx, results in enumerate(results_lists):
-        for entry in results:
-
-            # new entry for this key
-            if entry[key_field] not in merged:
-                merged[entry[key_field]] = {
-                    prop_name: None
-                    for prop_name in prop_names
-                }
-
-                # also add key
-                merged[entry[key_field]][key_field] = entry[key_field]
-
-            # set relevant prop
-            merged[entry[key_field]][prop_names[idx]] = entry[value_field]
-
-    # return sorted by key
-    return sorted(list(merged.values()), key=lambda entry: entry[key_field])
 
 
 def preprocessed_history(history):
