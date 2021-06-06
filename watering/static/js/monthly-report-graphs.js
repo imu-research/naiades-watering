@@ -157,6 +157,19 @@ $(function() {
         });
     }
 
+    function calculateTotal(data, prop) {
+        prop = prop || "consumption";
+
+        try {
+            return data
+                .map(entry => entry[prop])
+                .filter(value => value && value)
+                .reduce((a, b) => a + b);
+        } catch(err) {
+            return 0
+        }
+    }
+
     function renderEntity(boxId, boxData) {
         const $container = $(`#box-container-${boxId}`);
         const nBoxes = $container.data("nboxes");
@@ -166,14 +179,7 @@ $(function() {
         renderChartData(boxId, boxData.data, nBoxes);
 
         // calculate total consumption
-        let totalConsumption = 0;
-        try {
-            totalConsumption = boxData
-                .data
-                .map(entry => entry.consumption)
-                .filter(value => value && value)
-                .reduce((a, b) => a + b);
-        } catch(err) {}
+        const totalConsumption = calculateTotal(boxData.data);
 
         // show values
         $container
@@ -202,11 +208,26 @@ $(function() {
 
         // render overall chart
         renderChartData("overall", overallData);
+
+        // calculate total consumption & duration
+        const totalConsumption = calculateTotal(overallData);
+        const totalDuration = calculateTotal(overallData, "duration");
+
+        // show values
+        const $container = $("#overall-values");
+
+        $container
+            .find("> .col-xs-6:nth-of-type(1) .recommended-value")
+            .text(`${totalConsumption.toFixed(2)} lt`);
+
+        $container
+            .find("> .col-xs-6:nth-of-type(2) .recommended-value")
+            .text(`${totalDuration.toFixed(2)} s`);
     }
 
     // get monthly report data
     $.get({
-        url: "/watering/monthlyReport/data/",
+        url: `/watering/monthlyReport/data/?from=${window.PERIOD_START}&to=${window.PERIOD_END}`,
         success: function({data}) {
             const overallByDate = {};
 

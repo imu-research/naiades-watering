@@ -562,27 +562,51 @@ def cluster_details(request):
     })
 
 
-def box_monthly_report_data(request):
-    _now = datetime.datetime.now().isoformat()
+def get_report_range(request):
+    try:
+        to_date = datetime.datetime.strptime(request.GET["to"], "%d%m%Y")
+    except (KeyError, ValueError):
+        to_date = datetime.datetime.now()
 
-    start_date = datetime.datetime.now() - datetime.timedelta(30)
-    start_date = start_date.isoformat()
+    try:
+        from_date = datetime.datetime.strptime(request.GET["from"], "%d%m%Y")
+    except (KeyError, ValueError):
+        from_date = to_date - datetime.timedelta(30)
+
+    return {
+        "from": from_date,
+        "to": to_date,
+        "formatted": {
+            "from": from_date.isoformat(),
+            "to": to_date.isoformat()
+        }
+    }
+
+
+def box_monthly_report_data(request):
+    date_range = get_report_range(request=request)
 
     # get consumption historic data
     try:
-        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=_now)
+        consumption_history = WateringBox.consumption_history_list_values(
+            from_date=date_range["formatted"]["from"], to=date_range["formatted"]["to"]
+        )
     except ReadTimeout:
         consumption_history = []
 
     # get prediction historic data
     try:
-        prediction_history = WateringBox.prediction_history_list(start_date, _now)
+        prediction_history = WateringBox.prediction_history_list(
+            date_range["formatted"]["from"], date_range["formatted"]["to"]
+        )
     except ReadTimeout:
         prediction_history = []
 
     # get watering duration historic data
     try:
-        watering_duration = WateringBox.watering_duration_history_list(start_date, _now)
+        watering_duration = WateringBox.watering_duration_history_list(
+            date_range["formatted"]["from"], date_range["formatted"]["to"]
+        )
     except ReadTimeout:
         watering_duration = []
 
@@ -640,33 +664,14 @@ def box_monthly_report_data(request):
 
 
 def box_monthly_report(request):
-    # get boxes for this user
+    date_range = get_report_range(request=request)
 
-    '''boxes = JsonResponse({
-        "boxes": [box.data for box in WateringBox.list()]
-    })'''
+    # get boxes for this user
     boxes = WateringBox.list()
 
-    '''# get consumption historic data
-    try:
-        consumption_history = WateringBox.consumption_history_list()
-    except ReadTimeout:
-        consumption_history = []'''
-
-    # get watering predictions historic data
-    # TODO implement prediction history, by entity id
-    # try:
-    #     prediction_history = merge_histories(
-    #         old_history=consumption_history,
-    #         new_history=prediction_history,
-    #         preprocessing=None
-    #     )
-    # except ReadTimeout:
-    #     prediction_history = []
-
-    # prepare issues
+    # retrieve issues for this period
     issues_by_box = {}
-    for issue in Issue.objects.filter():
+    for issue in Issue.objects.filter(created__gte=date_range["from"], created__lte=date_range["to"]):
         if issue.box_id not in issues_by_box:
             issues_by_box[issue.box_id] = []
 
@@ -679,12 +684,12 @@ def box_monthly_report(request):
             for box in boxes
         ],
         'issues_by_box': issues_by_box,
+        'start': date_range["from"].strftime("%d%m%Y"),
+        'end': date_range["to"].strftime("%d%m%Y"),
     })
 
 
 def box_daily_report(request):
-
-
     # get boxes for this user
     boxes = WateringBox.list()
 

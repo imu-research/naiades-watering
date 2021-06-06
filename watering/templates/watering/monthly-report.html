@@ -32,6 +32,22 @@
             margin: 30px auto;
             text-align: center;
         }
+
+        .glyphicon.fast-right-spinner {
+            animation: glyphicon-spin-r 1s infinite linear;
+        }
+
+        @keyframes glyphicon-spin-r {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
     </style>
 {% endblock %}
 
@@ -69,13 +85,13 @@
 
         </div>
 
-    <div class="row">
+    <div class="row" id="overall-values">
         <div class="col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans "Total Periodic Water Consumption" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        &nbsp;
+                        <span class="glyphicon glyphicon-repeat fast-right-spinner"></span>
                     </div>
                 </div>
             </div>
@@ -85,7 +101,7 @@
                 <div class="panel-heading">{% trans "Total Periodic Watering Time" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        &nbsp;
+                        <span class="glyphicon glyphicon-repeat fast-right-spinner"></span>
                     </div>
                 </div>
             </div>
@@ -196,9 +212,7 @@
     <!-- AmCharts JavaScript -->
     <script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
-    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/animate/animate.min.js"></script>
-    <script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/chalk.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
@@ -207,10 +221,9 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.semanticui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
-    <script type="text/javascript">
-        const history = {{history |safe}};
-    </script>
+
     {% include 'watering/sensor-js.html' %}
+
     <script src="{% static 'js/monthly-report-graphs.js' %}"></script>
     <script src="{% static 'js/monthly-report.js' %}"></script>
 
@@ -220,32 +233,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-    <script type="text/javascript">
-        $(function() {
-
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            }
-
-            $('#reportrange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                ranges: {
-                   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 14 Days': [moment().subtract(13, 'days'), moment()],
-                   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                   'This Month': [moment().startOf('month'), moment().endOf('month')],
-                   'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                }
-            }, cb);
-
-            cb(start, end);
-
-        });
+    <script>
+        window.PERIOD_START = "{{ start }}";
+        window.PERIOD_END = "{{ end }}";
     </script>
-
-
+    <script type="text/javascript" src="{% static 'js/monthly-report-period-select.js' %}"></script>
 {% endblock %}
