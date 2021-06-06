@@ -244,4 +244,12 @@ $(function() {
             renderOverall(overallByDate);
         }
     });
+
+    // get location data
+    $.get({
+        url: `/watering/monthlyReport/distances/?from=${window.PERIOD_START}&to=${window.PERIOD_END}`,
+        success: function({distances}) {
+            console.log(distances);
+        }
+    });
 });

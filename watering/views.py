@@ -588,21 +588,22 @@ def get_report_range(request):
 def box_monthly_report_data(request):
     date_range = get_report_range(request=request)
 
-
-
-    # get truck location data
-    '''try:
-        truck_location_history = WateringBox.truck_location_history(start_date, _now)
-    except ReadTimeout:
-        truck_location_history = []'''
-
-    # calculate_driving_distance():
-
     manager = ReportDataManager(date_range=date_range)
 
     # return as json response
     return JsonResponse({
         "data": manager.get_entities_data(),
+    })
+
+
+def box_monthly_report_distances(request):
+    date_range = get_report_range(request=request)
+
+    manager = ReportDataManager(date_range=date_range)
+
+    # return as json response
+    return JsonResponse({
+        "distances": manager.get_distances_data(),
     })
 
 
@@ -707,19 +708,3 @@ def preprocessed_history(history):
     })
 
     return preprocessed
-
-def calculate_driving_distance():
-    lon_1 = 13.388860
-    lat = 52.517037
-    lon_2 = 13.397634
-    lat_2 = 52.529407
-    # call the OSMR API
-    #r = requests.get(f"http://router.project-osrm.org/route/v1/car/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false""")
-    r = requests.get(f"http://router.project-osrm.org/route/v1/car/{lon_1},{lat};{lon_2},{lat_2}?overview=false""")
-    # then you load the response using the json libray
-    # by default you get only one alternative so you access 0-th element of the `routes`
-    routes = json.loads(r.content)
-    route_1 = routes.get("routes")[0]
-    distance = route_1.get("distance")
-    print(distance)
-    return distance

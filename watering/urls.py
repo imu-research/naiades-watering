@@ -15,6 +15,7 @@ urlpatterns = [
 
     # Monthly Report
     path('monthlyReport/data/', views.box_monthly_report_data, name='monthly-report-data'),
+    path('monthlyReport/distances/', views.box_monthly_report_distances, name='monthly-report-distances'),
     path('monthlyReport/', views.box_monthly_report, name='monthly-report'),
 
     # Daily Report

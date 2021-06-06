@@ -681,14 +681,7 @@ class WateringBox(Model):
         except OrionError:
             return []
 
-        results = []
-        for idx, index in enumerate(response["index"]):
-            results.append({
-                "date": index,
-                "value": response["values"][idx],
-            })
-
-        return results
+        return WateringBox.format_list_response(response)
 
     @staticmethod
     def consumption_history_list():
