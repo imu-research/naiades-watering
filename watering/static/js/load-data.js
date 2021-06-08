@@ -21,12 +21,6 @@ $(function () {
                         if (box.location) {
                             box.location.position = box.location;
                         }
-
-                        // set position
-                        /*box.location.position = {
-                            lat: box.location.coordinates[1],
-                            lng: box.location.coordinates[0]
-                        };*/
                     });
 
                     that.fetchedMeasurements = boxes;
@@ -39,6 +33,10 @@ $(function () {
         },
 
         showFilteredMeasurements: function() {
+
+            if (!window.NaiadesRender) {
+                return
+            }
 
             // get selection
             const nextWatering = $('#next-watering').val();
@@ -56,7 +54,9 @@ $(function () {
 
         load: function() {
             // initialize renderer
-            window.NaiadesRender.initialize();
+            if (window.NaiadesRender) {
+                window.NaiadesRender.initialize();
+            }
 
             // load data
             this.loadData();

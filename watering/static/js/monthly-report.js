@@ -1,11 +1,11 @@
-function exportMonthlyReport(box_data) {
+function exportMonthlyReport(box_data, issues) {
 
   // So that we know export was started
   console.log("Starting export...");
 
   // Define IDs of the charts we want to include in the report
-  var ids = ["chart-km", "chart-prediction-overall", "chart-prediction-1", "chart-prediction-2", "chart-prediction-3", "chart-prediction-4", "chart-prediction-5", "chart-prediction-6",  "chart-prediction-7", "chart-prediction-8", "chart-consumption-box-1", "chart-consumption-box-2", "chart-consumption-box-3", "chart-consumption-box-4", "chart-consumption-box-5", "chart-consumption-box-6", "chart-consumption-box-7", "chart-consumption-box-8" ];
-
+  var ids = [ "chart-data-overall", "chart-data-1", "chart-data-2", "chart-data-3", "chart-data-4", "chart-data-5", "chart-data-6",  "chart-data-7", "chart-data-8", "chart-data-per-box-1", "chart-data-per-box-2", "chart-data-per-box-3", "chart-data-per-box-4", "chart-data-per-box-5", "chart-data-per-box-6", "chart-data-per-box-7", "chart-data-per-box-8" ];
+  //"chart-km"
   // Collect actual chart objects out of the AmCharts.charts array
   var charts = {}
   var charts_remaining = ids.length;
@@ -34,7 +34,7 @@ function exportMonthlyReport(box_data) {
           if (charts_remaining == 0) {
             // Yup, we got all of them
             // Let's proceed to putting PDF together
-            generatePDF(box_data);
+            generatePDF(box_data, issues);
           }
 
         });
@@ -42,7 +42,40 @@ function exportMonthlyReport(box_data) {
     }
   }
 
-  function generatePDF(data) {
+  function getEntriesBody(box_data) {
+      // start with headers
+      const logEntries=[
+          [
+              {text: window.MESSAGES.issue, style: 'tableHeader'},
+              {text: window.MESSAGES.description, style: 'tableHeader'},
+              {text: window.MESSAGES.user, style: 'tableHeader'},
+              {text: window.MESSAGES.date2, style: 'tableHeader'},
+          ]
+      ];
+
+      // add one entry for each log
+      $.each(box_data, function(idx, log) {
+
+          const logEntry =[log.issue_type];
+
+          // add date, old, & new values
+          logEntry.push(log.description);
+          logEntry.push('-');
+          logEntry.push(log.created || '-');
+
+          // add to logs
+          logEntries.push(logEntry);
+
+
+          if(logEntries.length == 1){
+              logEntries.push(['-', '-', '-', '-']);
+          }
+      });
+
+      return logEntries
+  }
+
+  function generatePDF(data, issues) {
 
     // Log
     console.log("Generating PDF...");
@@ -55,7 +88,7 @@ function exportMonthlyReport(box_data) {
     // Let's add a custom title
     layout.content.push({
       //"text": window.MESSAGES.consumptionReport,
-      "text": "March Monthly Report",
+      "text": "Periodic Report: "+window.PERIOD_START+" - "+ window.PERIOD_END,
       "fontSize": 15,
         "alignment": "center",
         "bold": true
@@ -87,13 +120,13 @@ function exportMonthlyReport(box_data) {
 
     // Put overall chart
     layout.content.push({
-        "image": charts["chart-prediction-overall"].exportedImage,
+        "image": charts["chart-data-overall"].exportedImage,
         "fit": [523, 600]
     });
-    layout.content.push({
+    /*layout.content.push({
         "image": charts["chart-km"].exportedImage,
         "fit": [523, 600]
-    });
+    });*/
 
     //for (var i = 1; i < 9; i++) {
     for (var box in box_data)  {
@@ -123,11 +156,11 @@ function exportMonthlyReport(box_data) {
 
         // Put overall chart
         layout.content.push({
-            "image": charts["chart-prediction-"+i].exportedImage,
+            "image": charts["chart-data-"+i].exportedImage,
             "fit": [523, 600]
         });
         layout.content.push({
-            "image": charts["chart-consumption-box-"+i].exportedImage,
+            "image": charts["chart-data-per-box-"+i].exportedImage,
             "fit": [523, 600]
         });
 
@@ -143,7 +176,7 @@ function exportMonthlyReport(box_data) {
                 // dontBreakRows: true,
                 // keepWithHeaderRows: 1,
                 widths: [125, 125, 125, 125],
-                body: [
+                body: getEntriesBody(issues) /*[
                     [{text: window.MESSAGES.issue, style: 'tableHeader'}, {
                         text: window.MESSAGES.description,
                         style: 'tableHeader'
@@ -151,7 +184,7 @@ function exportMonthlyReport(box_data) {
                       {text: window.MESSAGES.date2, style: 'tableHeader'}],
                     ['-', '-', '-', '-'],
 
-                ]
+                ]*/
             },
             layout: 'lightHorizontalLines'
         });

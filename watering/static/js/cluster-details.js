@@ -37,9 +37,14 @@ $(function() {
                 "url": `${window.location.href}&events=true`,
                 success: function({events}) {
                     // calculate total consumption
-                    const consumption = events
-                        .map(event => Number(event.consumption))
-                        .reduce((a, b) => a + b);
+                    let consumption;
+                    try {
+                        consumption = events
+                            .map(event => Number(event.consumption))
+                            .reduce((a, b) => a + b);
+                    } catch(err) {
+                        consumption = 0;
+                    }
 
                     // update
                     WateringProgressView.setConsumption(consumption);

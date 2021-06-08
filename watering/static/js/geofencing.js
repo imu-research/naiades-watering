@@ -1,8 +1,13 @@
 $(function() {
-    const maxLocalRadius = 0.03; // 30 meters
+    const maxLocalRadius = 0.01; // 10 meters
 
     const setRoutePositionMarker = function(controller, position) {
-        const mapsPosition = new google.maps.LatLng(position.lat, position.lng);
+        let mapsPosition;
+        try {
+            mapsPosition = new google.maps.LatLng(position.lat, position.lng);
+        } catch(err) {
+            return
+        }
 
         if (!controller.currentPositionMarker) {
             controller.currentPositionMarker = new google.maps.Marker({
@@ -37,12 +42,13 @@ $(function() {
 
     const notificationUI = {
         $container: $('#geofencing-notification-container'),
+        automaticRedirect: true,
 
         clear() {
             this.$container.empty();
         },
 
-        notify(localMeasurements, automaticRedirect) {
+        notify(localMeasurements) {
             // clear old notifications
             this.clear();
 
@@ -50,16 +56,25 @@ $(function() {
             const $container  = this.$container;
 
             const redirectTo = function(measurement) {
-                window.location.href = `/watering/cluster/?id=${measurement.boxId}`
+                window.location.href = `/watering/cluster/?id=${measurement.boxId}&return=${encodeURIComponent(window.location.href)}`
             };
 
-            // no options - nothing to do
+            // no options
             if (localMeasurements.length === 0) {
+
+                // check if we were automatically redirected
+                const returnUrl = (new URLSearchParams(window.location.search)).get("return");
+
+                // redirect to original page again
+                if (returnUrl) {
+                    window.location.href = decodeURIComponent(returnUrl);
+                }
+
                 return
             }
 
             // automatically redirect if only one is present
-            if ((localMeasurements.length === 1) && automaticRedirect) {
+            if ((localMeasurements.length === 1) && this.automaticRedirect) {
                 return redirectTo(localMeasurements[0]);
             }
 
@@ -99,11 +114,9 @@ $(function() {
     };
 
     const onLocationUpdate = function(locationInfo) {
-        console.log(locationInfo);
-
         if (!locationInfo) {
             // empty notifications
-            return notificationUI.notify([], false);
+            return notificationUI.notify([]);
         }
 
         // show current position in router & render maps
@@ -126,7 +139,7 @@ $(function() {
         );
 
         // show notifications
-        notificationUI.notify(localMeasurements, locationInfo.mode !== "dev");
+        notificationUI.notify(localMeasurements);
     };
 
     // get measurements

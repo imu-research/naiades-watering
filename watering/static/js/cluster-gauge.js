@@ -51,9 +51,9 @@ window.ClusterDetailsGauge = {
 
     lookUpGrade: function(lookupScore) {
         // Only change code below this line
-        for (var i = 0; i < this.grades.length; i++) {
+        for (let i = 0; i < this.grades.length; i++) {
             if (
-                this.grades[i].lowScore < lookupScore &&
+                this.grades[i].lowScore <= lookupScore &&
                 this.grades[i].highScore >= lookupScore
             ) {
                 return this.grades[i];
