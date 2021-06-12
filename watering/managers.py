@@ -174,8 +174,11 @@ class ReportDataManager:
             # add to locations for this date
             locations_by_date[location_date].append(point)
 
-        # calculate distance per date
-        return {
-            location_date: TruckDistanceManager().calculate_distance(points=points)
+        # calculate distance per date (in km)
+        return [
+            {
+                "date": location_date,
+                "total_distance": round(TruckDistanceManager().calculate_distance(points=points) / 1000, 1)
+            }
             for location_date, points in locations_by_date.items()
-        }
+        ]

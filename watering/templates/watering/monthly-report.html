@@ -72,7 +72,7 @@
         <div class="col-md-3">
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportMonthlyReport( {{ boxes | exclude_none | safe }}, {{ issues_by_box }} );">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportMonthlyReport( {{ boxes | exclude_none | safe }}, {{ issues_by_box | exclude_none | safe }} );">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
         </div>
@@ -223,7 +223,7 @@
 
     {% include 'watering/sensor-js.html' %}
 
-    <script src="{% static 'js/monthly-report-graphs.js' %}"></script>
+    <script src="{% static 'js/monthly-report-graphs.js' %}?v=20210612.1"></script>
     <script src="{% static 'js/monthly-report.js' %}?v=20210608.1"></script>
 
     //Date range picker

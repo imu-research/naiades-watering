@@ -42,7 +42,7 @@ function exportMonthlyReport(box_data, issues) {
     }
   }
 
-  function getEntriesBody(box_data) {
+  function getEntriesBody(box_data, issues) {
       // start with headers
       const logEntries=[
           [
@@ -56,20 +56,27 @@ function exportMonthlyReport(box_data, issues) {
       // add one entry for each log
       $.each(box_data, function(idx, log) {
 
-          const logEntry =[log.issue_type];
+          const boxId = log.boxId;
 
-          // add date, old, & new values
-          logEntry.push(log.description);
-          logEntry.push('-');
-          logEntry.push(log.created || '-');
+          console.log(issues);
+          //Get issues for box with id equals to boxId
 
-          // add to logs
-          logEntries.push(logEntry);
+          $.each(issues, function(idx, issue) {
 
+              const logEntry = [issue.issue_type];
 
-          if(logEntries.length == 1){
-              logEntries.push(['-', '-', '-', '-']);
-          }
+              // add date, old, & new values
+              logEntry.push(issue.description);
+              logEntry.push('-');
+              logEntry.push(issue.created || '-');
+
+              // add to logs
+              logEntries.push(logEntry);
+
+          });
+           if (logEntries.length == 1) {
+                  logEntries.push(['-', '-', '-', '-']);
+              }
       });
 
       return logEntries
@@ -176,7 +183,7 @@ function exportMonthlyReport(box_data, issues) {
                 // dontBreakRows: true,
                 // keepWithHeaderRows: 1,
                 widths: [125, 125, 125, 125],
-                body: getEntriesBody(issues) /*[
+                body: getEntriesBody(box_data, issues) /*[
                     [{text: window.MESSAGES.issue, style: 'tableHeader'}, {
                         text: window.MESSAGES.description,
                         style: 'tableHeader'

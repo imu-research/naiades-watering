@@ -1,21 +1,100 @@
 $(function() {
-    function renderChartData(boxId, data, divideBy) {
-        const title = (
-            divideBy
-            ? "Periodic Water Consumption (Avg. per Box)"
-            : "Periodic Water Consumption (Cluster)"
-        );
+    function getChartProps(type) {
+        if (type === "report-data") {
+            return {
+                valueAxes: [
+                    {
+                        "id": "distanceAxis",
+                        "axisAlpha": 0,
+                        "gridAlpha": 0,
+                        "position": "left",
+                        "title": "Consumption",
+                    },
+                    {
+                        "id": "durationAxis",
+                        "position": "right",
+                        "title": "Watering time",
+                    }
+                ],
+                graphs: [
+                    {
+                        "alphaField": "alpha",
+                        "balloonText": "[[value]] lt",
+                        "dashLengthField": "dashLength",
+                        "fillAlphas": 0.7,
+                        "legendPeriodValueText": "total: [[value.sum]] lt",
+                        "legendValueText": "[[value]] lt",
+                        "title": "Water Consumption",
+                        "type": "column",
+                        "valueField": "consumption",
+                        "valueAxis": "distanceAxis"
+                    },
+                    {
+                        "bullet": "square",
+                        "bulletBorderAlpha": 1,
+                        "bulletBorderThickness": 1,
+                        "alphaField": "alpha",
+                        "balloonText": "[[value]] lt",
+                        "dashLengthField": "dashLength",
+                        "dashLength": 10,
+                        "legendPeriodValueText": "total: [[value.sum]] lt",
+                        "legendValueText": "[[value]] lt",
+                        "title": "Predicted Water Consumption ",
+                        "fillAlphas": 0,
+                        "valueField": "prediction",
+                        "valueAxis": "distanceAxis"
+                    },
+                    {
+                        "bullet": "circle",
+                        "bulletBorderAlpha": 1,
+                        "bulletBorderThickness": 1,
+                        "dashLengthField": "dashLength",
+                        "legendValueText": "[[value]]",
+                        "legendPeriodValueText": "total: [[value.sum]]",
+                        "title": "Watering time",
+                        "fillAlphas": 0,
+                        "valueField": "duration",
+                        "valueAxis": "durationAxis"
+                    }
+                ]
+            };
+        }
 
-        // divide all data
-        $.each(data, function(idx, datum) {
-            $.each(["consumption", "prediction", "duration"], function(jdx, prop) {
-                if (datum[prop]) {
-                    datum[prop] /= (divideBy || 1);
-                }
-            })
-        });
+        if (type === "distance-data") {
+            return {
+                valueAxes: [
+                    {
+                        "id": "distanceAxis",
+                        "axisAlpha": 0,
+                        "gridAlpha": 0,
+                        "position": "left",
+                        "title": "Distance driven (km)",
+                    },
+                ],
+                graphs: [
+                    {
+                        "alphaField": "alpha",
+                        "balloonText": "[[category]]: [[value]] km",
+                        "dashLengthField": "dashLength",
+                        "fillAlphas": 0.7,
+                        "legendPeriodValueText": "total: [[value.sum]] km",
+                        "legendValueText": "[[value]] km",
+                        "title": "Distance driven",
+                        "type": "column",
+                        "valueField": "total_distance",
+                        "valueAxis": "distanceAxis"
+                    }
+                ]
+            };
+        }
 
-        AmCharts.makeChart(`chart-data${divideBy ? "-per-box" : ""}-${boxId}`, {
+        console.error(`Invalid chart type: "${type}".`)
+    }
+
+    function showChart(chartContainerId, type, title, data) {
+        const props = getChartProps(type);
+
+        AmCharts.makeChart(chartContainerId, {
             "type": "serial",
             "theme": "light",
             "hideCredits": true,
@@ -34,63 +113,8 @@ $(function() {
                 "valueWidth": 120
             },
             "dataProvider": data,
-            "valueAxes": [{
-                "id": "distanceAxis",
-                "axisAlpha": 0,
-                "gridAlpha": 0,
-                "position": "left",
-                 "title": "Consumption",
-            },
-                {
-                    "id": "durationAxis",
-                     "position": "right",
-                     "title": "Watering time",
-                }
-                ],
-            "graphs": [{
-                /*"bullet": "circle",
-                "bulletBorderAlpha": 1,
-                "bulletBorderThickness": 1,*/
-                "alphaField": "alpha",
-                "balloonText": "[[value]] lt",
-                "dashLengthField": "dashLength",
-                //"fillAlphas": 0,
-                "fillAlphas": 0.7,
-                "legendPeriodValueText": "total: [[value.sum]] lt",
-                "legendValueText": "[[value]] lt",
-                "title": "Water Consumption",
-                "type": "column",
-                "valueField": "consumption",
-                "valueAxis": "distanceAxis"
-            }, {
-                "bullet": "square",
-                "bulletBorderAlpha": 1,
-                "bulletBorderThickness": 1,
-                "alphaField": "alpha",
-                "balloonText": "[[value]] lt",
-                //"type": "column",
-                "dashLengthField": "dashLength",
-                "dashLength": 10,
-                "legendPeriodValueText": "total: [[value.sum]] lt",
-                "legendValueText": "[[value]] lt",
-                "title": "Predicted Water Consumption ",
-                "fillAlphas": 0,
-                //"fillAlphas": 0.6,
-                "valueField": "prediction",
-                "valueAxis": "distanceAxis"
-            }, {
-            "bullet": "circle",
-            "bulletBorderAlpha": 1,
-            "bulletBorderThickness": 1,
-            "dashLengthField": "dashLength",
-            "legendValueText": "[[value]]",
-             "legendPeriodValueText": "total: [[value.sum]]",
-            "title": "Watering time",
-            "fillAlphas": 0,
-            "valueField": "duration",
-            "valueAxis": "durationAxis"
-        }
-            ],
+            "valueAxes": props.valueAxes,
+            "graphs": props.graphs,
             "chartCursor": {
                 "categoryBalloonDateFormat": "DD",
                 "cursorAlpha": 0.1,
@@ -108,13 +132,13 @@ $(function() {
             "categoryAxis": {
                 "dateFormats": [{
                     "period": "DD",
-                    "format": "DD"
+                    "format": "DD MMM"
                 }, {
                     "period": "WW",
                     "format": "MMM DD"
                 }, {
                     "period": "MM",
-                    "format": "MMM"
+                    "format": "MMM YYYY"
                 }, {
                     "period": "YYYY",
                     "format": "YYYY"
@@ -131,6 +155,31 @@ $(function() {
                 "menu": []
             }
         });
+    }
+
+    function renderChartData(boxId, data, divideBy) {
+        const title = (
+            divideBy
+            ? "Periodic Water Consumption (Avg. per Box)"
+            : "Periodic Water Consumption (Cluster)"
+        );
+
+        // divide all properties
+        $.each(data, function(idx, datum) {
+            $.each(["consumption", "prediction", "duration"], function(jdx, prop) {
+                if (datum[prop]) {
+                    datum[prop] /= (divideBy || 1);
+                }
+            })
+        });
+
+        // show related chart
+        showChart(
+            `chart-data${divideBy ? "-per-box" : ""}-${boxId}`,
+            "report-data",
+            title,
+            data
+        );
     }
 
     function addToOverall(overallByDate, boxData) {
@@ -249,7 +298,12 @@ $(function() {
     $.get({
         url: `/watering/monthlyReport/distances/?from=${window.PERIOD_START}&to=${window.PERIOD_END}`,
         success: function({distances}) {
-            console.log(distances);
+            showChart(
+                'chart-km',
+                "distance-data",
+                "Total distance driven",
+                distances
+            );
         }
     });
 });
