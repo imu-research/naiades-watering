@@ -116,9 +116,9 @@
 
                 <select name="device_status" id="id_device_status" class="form-control">
                   <option value="" {% if not form.data.device_status %}selected{% endif %}></option>
-                  <option value="Active" {% if form.data.device_status == "Active" %}selected{% endif %}>{% trans "Active" %}</option>
-                  <option value="Maintenance" {% if form.data.device_status == "Maintenance" %}selected{% endif %}>{% trans "Maintenance" %}</option>
-                  <option value="Disabled" {% if form.data.device_status == "Disabled" %}selected{% endif %}>{% trans "Disabled" %}</option>
+                  <option value="active" {% if form.data.device_status == "active" %}selected{% endif %}>{% trans "Active" %}</option>
+                  <option value="maintenance" {% if form.data.device_status == "maintenance" %}selected{% endif %}>{% trans "Maintenance" %}</option>
+                  <option value="disabled" {% if form.data.device_status == "disabled" %}selected{% endif %}>{% trans "Disabled" %}</option>
                 </select>
                 {% if form.errors.device_status %}
                     <span class="o-red">{{ form.errors.device_status }}</span>
