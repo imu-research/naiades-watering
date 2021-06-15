@@ -281,6 +281,36 @@ class OrionEntity(object):
         # return list
         return response.json()
 
+    def get_device(self, service, device_id):
+        # list entities
+        response = requests.get(
+            f'http://{self.endpoint}/v2/entities/{device_id}/',
+            headers=self.get_headers(service=service),
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
+    def put_device_status(self, service, device_id, status):
+        # list entities
+        response = requests.put(
+            f'http://{self.endpoint}/v2/entities/{device_id}/attrs/deviceState/value',
+            headers=self.get_headers(service=service),
+            body=status,
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
     def weather_observed(self, service):
         # list entities
         response = requests.get(
@@ -408,6 +438,16 @@ class WateringBox(Model):
 
     @staticmethod
     def format_location(location_str_list):
+        if type(location_str_list) == list and \
+                len(location_str_list) == 2 and \
+                type(location_str_list[0]) in [int, float, Decimal]:
+            return [
+                {
+                    "lat": location_str_list[0],
+                    "long": location_str_list[1],
+                }
+            ]
+
         return [
             {
                 "lat": float(location_str.split(",")[1].strip()),
@@ -520,6 +560,13 @@ class WateringBox(Model):
                 data=data
             )
 
+        # set device status
+        if "device_status" in data:
+            WateringBox.set_device_status(
+                device_id=data["sensor"]["id"],
+                status=data.pop("device_status")
+            )
+
         # update box id
         OrionEntity().update(
             service=WateringBox.service,
@@ -532,6 +579,21 @@ class WateringBox(Model):
         return OrionEntity().delete(
             service=WateringBox.service,
             box_id=box_id
+        )
+
+    @staticmethod
+    def get_device_status(device_id):
+        return OrionEntity().get_device(
+            service=WateringBox.service,
+            device_id=device_id
+        ).get("deviceState", {}).get("value")
+
+    @staticmethod
+    def set_device_status(device_id, status):
+        return OrionEntity().put_device_status(
+            service=WateringBox.service,
+            device_id=device_id,
+            status=status
         )
 
     @staticmethod
@@ -690,7 +752,6 @@ class WateringBox(Model):
             return WateringBox.format_list_response(OrionEntity().consumption_history_list())
         except OrionError:
             return []
-
 
     @staticmethod
     def consumption_history_list_values(from_date, to):

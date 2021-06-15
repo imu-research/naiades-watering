@@ -132,7 +132,7 @@ $(function() {
             "categoryAxis": {
                 "dateFormats": [{
                     "period": "DD",
-                    "format": "DD MMM"
+                    "format": "DD/MM"
                 }, {
                     "period": "WW",
                     "format": "MMM DD"

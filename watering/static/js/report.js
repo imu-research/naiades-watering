@@ -105,15 +105,20 @@ function exportReport(box_data, watering_logs) {
       "fit": [523, 600]
     });
 
-     layout.content.push({
+    // Put two next charts side by side in columns
+    layout.content.push({
+      "columns": [{
+        "width": "50%",
         "image": charts["chart-ec"].exportedImage,
-        "fit": [523, 200]
+        "fit": [250, 300]
+      }, {
+        "width": "*",
+        "image": charts["chart-soil-temp"].exportedImage,
+        "fit": [250, 300]
+      }],
+      "columnGap": 10
     });
 
-     layout.content.push({
-      "image": charts["chart-soil-temp"].exportedImage,
-      "fit": [523, 200]
-    });
     layout.content.push({
       "image": charts["chart-battery"].exportedImage,
       "fit": [523, 600]

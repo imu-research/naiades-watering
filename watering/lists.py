@@ -24,7 +24,7 @@ SUN_EXPOSURE_OPTIONS = (
     ("Large", _("Large")),
 )'''
 
-DEVICE_STATE_OPTIONS = (
+DEVICE_STATUSES = (
     ("Active", _("Active")),
     ("Maintenance", _("Maintenance")),
     ("Disabled", _("Disabled")),

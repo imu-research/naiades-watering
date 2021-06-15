@@ -43,14 +43,14 @@
          {% if "route" not in mode %}
              <div class="col-md-4"></div>
              <div class="btn-group col-md-2">
-              <button type="button" class="btn btn-primary" style="width: 82%">Report</button>
+              <button type="button" class="btn btn-primary" style="width: 82%">{% trans "Report" %}</button>
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/watering/dailyReport/">Daily Report</a></li>
-                <li><a href="/watering/monthlyReport/">Monthly Report</a></li>
+                <li><a href="/watering/dailyReport/">{% trans "Daily Report" %}</a></li>
+                <li><a href="/watering/monthlyReport/">{% trans "Monthly Report" %}</a></li>
               </ul>
             </div>
 

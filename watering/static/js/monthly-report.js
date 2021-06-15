@@ -1,10 +1,10 @@
-function exportMonthlyReport(box_data, issues) {
+function exportMonthlyReport(box_data) {
 
   // So that we know export was started
   console.log("Starting export...");
 
   // Define IDs of the charts we want to include in the report
-  var ids = [ "chart-data-overall", "chart-data-1", "chart-data-2", "chart-data-3", "chart-data-4", "chart-data-5", "chart-data-6",  "chart-data-7", "chart-data-8", "chart-data-per-box-1", "chart-data-per-box-2", "chart-data-per-box-3", "chart-data-per-box-4", "chart-data-per-box-5", "chart-data-per-box-6", "chart-data-per-box-7", "chart-data-per-box-8" ];
+  var ids = [ "chart-data-overall", "chart-km", "chart-data-1", "chart-data-2", "chart-data-3", "chart-data-4", "chart-data-5", "chart-data-6",  "chart-data-7", "chart-data-8", "chart-data-per-box-1", "chart-data-per-box-2", "chart-data-per-box-3", "chart-data-per-box-4", "chart-data-per-box-5", "chart-data-per-box-6", "chart-data-per-box-7", "chart-data-per-box-8" ];
   //"chart-km"
   // Collect actual chart objects out of the AmCharts.charts array
   var charts = {}
@@ -31,10 +31,10 @@ function exportMonthlyReport(box_data, issues) {
           charts_remaining--;
 
           // Check if we got all of the charts
-          if (charts_remaining == 0) {
+          if (charts_remaining === 0) {
             // Yup, we got all of them
             // Let's proceed to putting PDF together
-            generatePDF(box_data, issues);
+            generatePDF();
           }
 
         });
@@ -42,9 +42,9 @@ function exportMonthlyReport(box_data, issues) {
     }
   }
 
-  function getEntriesBody(box_data, issues) {
+  function getEntriesBody(boxId) {
       // start with headers
-      const logEntries=[
+      const logEntries = [
           [
               {text: window.MESSAGES.issue, style: 'tableHeader'},
               {text: window.MESSAGES.description, style: 'tableHeader'},
@@ -53,36 +53,28 @@ function exportMonthlyReport(box_data, issues) {
           ]
       ];
 
-      // add one entry for each log
-      $.each(box_data, function(idx, log) {
+      $.each($(`#watering-issues-table-${boxId} tbody tr:not(.empty)`), function(idx, row) {
+          const $row = $(row);
 
-          const boxId = log.boxId;
+          // add to entries
+          logEntries.push([
+              $row.find("td:nth-of-type(1)").text(),
+              $row.find("td:nth-of-type(2)").text(),
+              $row.find("td:nth-of-type(3)").text(),
+              $row.find("td:nth-of-type(4)").text(),
 
-          console.log(issues);
-          //Get issues for box with id equals to boxId
-
-          $.each(issues, function(idx, issue) {
-
-              const logEntry = [issue.issue_type];
-
-              // add date, old, & new values
-              logEntry.push(issue.description);
-              logEntry.push('-');
-              logEntry.push(issue.created || '-');
-
-              // add to logs
-              logEntries.push(logEntry);
-
-          });
-           if (logEntries.length == 1) {
-                  logEntries.push(['-', '-', '-', '-']);
-              }
+          ]);
       });
+
+      // add placeholder row if empty
+      if (logEntries.length === 1) {
+          logEntries.push(['-', '-', '-', '-']);
+      }
 
       return logEntries
   }
 
-  function generatePDF(data, issues) {
+  function generatePDF() {
 
     // Log
     console.log("Generating PDF...");
@@ -95,7 +87,7 @@ function exportMonthlyReport(box_data, issues) {
     // Let's add a custom title
     layout.content.push({
       //"text": window.MESSAGES.consumptionReport,
-      "text": "Periodic Report: "+window.PERIOD_START+" - "+ window.PERIOD_END,
+      "text": `Periodic Report: ${$("#reportrange span").text()}`,
       "fontSize": 15,
         "alignment": "center",
         "bold": true
@@ -110,35 +102,38 @@ function exportMonthlyReport(box_data, issues) {
     });
 
     layout.content.push({
-            table: {
-                widths: [300, 300],
-                heights: 200,
-                alignment: 'center',
-                body: [
-                    [{
-                        text: 'Total Monthly Water Consumption',
-                        style: 'tableHeader'
-                    }, {text: 'Total Monthly Watering Time', style: 'tableHeader'}],
-                    ['493 lt', '11 hrs']
+        table: {
+            widths: [300, 300],
+            heights: 200,
+            alignment: 'center',
+            body: [
+                [{
+                    text: 'Total Monthly Water Consumption',
+                    style: 'tableHeader'
+                }, {text: 'Total Monthly Watering Time', style: 'tableHeader'}],
+                [
+                    $("#overall-values > .col-xs-6:nth-of-type(1) .recommended-value").text(),
+                    $("#overall-values > .col-xs-6:nth-of-type(2) .recommended-value").text()
                 ]
-            },
-            layout: 'noBorders'
-        });
+            ]
+        },
+        layout: 'noBorders',
+    });
 
     // Put overall chart
     layout.content.push({
         "image": charts["chart-data-overall"].exportedImage,
         "fit": [523, 600]
     });
-    /*layout.content.push({
+    layout.content.push({
         "image": charts["chart-km"].exportedImage,
-        "fit": [523, 600]
-    });*/
+        "fit": [523, 600],
+        pageBreak: 'after'
+    });
 
     //for (var i = 1; i < 9; i++) {
     for (var box in box_data)  {
-
-        var i = box_data[box].boxId;
+        const boxId = box_data[box].boxId;
 
         layout.content.push({
             text: 'Cluster '+box_data[box].name+' Monthly Report', fontSize: 14, bold: true, margin: [0, 20, 0, 10], alignment: 'center'
@@ -155,7 +150,10 @@ function exportMonthlyReport(box_data, issues) {
                         text: 'Total Monthly Water Consumption (Cluster)',
                         style: 'tableHeader'
                     }, {text: 'Total Monthly Water Consumption (Avg. per Box)', style: 'tableHeader'}],
-                    ['493 lt', '11 lt']
+                    [
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .col-xs-6:nth-of-type(1) .recommended-value`).text(),
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .col-xs-6:nth-of-type(2) .recommended-value`).text()
+                    ]
                 ]
             },
             layout: 'noBorders'
@@ -163,11 +161,11 @@ function exportMonthlyReport(box_data, issues) {
 
         // Put overall chart
         layout.content.push({
-            "image": charts["chart-data-"+i].exportedImage,
+            "image": charts[`chart-data-${boxId}`].exportedImage,
             "fit": [523, 600]
         });
         layout.content.push({
-            "image": charts["chart-data-per-box-"+i].exportedImage,
+            "image": charts[`chart-data-per-box-${boxId}`].exportedImage,
             "fit": [523, 600]
         });
 
@@ -183,17 +181,10 @@ function exportMonthlyReport(box_data, issues) {
                 // dontBreakRows: true,
                 // keepWithHeaderRows: 1,
                 widths: [125, 125, 125, 125],
-                body: getEntriesBody(box_data, issues) /*[
-                    [{text: window.MESSAGES.issue, style: 'tableHeader'}, {
-                        text: window.MESSAGES.description,
-                        style: 'tableHeader'
-                    }, {text: window.MESSAGES.user, style: 'tableHeader'},
-                      {text: window.MESSAGES.date2, style: 'tableHeader'}],
-                    ['-', '-', '-', '-'],
-
-                ]*/
+                body: getEntriesBody(boxId)
             },
-            layout: 'lightHorizontalLines'
+            layout: 'lightHorizontalLines',
+            pageBreak: 'after'
         });
     }
 

@@ -7,7 +7,7 @@ from django.forms.fields import CharField, DateField, ChoiceField, IntegerField
 
 from django.utils.translation import gettext as _
 
-from watering.models import Issue
+from watering.models import Issue, WateringBox
 from .lists import *
 
 
@@ -17,11 +17,14 @@ class BoxForm(Form):
     sun_exposure = ChoiceField(required=True, label=_('Exposure to sun'), choices=SUN_EXPOSURE_OPTIONS)
     number_of_boxes = IntegerField(required=True, label=_('Number of boxes'))
     name = CharField(required=True, label=_('Box Name'))
-    # device_state = ChoiceField(required=True, label=_('Device Status'), choices=DEVICE_STATE_OPTIONS)
+    device_status = ChoiceField(required=False, label=_('Device Status'), choices=DEVICE_STATUSES)
 
     @staticmethod
     def from_box(box):
         data = box.data
+
+        # get device status from remote call
+        device_status = WateringBox.get_device_status(device_id=data["sensor"]["id"])
 
         return BoxForm({
             "flowers_type": data.get("flowerType"),
@@ -31,7 +34,7 @@ class BoxForm(Form):
             "soil_type": data.get("soil_type"),
             "number_of_boxes": data.get("number_of_boxes"),
             "name": data.get('name'),
-            #"device_state": data.get("deviceState"),
+            "device_status": device_status,
         })
 
     def as_box(self):
@@ -45,7 +48,7 @@ class BoxForm(Form):
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
             ],
             "name": self.data.get('name'),
-            #"device_state": self.data.get("deviceState"),
+            "device_status": self.data.get("device_status"),
         }
 
 

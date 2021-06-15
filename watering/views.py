@@ -277,6 +277,7 @@ def box_edit(request):
             )
 
     else:
+        # get device status
         form = BoxForm.from_box(box=box)
 
     # render
