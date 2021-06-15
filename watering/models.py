@@ -438,15 +438,15 @@ class WateringBox(Model):
 
     @staticmethod
     def format_location(location_str_list):
-        if type(location_str_list) == list and \
-                len(location_str_list) == 2 and \
-                type(location_str_list[0]) in [int, float, Decimal]:
-            return [
-                {
-                    "lat": location_str_list[0],
-                    "long": location_str_list[1],
-                }
-            ]
+        # if type(location_str_list) == list and \
+        #         len(location_str_list) == 2 and \
+        #         type(location_str_list[0]) in [int, float, Decimal]:
+        #     return [
+        #         {
+        #             "lat": location_str_list[0],
+        #             "long": location_str_list[1],
+        #         }
+        #     ]
 
         return [
             {
