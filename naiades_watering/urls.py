@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^watering/admin/', admin.site.urls),
 
     # auth
+    path('accounts/', include('allauth.urls')),
     path('watering/login/', auth_views.login, name='login'),
     path('watering/logout/', views.logout, name='logout'),
 
