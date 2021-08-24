@@ -270,7 +270,7 @@ class OrionEntity(object):
     def sensor_list(self, service):
         # list entities
         response = requests.get(
-            f'http://{self.endpoint}/v2/entities/?type=Device&options=keyValues',
+            f'http://{self.endpoint}/v2/entities/?type=Device&idPattern=^urn:ngsi-ld:Device:Device-&options=keyValues',
             headers=self.get_headers(service=service)
         )
 
