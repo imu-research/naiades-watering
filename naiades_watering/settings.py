@@ -170,6 +170,9 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 
 APPEND_SLASH = True
 
+CSRF_COOKIE_NAME = "csrftoken_watering"
+CSRF_COOKIE_PATH = SESSION_COOKIE_PATH = "/watering/"
+
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     import dj_database_url
 
