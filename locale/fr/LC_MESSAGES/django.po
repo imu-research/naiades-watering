@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 17:48+0300\n"
+"POT-Creation-Date: 2021-09-23 22:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -307,6 +307,40 @@ msgstr "Prochain arrosage"
 msgid "Amount of previous watering"
 msgstr "Quantité d'eau"
 
+#: .\templates\util\js-translations.html:65 .\watering\lists.py:5
+msgid "Normal"
+msgstr "Normal"
+
+#: .\templates\util\js-translations.html:66 .\watering\lists.py:6
+msgid "Compost"
+msgstr "Compost"
+
+#: .\templates\util\js-translations.html:70 .\watering\lists.py:11
+#: .\watering\templates\watering\form.html:44
+msgid "Annual"
+msgstr "Annuelle"
+
+#: .\templates\util\js-translations.html:71 .\watering\lists.py:12
+#: .\watering\templates\watering\form.html:45
+msgid "Perennial"
+msgstr "Vivace"
+
+#: .\templates\util\js-translations.html:75 .\watering\lists.py:17
+#: .\watering\templates\watering\form.html:63
+msgid "Sunny"
+msgstr "Ensoleillé"
+
+#: .\templates\util\js-translations.html:76 .\watering\lists.py:18
+#: .\watering\templates\watering\form.html:64
+msgid "Mid shadow"
+msgstr "Partiellement ombragé"
+
+#: .\templates\util\js-translations.html:77 .\watering\lists.py:19
+#: .\watering\templates\watering\form.html:65
+#: .\watering\templates\watering\form.html:105
+msgid "None"
+msgstr "Aucun"
+
 #: .\watering\forms.py:18 .\watering\templates\watering\form.html:75
 msgid "Number of boxes"
 msgstr "Nombre de cluster"
@@ -318,35 +352,6 @@ msgstr "Nom de la zone"
 #: .\watering\forms.py:20 .\watering\templates\watering\form.html:115
 msgid "Device Status"
 msgstr ""
-
-#: .\watering\lists.py:5
-msgid "Normal"
-msgstr "Normal"
-
-#: .\watering\lists.py:6
-msgid "Compost"
-msgstr "Compost"
-
-#: .\watering\lists.py:11 .\watering\templates\watering\form.html:44
-msgid "Annual"
-msgstr "Annuelle"
-
-#: .\watering\lists.py:12 .\watering\templates\watering\form.html:45
-msgid "Perennial"
-msgstr "Vivace"
-
-#: .\watering\lists.py:17 .\watering\templates\watering\form.html:63
-msgid "Sunny"
-msgstr "Ensoleillé"
-
-#: .\watering\lists.py:18 .\watering\templates\watering\form.html:64
-msgid "Mid shadow"
-msgstr "Partiellement ombragé"
-
-#: .\watering\lists.py:19 .\watering\templates\watering\form.html:65
-#: .\watering\templates\watering\form.html:105
-msgid "None"
-msgstr "Aucun"
 
 #: .\watering\lists.py:28 .\watering\templates\watering\form.html:119
 msgid "Active"

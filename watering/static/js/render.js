@@ -99,6 +99,24 @@ $(function () {
             return '#8EC760';
         },
 
+        formatDate: function(date, withHours) {
+            if (!date) {
+                return "-";
+            }
+
+            const dayParts = date.split("T")[0].split("-");
+            const day = `${dayParts[2]}-${dayParts[1]}-${dayParts[0]}`;
+
+            if (!withHours) {
+                return day;
+            }
+
+            // parse hour ignoring milliseconds
+            const hourParts = (date.split("T")[1] || "").split("Z")[0].split(".")[0].split(":");
+
+            return `${day} ${hourParts[0]}:${hourParts[1]}`;
+        },
+
         getPopupContent: function(meter) {
             const that = this;
             if (!meter.isSetup) {
@@ -116,11 +134,11 @@ $(function () {
             return $("<div />")
                 .addClass("popup-content")
                 .append($(`<div class="prop-label">${window.MESSAGES.boxId}:</div><div class="prop-value">${meter.boxId}</></div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${meter.dateLastWatering || '-'}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${meter.nextWateringDeadline || '-'}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${meter.soil_type.replace("soil", "") || '-'}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.flowerType}:</div><div class="prop-value">${meter.flowerType || '-'}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.sunExposure}:</div><div class="prop-value"> ${meter.sunExposure || '-'}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${this.formatDate(meter.dateLastWatering, true)}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${this.formatDate(meter.nextWateringDeadline, false)}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${window.MESSAGES.soilTypes[meter.soil_type || "empty"]}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.flowerType}:</div><div class="prop-value">${window.MESSAGES.flowerTypes[meter.flowerType || "empty"]}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.sunExposure}:</div><div class="prop-value"> ${window.MESSAGES.sunExposures[meter.sunExposure || "empty"]}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.humidity}:</div><div class="prop-value">${meter.soilMoisture.toFixed(2) || '-'}</div><br>`))
                 .append($('<a />')
                     .attr('href', `/watering/details?id=${meter.boxId}`)
