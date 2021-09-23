@@ -23,6 +23,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "${NAIADES_WATERING_PORT:-80}:8000"
+    #expose:
+     # - "80"
     environment:
         - POSTGRES_HOST=db
         - POSTGRES_DB=postgres
