@@ -354,7 +354,7 @@ const chart3 = AmCharts.makeChart("chart-ec", {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": "Soil Electroconductivity (EC)"
+                        "text": window.MESSAGES.electroconductivity
                     }
                 ],
     "valueAxes": [{
@@ -420,7 +420,7 @@ const chart4 = AmCharts.makeChart("chart-soil-temp", {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": "Soil Temperature"
+                        "text": window.MESSAGES.soilTemp
                     }
                 ],
     "valueAxes": [{
@@ -500,7 +500,7 @@ const chart5 = AmCharts.makeChart("chart-battery", {
                     {
                         "id": "Title-1",
                         "size": 15,
-                        "text": "Battery"
+                        "text": window.MESSAGES.battery
                     }
                 ],
     "valueAxes": [{

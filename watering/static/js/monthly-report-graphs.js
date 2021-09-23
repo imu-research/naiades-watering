@@ -8,12 +8,12 @@ $(function() {
                         "axisAlpha": 0,
                         "gridAlpha": 0,
                         "position": "left",
-                        "title": "Consumption",
+                        "title": window.MESSAGES.consumption,
                     },
                     {
                         "id": "durationAxis",
                         "position": "right",
-                        "title": "Watering time",
+                        "title": window.MESSAGES.wateringTime,
                     }
                 ],
                 graphs: [
@@ -24,7 +24,7 @@ $(function() {
                         "fillAlphas": 0.7,
                         "legendPeriodValueText": "total: [[value.sum]] lt",
                         "legendValueText": "[[value]] lt",
-                        "title": "Water Consumption",
+                        "title": window.MESSAGES.waterCons,
                         "type": "column",
                         "valueField": "consumption",
                         "valueAxis": "distanceAxis"
@@ -39,7 +39,7 @@ $(function() {
                         "dashLength": 10,
                         "legendPeriodValueText": "total: [[value.sum]] lt",
                         "legendValueText": "[[value]] lt",
-                        "title": "Predicted Water Consumption ",
+                        "title": window.MESSAGES.predCons,
                         "fillAlphas": 0,
                         "valueField": "prediction",
                         "valueAxis": "distanceAxis"
@@ -79,7 +79,7 @@ $(function() {
                         "fillAlphas": 0.7,
                         "legendPeriodValueText": "total: [[value.sum]] km",
                         "legendValueText": "[[value]] km",
-                        "title": "Distance driven",
+                        "title": window.MESSAGES.distance,
                         "type": "column",
                         "valueField": "total_distance",
                         "valueAxis": "distanceAxis"
@@ -160,8 +160,8 @@ $(function() {
     function renderChartData(boxId, data, divideBy) {
         const title = (
             divideBy
-            ? "Periodic Water Consumption (Avg. per Box)"
-            : "Periodic Water Consumption (Cluster)"
+            ? window.MESSAGES.periodicConsBox
+            : window.MESSAGES.periodicConsCluster
         );
 
         // divide all properties

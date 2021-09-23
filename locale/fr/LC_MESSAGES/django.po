@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 22:00+0300\n"
+"POT-Creation-Date: 2021-09-24 00:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -341,6 +341,52 @@ msgstr "Partiellement ombragé"
 msgid "None"
 msgstr "Aucun"
 
+#: .\templates\util\js-translations.html:80
+msgid "Soil Electroconductivity (EC)"
+msgstr "Electroconductivité du sol"
+
+#: .\templates\util\js-translations.html:81
+msgid "Soil Temperature"
+msgstr "Température du sol"
+
+#: .\templates\util\js-translations.html:82
+msgid "Battery"
+msgstr "Charge batterie"
+
+#: .\templates\util\js-translations.html:83
+#, fuzzy
+#| msgid "Water Consumption Report"
+msgid "Consumption"
+msgstr "Rapport de consommation d'eau"
+
+#: .\templates\util\js-translations.html:84
+#, fuzzy
+#| msgid "Watering Logs"
+msgid "Watering time"
+msgstr "Historique d'arrosage"
+
+#: .\templates\util\js-translations.html:86
+#, fuzzy
+#| msgid "Water Consumption Report"
+msgid "Predicted Water Consumption"
+msgstr "Rapport de consommation d'eau"
+
+#: .\templates\util\js-translations.html:87
+msgid "Distance driven"
+msgstr "Distance parcourue"
+
+#: .\templates\util\js-translations.html:88
+#, fuzzy
+#| msgid "Water Consumption Report"
+msgid "Periodic Water Consumption (Avg. per Box)"
+msgstr "Rapport de consommation d'eau"
+
+#: .\templates\util\js-translations.html:89
+#, fuzzy
+#| msgid "Water Consumption Report"
+msgid "Periodic Water Consumption (Cluster)"
+msgstr "Rapport de consommation d'eau"
+
 #: .\watering\forms.py:18 .\watering\templates\watering\form.html:75
 msgid "Number of boxes"
 msgstr "Nombre de cluster"
@@ -583,7 +629,7 @@ msgstr "Aller à la position suivante"
 
 #: .\watering\templates\watering\monthly-report.html:57
 msgid "Periodic Report"
-msgstr ""
+msgstr "Rapport périodique"
 
 #: .\watering\templates\watering\monthly-report.html:91
 #, fuzzy
@@ -599,7 +645,7 @@ msgstr "Date d'arrosage suggerée"
 
 #: .\watering\templates\watering\monthly-report.html:130
 msgid "Periodic Report of the Cluster "
-msgstr ""
+msgstr "Rapport périodique de la zone"
 
 #: .\watering\templates\watering\monthly-report.html:139
 #, fuzzy
@@ -609,7 +655,7 @@ msgstr "Rapport de consommation d'eau"
 
 #: .\watering\templates\watering\monthly-report.html:147
 msgid "Total Periodic Water Consumption (Avg. per Box)"
-msgstr ""
+msgstr "Consommation totale d'eau pour la période (moyenne par bac)"
 
 #: .\watering\templates\watering\view.html:23
 msgid "Suggested watering day"
