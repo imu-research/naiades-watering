@@ -11,12 +11,12 @@
     <form action="." method="POST">
         {% csrf_token %}
 
-        <h2>{% trans "New Box setup - Info" %}</h2>
+        <h2>{% trans "New Cluster setup - Info" %}</h2>
 
         {% include "util/form-fields.html" %}
 
         <button class="btn btn-primary" type="submit">
-            {% trans "Create Box" %}
+            {% trans "Create Cluster" %}
         </button>
     </form>
 {% endblock %}

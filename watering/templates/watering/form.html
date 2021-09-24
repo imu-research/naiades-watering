@@ -2,20 +2,20 @@
 <div class="box-form" style="margin: 20px 0 40px 0;">
     <div class="row">
         <div class="col-xs-12">
-            <h3>{% trans "Box details" %}</h3>
+            <h3>{% trans " Cluster details" %}</h3>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_box_id">{% trans "Box ID" %}:</label>
+                <label for="id_box_id">{% trans "Cluster ID" %}:</label>
                 <input type="text" name="box_id" required="" id="id_box_id" class="form-control disabled" value="{{ box.id }}" disabled>
             </div>
         </div>
         <div class="col-lg-6 col-xs-12 ">
             <div class="form-group">
-                <label for="id_box_name">{% trans "Box Name" %}:</label>
+                <label for="id_box_name">{% trans "Cluster Name" %}:</label>
                 <input type="text" name="box_name" required="" id="id_box_name" class="form-control" value="{{ box.data.name }}" >
             </div>
         </div>
@@ -132,7 +132,7 @@
         <div class="col-xs-12">
             <button class="btn btn-success" type="submit">
                 <i class="fa fa-save"></i>
-                {% trans "Update box" %}
+                {% trans "Update Cluster" %}
             </button>
         </div>
     </div>

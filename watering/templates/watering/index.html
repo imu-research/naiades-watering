@@ -10,9 +10,9 @@
 {% block content %}
     {% if not boxes %}
         <div id="no-boxes-placeholder">
-            <div class="empty-message">{% trans "You have not setup any watering boxes"%}</div>
+            <div class="empty-message">{% trans "You have not setup any watering clusters"%}</div>
 
-            <a href="{% url 'box-create' %}" class="btn btn-primary">{% trans "Setup a new box" %}</a>
+            <a href="{% url 'box-create' %}" class="btn btn-primary">{% trans "Setup a new cluster" %}</a>
         </div>
     {% else %}
     {% endif %}
