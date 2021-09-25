@@ -308,7 +308,7 @@ $(function () {
                                 append(
                                     $('<a />')
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                        .text(`Box #${meter.boxId}`)
+                                        .text(window.MESSAGES.box+` #${meter.boxId}`)
                                 )
                         )
                         .append(

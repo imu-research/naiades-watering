@@ -173,7 +173,7 @@ var chart1 = AmCharts.makeChart("chart-prediction-overall", {
             "fillAlphas": 0.7,
             "legendPeriodValueText": "total: [[value.sum]] lt",
             "legendValueText": "[[value]] lt",
-            "title": "Water Consumption",
+            "title": window.MESSAGES.waterCons,
             "type": "column",
             "valueField": "actual",
             "valueAxis": "distanceAxis"
@@ -188,7 +188,7 @@ var chart1 = AmCharts.makeChart("chart-prediction-overall", {
             "dashLength": 10,
             "legendPeriodValueText": "total: [[value.sum]] lt",
             "legendValueText": "[[value]] lt",
-            "title": "Predicted Water Consumption ",
+            "title": window.MESSAGES.predCons,
             "fillAlphas": 0,
             //"fillAlphas": 0.6,
             "valueField": "predicted",
@@ -200,7 +200,7 @@ var chart1 = AmCharts.makeChart("chart-prediction-overall", {
         "dashLengthField": "dashLength",
         "legendValueText": "[[value]]",
          "legendPeriodValueText": "total: [[value.sum]] min",
-        "title": "Watering time",
+        "title": window.MESSAGES.wateringTime,
         "fillAlphas": 0,
         "valueField": "duration",
         "valueAxis": "durationAxis"
@@ -256,7 +256,7 @@ var chart2 = AmCharts.makeChart("chartdiv", {
             {
                 "id": "Title-1",
                 "size": 15,
-                "text": "Last watering vs previous watering"
+                "text": window.MESSAGES.lastvsprev
             }
         ],
   "rotate": true,
@@ -272,7 +272,7 @@ var chart2 = AmCharts.makeChart("chartdiv", {
       "fillAlphas": 0.8,
       "id": "AmGraph-1",
       "lineAlpha": 0.2,
-      "title": "This watering",
+      "title": window.MESSAGES.last,
       "type": "column",
       "valueField": "this_watering"
     },
@@ -281,7 +281,7 @@ var chart2 = AmCharts.makeChart("chartdiv", {
       "fillAlphas": 0.8,
       "id": "AmGraph-2",
       "lineAlpha": 0.2,
-      "title": "Previous watering",
+      "title": window.MESSAGES.prev,
       "type": "column",
       "valueField": "last_watering"
     }

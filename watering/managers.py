@@ -34,7 +34,8 @@ class TruckDistanceManager:
         )
 
         if response.status_code != 200:
-            import pdb; pdb.set_trace()
+            raise ValueError(response.content)
+
         # then you load the response using the json libray
         # by default you get only one alternative so you access 0-th element of the `routes`
         return response.\

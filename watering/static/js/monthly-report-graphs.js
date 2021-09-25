@@ -51,7 +51,7 @@ $(function() {
                         "dashLengthField": "dashLength",
                         "legendValueText": "[[value]]",
                         "legendPeriodValueText": "total: [[value.sum]]",
-                        "title": "Watering time",
+                        "title": window.MESSAGES.wateringTime,
                         "fillAlphas": 0,
                         "valueField": "duration",
                         "valueAxis": "durationAxis"
