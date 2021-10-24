@@ -11,6 +11,12 @@ from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_
     DecimalField, Q
 from django.utils.timezone import now
 
+from naiades_watering.settings import KSI_ENDPOINT, KSI_SECRET
+
+
+class KSIError(ValueError):
+    pass
+
 
 class OrionError(ValueError):
     pass
@@ -59,6 +65,25 @@ class OrionEntity(object):
         # raise generic exception
         raise OrionError(response)
 
+    @staticmethod
+    def add_signature(data):
+        # post request to KSI service
+        response = requests.post(
+            f"{KSI_ENDPOINT}/sign/",
+            json={
+                "secret": KSI_SECRET,
+                "data": data,
+            }
+        )
+
+        if response.status_code != 200:
+            raise KSIError()
+
+        # add signature
+        data["ksiSignature"] = response.json()["signature"]
+
+        return data
+
     def list(self, service):
         # list entities
         response = requests.get(
@@ -77,7 +102,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/entities/?options=keyValues',
             headers=self.get_headers(service=service),
-            json=data,
+            json=self.add_signature(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -98,7 +123,7 @@ class OrionEntity(object):
         response = requests.patch(
             f'http://{self.endpoint}/v2/entities/{entity_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
-            json=data,
+            json=self.add_signature(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -344,7 +369,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/subscriptions/',
             headers=self.get_headers(service=service),
-            json={
+            json=self.add_signature({
                 "description": "Naiades Watering App Subscription to `FlowerBed.consumption`.",
                 "subject": {
                     "entities": [
@@ -368,7 +393,7 @@ class OrionEntity(object):
                     ],
                     "attrsFormat": "keyValues"
                 },
-            }
+            }),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -561,9 +586,9 @@ class WateringBox(Model):
             )
 
         # set device status
-        if "device_status" in data:
+        if "device_status" in data and False:
             WateringBox.set_device_status(
-                device_id=data["sensor"]["id"],
+                device_id=data.get("refDevice") or data["sensor"]["id"],
                 status=data.pop("device_status")
             )
 

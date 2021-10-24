@@ -174,6 +174,9 @@ APPEND_SLASH = True
 CSRF_COOKIE_NAME = "csrftoken_watering"
 CSRF_COOKIE_PATH = SESSION_COOKIE_PATH = "/watering/"
 
+KSI_ENDPOINT = "https://ksi-service.herokuapp.com"
+KSI_SECRET = "mvtz866HuJb_$?ec"
+
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     import dj_database_url
 
