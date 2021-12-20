@@ -157,7 +157,7 @@ STATICFILES_FINDERS = [
 ]
 
 # Login & Logout
-LOGIN_URL = '/watering/login'
+LOGIN_URL = '/watering/keyrock/keyrockprovider/login'
 LOGIN_REDIRECT_URL = '/watering/'
 LOGOUT_URL = '/watering/logout'
 ADMIN_URL = '/watering/admin'
