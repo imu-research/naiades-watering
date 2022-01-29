@@ -104,7 +104,7 @@
                 <div class="panel-heading">{% trans "Predicted Required  Water Amount (Avg. per Box)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        {{ recommended_consumption }} lt
+                        {{ recommended_consumption|floatformat:1 }} lt
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                 <div class="panel-heading">{% trans "Predicted Required  Water Amount (Cluster)" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        {{ recommended_consumption_per_cluster }} lt
+                        {{ recommended_consumption_per_cluster|floatformat:1 }} lt
                     </div>
                 </div>
             </div>

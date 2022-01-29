@@ -15,7 +15,6 @@ $(function() {
             } else {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position){
-                        console.log(position);
                         window.LocationManager.updateLocationInfo({
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
