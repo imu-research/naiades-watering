@@ -205,7 +205,7 @@ $(function () {
 
                 // create point if sensor data is provided
                 if (flowerbed.sensor) {
-                    const sensorLocation = flowerbed.sensor.location;
+                    const sensorLocation = flowerbed.sensor.location.coordinates || flowerbed.sensor.location;
 
                     const point = L.marker([sensorLocation[0], sensorLocation[1]], {
                         icon: that.getIcon(color),

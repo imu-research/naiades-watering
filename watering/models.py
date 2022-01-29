@@ -67,6 +67,10 @@ class OrionEntity(object):
 
     @staticmethod
     def add_signature(data):
+        # temporarily disable KSI
+        # TODO: remove once KSI works properly
+        return data
+
         # post request to KSI service
         response = requests.post(
             f"{KSI_ENDPOINT}/sign/",
@@ -322,19 +326,18 @@ class OrionEntity(object):
         return response.json()
 
     def put_device_status(self, service, device_id, status):
-        # list entities
-        response = requests.put(
-            f'http://{self.endpoint}/v2/entities/{device_id}/attrs/deviceState/value',
+        # change device status
+        response = requests.post(
+            f'http://{self.endpoint}/v2/entities/{device_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
-            body=status,
+            json={
+                "deviceState": status,
+            },
         )
 
         # raise exception if response code is in 4xx, 5xx
         if response.status_code >= 400:
             self.handle_error(response)
-
-        # return list
-        return response.json()
 
     def weather_observed(self, service):
         # list entities
@@ -586,9 +589,9 @@ class WateringBox(Model):
             )
 
         # set device status
-        if "device_status" in data and False:
+        if "device_status" in data:
             WateringBox.set_device_status(
-                device_id=data.get("refDevice") or data["sensor"]["id"],
+                device_id=f"urn:ngsi-ld:Device:Device-{data['refDevice'][-4:]}",
                 status=data.pop("device_status")
             )
 
