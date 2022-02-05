@@ -34,12 +34,14 @@
                     class="btn btn-secondary" style="margin-right: 12px;">
                 <i class="glyphicon glyphicon-chevron-left"></i> {% trans Back %}
             </a>
-            <button id="delete-box"
-                    class="btn btn-danger {% if not box.can_be_deleted %}disabled{% endif %}"
-                    {% if not box.can_be_deleted %}disabled{% endif %}
-                    style="margin-right: 12px;">
-                <i class="glyphicon glyphicon-trash"></i> {% trans "Delete cluster" %}
-            </button>
+            {% if request.user.is_superuser %}
+                <button id="delete-box"
+                        class="btn btn-danger {% if not box.can_be_deleted %}disabled{% endif %}"
+                        {% if not box.can_be_deleted %}disabled{% endif %}
+                        style="margin-right: 12px;">
+                    <i class="glyphicon glyphicon-trash"></i> {% trans "Delete cluster" %}
+                </button>
+            {% endif %}
         </div>
     </div>
     <div class="row" style="margin: 10px 0;">
@@ -48,7 +50,9 @@
           </div> -->
 
         <div class="col-md-3">
-            <button id="start-watering" type="button" class="btn btn-primary btn-block">{% trans "Start Watering" %}</button>
+            {% if request.user.is_superuser %}
+                <button id="start-watering" type="button" class="btn btn-primary btn-block">{% trans "Start Watering" %}</button>
+            {% endif %}
         </div>
         <div class="col-md-9">
             <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} , {{ watering_logs_history | exclude_none | safe }});">

@@ -188,7 +188,7 @@ class WateringBox(Model):
         return boxes
 
     @staticmethod
-    def post(box_id, data):
+    def post(box_id, data, only_status=False):
         if not box_id:
             return OrionEntity().create(
                 service=WateringBox.service,
@@ -202,12 +202,13 @@ class WateringBox(Model):
                 status=data.pop("device_status")
             )
 
-        # update box id
-        OrionEntity().update(
-            service=WateringBox.service,
-            entity_id=box_id,
-            data=data
-        )
+        # update box
+        if not only_status:
+            OrionEntity().update(
+                service=WateringBox.service,
+                entity_id=box_id,
+                data=data
+            )
 
     @staticmethod
     def delete(box_id):

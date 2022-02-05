@@ -14,9 +14,10 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
-from watering.forms import BoxSetupForm, BoxForm, IssueForm
+from watering.forms import BoxSetupForm, BoxForm, IssueForm, GardenerBoxForm
 from watering.models import WateringBox, Issue, Sensor, Weather, Event, EventParseError
 from watering.managers import ReportDataManager, BoxAlreadyExists
+from watering.templatetags.app_filters import is_gardener
 from watering.utils import merge_histories
 
 from naiades_watering.settings import DEBUG
@@ -88,6 +89,43 @@ def box_api_delete(request, box_id):
     }, status=204)
 
 
+def base_box_edit(request, box):
+    if request.method != "POST":
+        return BoxForm.from_box(box=box)
+
+    # different form between gardeners & other users
+    gardener = is_gardener(request.user)
+    form = (
+        GardenerBoxForm if gardener else BoxForm
+    )(request.POST)
+
+    # check if valid & create box
+    if not form.is_valid():
+        return form
+
+    data = form.as_box()
+
+    if "refDevice" not in data:
+        data.update({
+            "refDevice": box.data["refDevice"],
+        })
+
+    # update box
+    WateringBox.post(
+        box_id=box.data["id"],
+        data=data,
+        only_status=not gardener,
+    )
+
+    # for gardeners, return form with full data
+    if gardener:
+        form = BoxForm.from_box(box, updated={
+            "device_status": request.POST["device_status"],
+        })
+
+    return form
+
+
 def box_details(request):
     # get box id
     box_id = request.GET.get("id")
@@ -99,7 +137,6 @@ def box_details(request):
 
     start_date = datetime.datetime.now() - datetime.timedelta(30)
     start_date = start_date.isoformat()
-
 
     # get humidity historic data
     try:
@@ -171,19 +208,7 @@ def box_details(request):
     except ReadTimeout:
         watering_logs_history = []
 
-    if request.method == "POST":
-        form = BoxForm(request.POST)
-
-        # check if valid & create box
-        if form.is_valid():
-            # update box
-            WateringBox.post(
-                box_id=box.data["id"],
-                data=form.as_box()
-            )
-
-    else:
-        form = BoxForm.from_box(box=box)
+    form = base_box_edit(request, box=box)
 
     # render
     return render(request, 'watering/details.html', {
@@ -265,20 +290,7 @@ def box_edit(request):
     # find box
     box = WateringBox.get(box_id)
 
-    if request.method == "POST":
-        form = BoxForm(request.POST)
-
-        # check if valid & create box
-        if form.is_valid():
-            # update box
-            WateringBox.post(
-                box_id=box.data["id"],
-                data=form.as_box()
-            )
-
-    else:
-        # get device status
-        form = BoxForm.from_box(box=box)
+    form = base_box_edit(request, box=box)
 
     # render
     return render(request, 'watering/edit.html', {

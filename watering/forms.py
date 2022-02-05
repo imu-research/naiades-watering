@@ -11,6 +11,15 @@ from watering.models import Issue, WateringBox
 from .lists import *
 
 
+class GardenerBoxForm(Form):
+    device_status = ChoiceField(required=False, label=_('Device Status'), choices=DEVICE_STATUSES)
+
+    def as_box(self):
+        return {
+            "device_status": self.data.get("device_status"),
+        }
+
+
 class BoxForm(Form):
     soil_type = ChoiceField(required=True, label=_('Type of soil'), choices=SOIL_TYPES)
     flowers_type = ChoiceField(required=True, label=_('Type of flowers'), choices=FLOWER_TYPES)
@@ -20,13 +29,13 @@ class BoxForm(Form):
     device_status = ChoiceField(required=False, label=_('Device Status'), choices=DEVICE_STATUSES)
 
     @staticmethod
-    def from_box(box):
+    def from_box(box, updated=None):
         data = box.data
 
         # get device status from remote call
         device_status = WateringBox.get_device_status(device_id=data["sensor"]["id"])
 
-        return BoxForm({
+        form_data = {
             "flowers_type": data.get("flowerType"),
             "sun_exposure": data.get("sunExposure"),
             "refDevice": data.get("refDevice"),
@@ -35,7 +44,12 @@ class BoxForm(Form):
             "number_of_boxes": data.get("number_of_boxes"),
             "name": data.get('name'),
             "device_status": device_status,
-        })
+        }
+
+        if updated:
+            form_data.update(updated)
+
+        return BoxForm(form_data)
 
     def as_box(self):
         return {
