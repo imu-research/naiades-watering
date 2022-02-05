@@ -1,46 +1,6 @@
-import json
-import requests
-
 from requests import ReadTimeout
 
-from watering.models import WateringBox
 from watering.utils import merge, merge_by_date
-
-
-class TruckDistanceManager:
-    def __init__(self, parking=None):
-        self.parking = parking or {
-            "lat": 46.1822,
-            "lng": 6.14954,
-        }
-
-    def calculate_distance(self, points):
-        # no distance driven
-        if not points:
-            return 0
-
-        # add parking at beginning & end
-        points = [self.parking] + points + [self.parking]
-
-        # format for API call - notice the reverse order!
-        formatted_points = [
-            f"{point['lng']},{point['lat']}"
-            for point in points
-        ]
-
-        # call the OSMR API
-        response = requests.get(
-            f"http://router.project-osrm.org/route/v1/car/{';'.join(formatted_points)}?overview=false"
-        )
-
-        if response.status_code != 200:
-            raise ValueError(response.content)
-
-        # then you load the response using the json libray
-        # by default you get only one alternative so you access 0-th element of the `routes`
-        return response.\
-            json().\
-            get("routes", [])[0]["distance"]
 
 
 class ReportDataManager:
@@ -53,6 +13,8 @@ class ReportDataManager:
         self.date_range = date_range
 
     def load_history_data(self):
+        from watering.models import WateringBox
+
         params = (
             self.date_range["formatted"]["from"],
             self.date_range["formatted"]["to"],
@@ -77,6 +39,8 @@ class ReportDataManager:
             self.watering_duration = []
 
     def load_location_history(self):
+        from watering.models import WateringBox
+
         # get truck location data
         try:
             self.truck_location_history = WateringBox.truck_location_history(
@@ -131,19 +95,8 @@ class ReportDataManager:
 
         return entities_data
 
-    def get_distances_data(self):
-        # check if data have been loaded
-        if self.truck_location_history is None:
-            self.load_location_history()
-
-        # collect all locations
-        location_entries = []
-        for entity_data in self.truck_location_history:
-            location_entries += entity_data["results"]
-
-        # sort from least to most recent
-        location_entries = sorted(location_entries, key=lambda entry: entry["date"])
-
+    @staticmethod
+    def _get_locations_by_date(location_entries):
         # group by date
         locations_by_date = {}
         for location_entry in location_entries:
@@ -174,6 +127,26 @@ class ReportDataManager:
 
             # add to locations for this date
             locations_by_date[location_date].append(point)
+
+        return locations_by_date
+
+    def get_distances_data(self):
+        from watering.managers.trucks import TruckDistanceManager
+
+        # check if data have been loaded
+        if self.truck_location_history is None:
+            self.load_location_history()
+
+        # collect all locations
+        location_entries = []
+        for entity_data in self.truck_location_history:
+            location_entries += entity_data["results"]
+
+        # sort from least to most recent
+        # then group by date
+        locations_by_date = self._get_locations_by_date(
+            location_entries=sorted(location_entries, key=lambda entry: entry["date"])
+        )
 
         # calculate distance per date (in km)
         return [

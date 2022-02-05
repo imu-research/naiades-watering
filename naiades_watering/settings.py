@@ -177,6 +177,12 @@ CSRF_COOKIE_PATH = SESSION_COOKIE_PATH = "/watering/"
 KSI_ENDPOINT = "https://ksi-service.herokuapp.com"
 KSI_SECRET = "mvtz866HuJb_$?ec"
 
+# Group names
+GROUP_GARDENER = "GARDENER"
+GROUP_BACKOFFICE = "BACKOFFICE"
+DEFAULT_GROUPS = [GROUP_GARDENER, GROUP_BACKOFFICE, ]
+
+
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     import dj_database_url
 

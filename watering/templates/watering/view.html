@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load static %}
+{% load app_filters %}
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
@@ -69,9 +70,11 @@
         <div class="col-md-6"></div>
         <div class="row" style="margin: 20px">
              <div class="col-md-3">
-                <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
-                    <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}
-                </button>
+                 {% if request.user|is_backoffice %}
+                     <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
+                         <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}
+                     </button>
+                 {% endif %}
              </div>
 
              <div class="col-md-3">

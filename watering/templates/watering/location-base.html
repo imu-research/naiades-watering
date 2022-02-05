@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block post_content %}
-    {% if TESTING %}
+    {% if TESTING and request.user.is_superuser %}
         <div class="row" style="margin: 10px 20px;">
             <button type="button" class="btn btn-primary" id="test-route-btn">
                 {% trans "Start test route" %}

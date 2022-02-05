@@ -15,8 +15,8 @@ from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 from watering.forms import BoxSetupForm, BoxForm, IssueForm
-from watering.models import WateringBox, Issue, Sensor, BoxAlreadyExists, Weather, Event, EventParseError
-from watering.managers import ReportDataManager
+from watering.models import WateringBox, Issue, Sensor, Weather, Event, EventParseError
+from watering.managers import ReportDataManager, BoxAlreadyExists
 from watering.utils import merge_histories
 
 from naiades_watering.settings import DEBUG
