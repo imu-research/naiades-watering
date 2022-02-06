@@ -31,13 +31,13 @@
 #weather-container > .forecast .temperatures {
     font-size: 18px;
     font-weight: 600;
-    color: #4fc1e9;
+    color:  #368fcd;
 }
 
 #weather-container > .forecast .separator {
     padding: 3px;
     border-radius: 50%;
-    background: #4fc1e9;
+    background:  #368fcd;
     vertical-align: top;
     margin: 10px 5px;
     display: inline-block;

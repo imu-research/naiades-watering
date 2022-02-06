@@ -61,6 +61,20 @@ ul.errorlist {
     border: none !important;
 }
 
+#language-picker button.btn-primary {
+    background: #368fcd;
+    opacity: 1;
+}
+
+#language-picker button.btn-default:hover {
+    color: #111818;
+    background: #edf2f2;
+}
+
+.btn-primary {
+    background: #368fcd;
+}
+
 .stepper .stepper-arrow {
     height: 18px;
 }
