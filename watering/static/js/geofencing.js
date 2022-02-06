@@ -1,5 +1,5 @@
 $(function() {
-    const maxLocalRadius = 0.01; // 10 meters
+    const maxLocalRadius = 0.02; // 20 meters
 
     const setRoutePositionMarker = function(controller, position) {
         let mapsPosition;

@@ -9,6 +9,7 @@ class AuthRequiredMiddleware(object):
         LOGIN_URL,
         ADMIN_URL,
         STATIC_URL,
+        "/watering/logout",
         "/watering/keyrock/",
         "/watering/consumptions/",
     ]
