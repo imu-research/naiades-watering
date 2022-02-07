@@ -322,6 +322,28 @@ class WateringBox(Model):
         return results
 
     @staticmethod
+    def last_watering_date_history(box_id, fromDate, to):
+        # get humidity history of box id
+        try:
+            response = OrionEntity().last_watering_date_history(
+                service=WateringBox.service,
+                entity_id=box_id,
+                fromDate=fromDate,
+                to=to
+            )
+        except OrionError:
+            return []
+
+        results = []
+        for idx, index in enumerate(response["index"]):
+            results.append({
+                "date": index,
+                "value": response["values"][idx],
+            })
+
+        return results
+
+    @staticmethod
     def format_list_response(response):
         values = []
         for value in response["values"]:

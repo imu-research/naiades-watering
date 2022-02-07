@@ -172,7 +172,8 @@ def box_details(request):
 
     # get consumption historic data
     try:
-        consumption_history = box_consumption_history(box_id, start_date, now)
+        #consumption_history = box_consumption_history(box_id, start_date, now)
+        consumption_history = box_preprocessing_consumption_data(box_id, start_date, now)
     except ReadTimeout:
         consumption_history = []
 
@@ -184,7 +185,7 @@ def box_details(request):
 
     # get watering duration historic data
     try:
-        watering_duration = box_watering_duration_history(box_id, start_date, now)
+        watering_duration = box_preprocessing_duration_data(box_id, start_date, now)
     except ReadTimeout:
         watering_duration = []
 
@@ -358,6 +359,56 @@ def box_prediction_history(box_id, fromDate, to):
     # render
     return historic_data
 
+def box_last_watering_date_history(box_id, fromDate, to):
+    # find box
+    box = WateringBox.get(box_id)
+
+    historic_data = WateringBox.last_watering_date_history(
+        box_id=box.data["id"],
+        fromDate=fromDate,
+        to=to
+    )
+
+    # render
+    return historic_data
+
+def box_preprocessing_consumption_data(box_id, fromDate, to):
+
+    consumption_history = box_consumption_history(box_id, fromDate, to)
+    last_watering_date_history = box_last_watering_date_history(box_id, fromDate, to)
+    historic_data = []
+    watering_dates = list(set([date["value"] for date in last_watering_date_history]))
+    print(watering_dates)
+
+    for idx, entry in enumerate(consumption_history):
+        if entry['date'] in watering_dates:
+            historic_data.append(entry)
+        else:
+            historic_data.append({
+                "date": entry['date'],
+                "value": 0
+            })
+
+    return historic_data
+
+def box_preprocessing_duration_data(box_id, fromDate, to):
+
+    duration_history = box_watering_duration_history(box_id, fromDate, to)
+    last_watering_date_history = box_last_watering_date_history(box_id, fromDate, to)
+    historic_data = []
+    watering_dates = list(set([date["value"] for date in last_watering_date_history]))
+    print(watering_dates)
+
+    for idx, entry in enumerate(duration_history):
+        if entry['date'] in watering_dates:
+            historic_data.append(entry)
+        else:
+            historic_data.append({
+                "date": entry['date'],
+                "value": 0
+            })
+
+    return historic_data
 
 def consumption_history_list(from_date, to):
 
