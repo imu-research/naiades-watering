@@ -9,6 +9,7 @@ urlpatterns = [
 
     # Box Details
     path('details/', views.box_details, name='box-details'),
+    path('details/<str:metric>/', views.box_details_metric, name='box-details-metric'),
 
     # Cluster Details
     path('cluster/', views.cluster_details, name='cluster-details'),

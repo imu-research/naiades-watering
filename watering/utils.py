@@ -1,3 +1,29 @@
+from django.utils.timezone import now
+
+
+def preprocessed_history(history):
+    preprocessed = []
+    previous_humidity = None
+
+    for idx, entry in enumerate(history):
+        if idx > 0:
+            preprocessed.append({
+                "date": entry['date'],
+                "value": previous_humidity
+            })
+
+        preprocessed.append(entry)
+        previous_humidity = entry['value']
+
+    # add an entry for right now, with previous humidity
+    preprocessed.append({
+        "date": now().strftime("%Y-%m-%dT%H:%M:%S.%f"),
+        "value": previous_humidity
+    })
+
+    return preprocessed
+
+
 def merge(key_field, value_field, results_lists, prop_names, preprocessing=None):
     if len(results_lists) != len(prop_names):
         raise ValueError("Invalid prop_names parameter.")

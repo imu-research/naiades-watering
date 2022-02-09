@@ -53,7 +53,7 @@
             {% endif %}
         </div>
         <div class="col-md-9">
-            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} , {{ watering_logs_history | exclude_none | safe }});">
+            <button type="button" class="btn btn-sm btn-secondary" style="margin-left: 10px;float: right" onclick="exportReport( {{ box.data | exclude_none | safe }} , window.WATERING_LOGS);">
                 <i class="glyphicon glyphicon-print"></i>
             </button>
             <a href="/watering/cluster/?id={{ box.id }}" id="back-box" class="btn btn-sm btn-default" style="min-width: 130px; margin-left: 10px;float: right">
@@ -106,27 +106,12 @@
              <table class="table ui celled" id="watering-logs-table">
                 <thead>
                   <tr>
-                    <th>{% trans "Date" %}</th>
+                    <th style="min-width: 400px;">{% trans "Date" %}</th>
                     <th>{% trans "Amount of watering" %}</th>
                     <th>{% trans "Time of watering" %}</th>
                   </tr>
                 </thead>
                 <tbody>
-                {% for con in watering_logs_history %}
-                  <tr>
-                      <td> <a href="#">{{ con.date }}</a></td>
-                      {% if con.value_old is None %}
-                        <td> - </td>
-                      {% else %}
-                          <td>{{ con.value_old }} lt</td>
-                      {% endif %}
-                      {% if con.value_new is None %}
-                        <td> - </td>
-                      {% else %}
-                      <td>{{ con.value_new }} </td>
-                      {% endif %}
-                  </tr>
-                {%  endfor %}
                 </tbody>
               </table>
         </div>
@@ -149,14 +134,10 @@
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/dataTables.semanticui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
     <script type="text/javascript">
-        const history = {{history |safe}};
-        const battery_history = {{ battery_history |safe }}
-        const ec_history = {{ ec_history |safe }}
-        const soil_temp_history = {{ soil_temp_history |safe }}
-        const prediction_history = {{ prediction_history | safe }}
+        window.BOX_ID = "{{ id }}";
     </script>
     {% include 'watering/sensor-js.html' %}
-    <script src="{% static 'js/box-details-graphs.js' %}?v=20210608.1"></script>
+    <script src="{% static 'js/box-details-graphs.js' %}?v=20220209.1"></script>
     <script src="{% static 'js/report.js' %}"></script>
     <script>
         $(function() {
@@ -226,17 +207,7 @@
                         window.location.href = "/watering/list/";
                     }
                 });
-            })
-
-            // enable datatables
-            $('#watering-logs-table').DataTable({
-                "order": [[ 0, "desc" ]],
-                "bFilter": false,
-                "info": false,
-                "ordering": false,
-                "bLengthChange": false,
-                "pageLength":10
-                });
+            });
         });
     </script>
 
