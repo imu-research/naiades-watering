@@ -1,0 +1,70 @@
+#start-watering-info {
+    margin: 10px 0;
+}
+
+#start-watering-info i {
+    margin-left: 10px;
+}
+
+#cluster-details-container .watering-value {
+    color: #777;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#cluster-details-gauge-container {
+    width: 100%;
+    height: 500px;
+}
+
+.panel-heading {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.recommended-value {
+    font-size: 52px;
+    font-weight: 700;
+    color: #777;
+    width: 100%;
+    margin: 30px auto;
+    text-align: center;
+}
+
+/* Gauge annex */
+#cluster-details-gauge-annex {
+    padding: 20px 0;
+}
+
+#cluster-details-gauge-annex > ul {
+    max-width: 700px;
+    margin: auto;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#cluster-details-gauge-annex > ul > li {
+    padding: 5px 0;
+}
+
+#cluster-details-gauge-annex > ul > li > .name {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+#cluster-details-gauge-annex > ul > li > .name.danger {
+    color: #ee1f25;
+}
+
+#cluster-details-gauge-annex > ul > li > .name.warning {
+    color: #d5ce18;
+}
+
+#cluster-details-gauge-annex > ul > li > .name.success {
+    color: #54b947;
+}
