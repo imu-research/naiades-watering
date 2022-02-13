@@ -14,7 +14,7 @@ from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 
 from watering.forms import BoxSetupForm, IssueForm
-from watering.models import WateringBox, Issue, Sensor, Weather, Event, EventParseError
+from watering.models import WateringBox, Issue, Sensor, Weather, Event, EventParseError, LocationEvent
 from watering.managers import ReportDataManager, BoxAlreadyExists
 
 
@@ -22,6 +22,23 @@ from naiades_watering.settings import DEBUG
 
 
 def home(request):
+    # check if event should be logged
+    if request.GET.get("from"):
+        # save event
+        try:
+            location_event = LocationEvent.objects.filter(
+                box_id=request.GET["from"],
+                user=request.user,
+                entered__gte=now() - datetime.timedelta(hours=24),
+                exited=None
+            ).order_by("-entered")[0]
+            location_event.exited = now()
+            location_event.save()
+        except IndexError:
+            pass
+
+        return redirect("/watering/")
+
     # get boxes for this user
     boxes = WateringBox.list()
 
@@ -328,6 +345,16 @@ def cluster_details(request):
     # get box id
     box_id = request.GET.get("id")
 
+    # check if event should be logged
+    if request.GET.get("return") == "event-log":
+        # save event
+        LocationEvent.objects.create(
+            box_id=box_id,
+            user=request.user,
+        )
+
+        return redirect(f"/watering/cluster/?id={box_id}&return=true")
+
     # events?
     if request.GET.get("events"):
         return JsonResponse({
@@ -429,14 +456,33 @@ def box_monthly_report(request):
     })
 
 
+def get_time_spent(box_id, start_date):
+    # get time spent
+    time_spent = 0
+
+    try:
+        box_id = int(box_id.split("-")[-1])
+    except (IndexError, ValueError, TypeError):
+        box_id = box_id
+
+    location_events = LocationEvent.objects. \
+        filter(box_id=box_id, exited__gte=start_date). \
+        exclude(entered=None)
+    for location_event in location_events:
+        time_spent += location_event.duration
+
+    return time_spent
+
+
 def box_daily_report(request):
     # get boxes for this user
     boxes = WateringBox.list()
 
     _now = datetime.datetime.now().isoformat()
 
-    start_date = datetime.datetime.now() - datetime.timedelta(30)
-    start_date = start_date.isoformat()
+    # since the beginning of the day
+    start_date_raw = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    start_date = start_date_raw.isoformat()
 
     # get consumption historic data
     try:
@@ -468,7 +514,16 @@ def box_daily_report(request):
                 if c["entity_id"] == box.data['id']:
                     last_watering = round(c["value"], 2)
 
-            data.append({"box": "Box"+box.data['boxId'], "this_watering": box.data['consumption'], "last_watering": last_watering})
+            box.data["time_spent"] = get_time_spent(
+                box.data["id"],
+                start_date=start_date_raw
+            )
+
+            data.append({
+                "box": f"Box{box.data['boxId']}",
+                "this_watering": box.data['consumption'],
+                "last_watering": last_watering,
+            })
 
     # render
     return render(request, 'watering/daily-report.html', {

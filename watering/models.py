@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.postgres.fields import JSONField
 from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField, \
-    DecimalField, Q
+    DecimalField, Q, CASCADE
 from django.utils.timezone import now
 
 from watering.managers import OrionEntity, OrionError
@@ -535,6 +535,20 @@ class EventParseError(ValueError):
     Exception raised when an event can not be parsed
     """
     pass
+
+
+class LocationEvent(Model):
+    box_id = CharField(max_length=64)
+    entered = DateTimeField(auto_now_add=True, db_index=True)
+    exited = DateTimeField(blank=True, null=True)
+    user = ForeignKey("auth.User", on_delete=CASCADE)
+
+    @property
+    def duration(self):
+        if self.entered and self.exited:
+            return (self.exited - self.entered).seconds
+
+        return None
 
 
 class Event(Model):

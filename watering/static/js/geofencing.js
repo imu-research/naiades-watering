@@ -56,18 +56,18 @@ $(function() {
             const $container  = this.$container;
 
             const redirectTo = function(measurement) {
-                window.location.href = `/watering/cluster/?id=${measurement.boxId}&return=${encodeURIComponent(window.location.href)}`
+                window.location.href = `/watering/cluster/?id=${measurement.boxId}&return=event-log`
             };
 
             // no options
             if (localMeasurements.length === 0) {
 
                 // check if we were automatically redirected
-                const returnUrl = (new URLSearchParams(window.location.search)).get("return");
+                const shouldReturn = (new URLSearchParams(window.location.search)).get("return");
 
-                // redirect to original page again
-                if (returnUrl) {
-                    window.location.href = decodeURIComponent(returnUrl);
+                // redirect to original page
+                if (shouldReturn) {
+                    window.location.href = `/watering/?from=${window.BOX_ID}`;
                 }
 
                 return
@@ -132,8 +132,8 @@ $(function() {
         const localMeasurements = NaiadesWateringData.measurements.filter(
             measurement => LocationManager.getDistance(
                 {
-                lat: measurement.sensor.location[0],
-                lng: measurement.sensor.location[1],
+                lat: ((measurement.sensor || {}).location || [0,0])[0],
+                lng: ((measurement.sensor || {}).location || [0,0])[1]
             }, locationInfo.position
             ) < maxLocalRadius
         );

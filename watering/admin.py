@@ -1,6 +1,13 @@
 from django.contrib import admin
 
-from watering.models import Event, Issue
+from watering.models import LocationEvent, Event, Issue
+
+
+@admin.register(LocationEvent)
+class LocationEventAdmin(admin.ModelAdmin):
+    list_display = ("entered", "exited", "box_id", "user", )
+    list_filter = ("user", )
+    ordering = ("-entered", )
 
 
 @admin.register(Event)

@@ -98,6 +98,7 @@
                     <th>{% trans "Humidity Level" %}</th>
                     <th>{% trans "Amount of watering" %}</th>
                     <th>{% trans "Time of watering" %}</th>
+                    <th>{% trans "Time spent" %}</th>
                     <th>{% trans "Next watering amount" %}</th>
                   </tr>
                 </thead>
@@ -108,7 +109,8 @@
                           <td>{{ box.boxId }}</td>
                           <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
                           <td> {{ box.consumption }} </td>
-                          <td> {{ box.duration }} </td>
+                          <td> {{ box.duration }} s</td>
+                          <td> {{ box.time_spent }} s</td>
                           <td>{{ box.nextWateringAmountAdvice }} lt </td>
                       </tr>
                   {% endif %}
