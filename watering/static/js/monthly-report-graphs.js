@@ -189,12 +189,13 @@ $(function() {
                 overallByDate[boxDatum.date] = {
                     prediction: null,
                     consumption: null,
-                    duration: null
+                    duration: null,
+                    time_spent: null
                 };
             }
 
             // for each property
-            $.each(["prediction", "consumption", "duration"], function(pdx, prop) {
+            $.each(["prediction", "consumption", "duration", "time_spent"], function(pdx, prop) {
                 // ignore if empty/unset/zero
                 if (!boxDatum[prop]) {
                     return
@@ -229,15 +230,24 @@ $(function() {
 
         // calculate total consumption
         const totalConsumption = calculateTotal(boxData.data);
+        const totalTimeSpent = calculateTotal(boxData.data, "time_spent");
 
         // show values
         $container
-            .find("> .row > .col-xs-6:nth-of-type(1) .recommended-value")
+            .find("> .row > .metric:nth-of-type(1) .recommended-value")
             .text(`${totalConsumption.toFixed(2)} lt`);
 
         $container
-            .find("> .row > .col-xs-6:nth-of-type(2) .recommended-value")
+            .find("> .row > .metric:nth-of-type(2) .recommended-value")
             .text(`${(totalConsumption / nBoxes).toFixed(2)} lt`);
+
+        $container
+            .find("> .row > .metric:nth-of-type(3) .recommended-value")
+            .text(`${(totalTimeSpent).toFixed(0)} s`);
+
+        $container
+            .find("> .row > .metric:nth-of-type(4) .recommended-value")
+            .text(`${(totalTimeSpent / nBoxes).toFixed(0)} s`);
     }
 
     function renderOverall(overallByDate) {
@@ -261,17 +271,22 @@ $(function() {
         // calculate total consumption & duration
         const totalConsumption = calculateTotal(overallData);
         const totalDuration = calculateTotal(overallData, "duration");
+        const totalTimeSpent = calculateTotal(overallData, "time_spent");
 
         // show values
         const $container = $("#overall-values");
 
         $container
-            .find("> .col-xs-6:nth-of-type(1) .recommended-value")
+            .find("> .metric:nth-of-type(1) .recommended-value")
             .text(`${totalConsumption.toFixed(2)} lt`);
 
         $container
-            .find("> .col-xs-6:nth-of-type(2) .recommended-value")
+            .find("> .metric:nth-of-type(2) .recommended-value")
             .text(`${totalDuration.toFixed(2)} s`);
+
+        $container
+            .find("> .metric:nth-of-type(3) .recommended-value")
+            .text(`${totalTimeSpent.toFixed(0)} s`);
     }
 
     // get monthly report data

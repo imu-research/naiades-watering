@@ -15,7 +15,7 @@
         <a href="{% url 'report-issue' box_id=box_id %}" class="btn btn-warning">
             {% trans "Report issue" %}
         </a>
-        <a href="/watering" id="back-box" class="btn btn-secondary" style="margin-right: 12px;">
+        <a href="{{request.META.HTTP_REFERER}}" id="back-box" class="btn btn-secondary" style="margin-right: 12px;">
             <i class="glyphicon glyphicon-chevron-left"></i> Back
         </a>
     </div>

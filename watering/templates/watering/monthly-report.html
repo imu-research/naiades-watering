@@ -87,7 +87,7 @@
         </div>
 
     <div class="row" id="overall-values">
-        <div class="col-xs-6">
+        <div class="metric col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans "Total Periodic Water Consumption" %}</div>
                 <div class="panel-body">
@@ -97,9 +97,19 @@
                 </div>
             </div>
         </div>
-         <div class="col-xs-6">
+         <div class="metric col-xs-6">
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans "Total Periodic Watering Time" %}</div>
+                <div class="panel-body">
+                    <div class="recommended-value">
+                        <span class="glyphicon glyphicon-repeat fast-right-spinner"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="metric col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans "Total Time Spent" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
                         <span class="glyphicon glyphicon-repeat fast-right-spinner"></span>
@@ -135,7 +145,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-6">
+                <div class="metric col-xs-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans "Total Periodic Water Consumption (Cluster)" %}</div>
                         <div class="panel-body">
@@ -143,9 +153,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
+                <div class="metric col-xs-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">{% trans "Total Periodic Water Consumption (Avg. per Box)" %}</div>
+                        <div class="panel-body">
+                            <div class="recommended-value">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans "Total Time Spent (Cluster)" %}</div>
+                        <div class="panel-body">
+                            <div class="recommended-value">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="metric col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{% trans "Total Time Spent (Avg. per Box)" %}</div>
                         <div class="panel-body">
                             <div class="recommended-value">
                                 &nbsp;
@@ -226,7 +256,7 @@
 
     {% include 'watering/sensor-js.html' %}
 
-    <script src="{% static 'js/monthly-report-graphs.js' %}?v=20210925.1"></script>
+    <script src="{% static 'js/monthly-report-graphs.js' %}?v=20220216.1"></script>
     <script src="{% static 'js/monthly-report.js' %}?v=20210608.1"></script>
 
     //Date range picker

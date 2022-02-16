@@ -424,6 +424,18 @@ class WateringBox(Model):
             return []
 
     @staticmethod
+    def last_watering_date_history_list_values(from_date, to):
+        # get humidity history of box id
+        try:
+            return WateringBox.format_list_response(OrionEntity().last_watering_date_history_list_values(
+                service=None,
+                from_date=from_date,
+                to=to
+            ))
+        except OrionError:
+            return []
+
+    @staticmethod
     def sensors_list():
         # list flowerbeds in Orion
         # filter only flowerbed entities

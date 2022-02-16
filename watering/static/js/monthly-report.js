@@ -107,13 +107,24 @@ function exportMonthlyReport(box_data) {
             heights: 200,
             alignment: 'center',
             body: [
-                [{
-                    text: 'Total Monthly Water Consumption',
-                    style: 'tableHeader'
-                }, {text: 'Total Monthly Watering Time', style: 'tableHeader'}],
                 [
-                    $("#overall-values > .col-xs-6:nth-of-type(1) .recommended-value").text(),
-                    $("#overall-values > .col-xs-6:nth-of-type(2) .recommended-value").text()
+                    {
+                        text: 'Total Monthly Water Consumption',
+                        style: 'tableHeader'
+                    },
+                    {
+                        text: 'Total Monthly Watering Time',
+                        style: 'tableHeader'
+                    },
+                    {
+                        text: 'Total Time Spent',
+                        style: 'tableHeader'
+                    }
+                ],
+                [
+                    $("#overall-values > .metric:nth-of-type(1) .recommended-value").text(),
+                    $("#overall-values > .metric:nth-of-type(2) .recommended-value").text(),
+                    $("#overall-values > .metric:nth-of-type(3) .recommended-value").text()
                 ]
             ]
         },
@@ -146,13 +157,29 @@ function exportMonthlyReport(box_data) {
                 alignment: 'center',
                 margin: [5, 0, 5, 10],
                 body: [
-                    [{
-                        text: 'Total Monthly Water Consumption (Cluster)',
-                        style: 'tableHeader'
-                    }, {text: 'Total Monthly Water Consumption (Avg. per Box)', style: 'tableHeader'}],
                     [
-                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .col-xs-6:nth-of-type(1) .recommended-value`).text(),
-                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .col-xs-6:nth-of-type(2) .recommended-value`).text()
+                        {
+                            text: 'Total Monthly Water Consumption (Cluster)',
+                            style: 'tableHeader'
+                        },
+                        {
+                            text: 'Total Monthly Water Consumption (Avg. per Box)',
+                            style: 'tableHeader'
+                        },
+                        {
+                            text: 'Total Time Spent (Cluster)',
+                            style: 'tableHeader'
+                        },
+                        {
+                            text: 'Total Time Spent (Avg. per Box)',
+                            style: 'tableHeader'
+                        }
+                    ],
+                    [
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(1) .recommended-value`).text(),
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(2) .recommended-value`).text(),
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(3) .recommended-value`).text(),
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(4) .recommended-value`).text()
                     ]
                 ]
             },

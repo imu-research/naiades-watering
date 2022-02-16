@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import logging
@@ -446,32 +447,11 @@ def box_monthly_report(request):
 
     # render
     return render(request, 'watering/monthly-report.html', {
-        'boxes': [
-            box.data
-            for box in boxes
-        ],
+        'boxes': [box.data for box in boxes],
         'issues_by_box': issues_by_box,
         'start': date_range["from"].strftime("%d%m%Y"),
         'end': date_range["to"].strftime("%d%m%Y"),
     })
-
-
-def get_time_spent(box_id, start_date):
-    # get time spent
-    time_spent = 0
-
-    try:
-        box_id = int(box_id.split("-")[-1])
-    except (IndexError, ValueError, TypeError):
-        box_id = box_id
-
-    location_events = LocationEvent.objects. \
-        filter(box_id=box_id, exited__gte=start_date). \
-        exclude(entered=None)
-    for location_event in location_events:
-        time_spent += location_event.duration
-
-    return time_spent
 
 
 def box_daily_report(request):
@@ -514,10 +494,11 @@ def box_daily_report(request):
                 if c["entity_id"] == box.data['id']:
                     last_watering = round(c["value"], 2)
 
-            box.data["time_spent"] = get_time_spent(
-                box.data["id"],
-                start_date=start_date_raw
-            )
+            box.data["time_spent"] = ReportDataManager(date_range={
+                "from": start_date_raw,
+                "to": start_date_raw + datetime.timedelta(days=1) - datetime.timedelta(microseconds=1)
+            }).\
+                get_time_spent(box.data["id"])
 
             data.append({
                 "box": f"Box{box.data['boxId']}",

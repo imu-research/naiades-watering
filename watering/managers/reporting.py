@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from requests import ReadTimeout
 
 from watering.utils import merge, merge_by_date
@@ -11,6 +13,28 @@ class ReportDataManager:
 
     def __init__(self, date_range):
         self.date_range = date_range
+
+    def get_time_spent(self, box_id):
+        from watering.models import LocationEvent
+
+        # get time spent
+        time_spent = 0
+
+        try:
+            box_id = int(box_id.split("-")[-1])
+        except (IndexError, ValueError, TypeError):
+            box_id = box_id
+
+        location_events = LocationEvent.objects. \
+            filter(box_id=box_id).\
+            filter(exited__gte=self.date_range["from"]). \
+            filter(exited__lte=self.date_range["to"]). \
+            exclude(entered=None)
+
+        for location_event in location_events:
+            time_spent += location_event.duration
+
+        return time_spent
 
     def load_history_data(self):
         from watering.models import WateringBox
@@ -69,6 +93,11 @@ class ReportDataManager:
         # for each entity, group by date
         entities_data = []
         for entity in by_entity:
+
+            # get box ID
+            box_id = entity["entity_id"].split("ld:FlowerBed:FlowerBed-")[-1]
+
+            # merge data by individual date
             data_by_date = merge_by_date(
                 results_lists=[
                     entity["predictions"],
@@ -87,9 +116,15 @@ class ReportDataManager:
 
                 datum["duration"] = datum["duration"] / 1000 if datum["duration"] is not None else None
 
+                datum["time_spent"] = ReportDataManager(date_range={
+                    "from": datetime.strptime(datum["date"], "%Y-%m-%d"),
+                    "to": datetime.strptime(datum["date"], "%Y-%m-%d") + timedelta(days=1),
+                }).\
+                    get_time_spent(box_id=box_id)
+
             entities_data.append({
                 "entity_id": entity["entity_id"],
-                "box_id": entity["entity_id"].split("ld:FlowerBed:FlowerBed-")[-1],
+                "box_id": box_id,
                 "data": data_by_date,
             })
 
@@ -156,3 +191,35 @@ class ReportDataManager:
             }
             for location_date, points in locations_by_date.items()
         ]
+
+    def preprocessing_duration_data(self):
+
+        from watering.models import WateringBox
+
+        params = (
+            self.date_range["formatted"]["from"],
+            self.date_range["formatted"]["to"],
+        )
+
+        # get last watering date historic data
+        try:
+            last_watering_date_history_list = WateringBox.last_watering_date_history_list_values(*params)
+        except ReadTimeout:
+            last_watering_date_history_list = []
+
+        historic_data = []
+
+        '''watering_dates = list(set([date["value"] for date in last_watering_date_history_list]))
+
+        for idx, entry in enumerate(duration_history):
+            if entry['date'] in watering_dates:
+                historic_data.append(entry)
+            else:
+                historic_data.append({
+                    "date": entry['date'],
+                    "value": 0
+                })
+
+        return historic_data'''
+
+

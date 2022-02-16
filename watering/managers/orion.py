@@ -231,6 +231,24 @@ class OrionEntity(object):
         # return list
         return response.json()
 
+    def last_watering_date_history_list_values(self, service, from_date, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/dateLastWatering/value?fromDate={from_date}&toDate={to}',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
     def prediction_history_list(self, service, fromDate, to):
         # list entities
         response = requests.get(

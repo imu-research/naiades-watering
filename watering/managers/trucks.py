@@ -30,7 +30,7 @@ class TruckDistanceManager:
         if response.status_code != 200:
             raise ValueError(response.content)
 
-        # then you load the response using the json libray
+        # then you load the response using the json library
         # by default you get only one alternative so you access 0-th element of the `routes`
         return response.\
             json().\
