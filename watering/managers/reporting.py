@@ -73,10 +73,59 @@ class ReportDataManager:
         except ReadTimeout:
             self.truck_location_history = []
 
+    @staticmethod
+    def parse_date(value):
+        return datetime.strptime(value.split("T")[0], "%Y-%m-%d")
+
+    @staticmethod
+    def _rounded(value):
+        if value is None:
+            return None
+
+        return round(value, 2)
+
+    def _process_entity_data(self, datum, box_id, entity_id, watering_dates_by_entity):
+        # get watering dates for this entity
+        watering_dates = watering_dates_by_entity.get(entity_id, set())
+
+        # only k
+        datum["date"] = datum["date"].split("T")[0]
+
+        # parse date
+        parsed_date = self.parse_date(value=datum["date"])
+
+        # get consumption, filter by date
+        datum["consumption"] = (
+            self._rounded(datum["consumption"])
+            if parsed_date in watering_dates
+            else None
+        )
+
+        # get prediction
+        datum["prediction"] = self._rounded(datum["prediction"])
+
+        # get duration, filter by date
+        datum["duration"] = (
+            (
+                datum["duration"] / 1000
+                if parsed_date in watering_dates
+                else None
+            )
+        ) if datum["duration"] is not None else None
+
+        datum["time_spent"] = ReportDataManager(date_range={
+            "from": parsed_date,
+            "to": parsed_date + timedelta(days=1),
+        }). \
+            get_time_spent(box_id=box_id)
+
     def get_entities_data(self):
         # check if data have been loaded
         if self.consumption_history is None:
             self.load_history_data()
+
+        # load watering dates by entity
+        watering_dates_by_entity = self.preprocessing_duration_data()
 
         # group by entity
         by_entity = merge(
@@ -109,18 +158,12 @@ class ReportDataManager:
 
             # ignore hour part, format metrics
             for datum in data_by_date:
-                datum["date"] = datum["date"].split("T")[0]
-
-                for prop in ["consumption", "prediction"]:
-                    datum[prop] = round(datum[prop], 2) if datum[prop] is not None else None
-
-                datum["duration"] = datum["duration"] / 1000 if datum["duration"] is not None else None
-
-                datum["time_spent"] = ReportDataManager(date_range={
-                    "from": datetime.strptime(datum["date"], "%Y-%m-%d"),
-                    "to": datetime.strptime(datum["date"], "%Y-%m-%d") + timedelta(days=1),
-                }).\
-                    get_time_spent(box_id=box_id)
+                self._process_entity_data(
+                    datum=datum,
+                    box_id=box_id,
+                    entity_id=entity["entity_id"],
+                    watering_dates_by_entity=watering_dates_by_entity,
+                )
 
             entities_data.append({
                 "entity_id": entity["entity_id"],
@@ -207,19 +250,11 @@ class ReportDataManager:
         except ReadTimeout:
             last_watering_date_history_list = []
 
-        historic_data = []
-
-        '''watering_dates = list(set([date["value"] for date in last_watering_date_history_list]))
-
-        for idx, entry in enumerate(duration_history):
-            if entry['date'] in watering_dates:
-                historic_data.append(entry)
-            else:
-                historic_data.append({
-                    "date": entry['date'],
-                    "value": 0
-                })
-
-        return historic_data'''
-
-
+        # group by entity id, only unique dates
+        return {
+            last_watering_date_history["entity_id"]: set([
+                self.parse_date(result["value"])
+                for result in last_watering_date_history.get("results", [])
+            ])
+            for last_watering_date_history in last_watering_date_history_list
+        }
