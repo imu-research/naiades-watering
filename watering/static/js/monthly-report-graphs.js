@@ -220,6 +220,16 @@ $(function() {
         }
     }
 
+    function formatTime(nSeconds) {
+        const nSecondsInt = Math.floor(nSeconds);
+
+        if (nSeconds > 60) {
+            return `${Math.floor(nSecondsInt / 60)} min ${(nSecondsInt % 60)} s`;
+        }
+
+        return `${nSecondsInt} s`;
+    }
+
     function renderEntity(boxId, boxData) {
         const $container = $(`#box-container-${boxId}`);
         const nBoxes = $container.data("nboxes");
@@ -243,11 +253,11 @@ $(function() {
 
         $container
             .find("> .row > .metric:nth-of-type(3) .recommended-value")
-            .text(`${(totalTimeSpent).toFixed(0)} s`);
+            .text(formatTime(totalTimeSpent));
 
         $container
             .find("> .row > .metric:nth-of-type(4) .recommended-value")
-            .text(`${(totalTimeSpent / nBoxes).toFixed(0)} s`);
+            .text(formatTime(totalTimeSpent / nBoxes));
     }
 
     function renderOverall(overallByDate) {
@@ -282,11 +292,11 @@ $(function() {
 
         $container
             .find("> .metric:nth-of-type(2) .recommended-value")
-            .text(`${totalDuration.toFixed(2)} s`);
+            .text(formatTime(totalDuration));
 
         $container
             .find("> .metric:nth-of-type(3) .recommended-value")
-            .text(`${totalTimeSpent.toFixed(0)} s`);
+            .text(formatTime(totalTimeSpent));
     }
 
     // get monthly report data
