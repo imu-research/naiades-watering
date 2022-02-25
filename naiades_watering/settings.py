@@ -204,3 +204,31 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+
+
+# Airbrake
+if os.environ.get("AIRBRAKE_API_KEY") and os.environ.get("AIRBRAKE_PROJECT_ID"):
+    AIRBRAKE = dict(
+        project_id=int(os.environ["AIRBRAKE_PROJECT_ID"]),
+        project_key=os.environ["AIRBRAKE_API_KEY"],
+    )
+
+    MIDDLEWARE += ["pybrake.django.AirbrakeMiddleware"]
+
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {
+            "airbrake": {
+                "level": "ERROR",
+                "class": "pybrake.LoggingHandler",
+            },
+        },
+        "loggers": {
+            "app": {
+                "handlers": ["airbrake"],
+                "level": "ERROR",
+                "propagate": True,
+            },
+        },
+    }
