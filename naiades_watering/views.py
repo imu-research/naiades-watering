@@ -22,3 +22,8 @@ def logout(request):
 
     # logout from keyrock
     return redirect(f"{OAUTH_SERVER_BASEURL}/auth/external_logout?_method=DELETE&{client_id}")
+
+
+def error(request):
+    # request to simulate a 500 error
+    raise ValueError("This is a failing request.")

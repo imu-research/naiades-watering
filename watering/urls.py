@@ -52,4 +52,7 @@ urlpatterns = [
 
     # Weather API
     path('api/weather/', views.weather, name='api-weather'),
+
+    # Connection status
+    path('api/connection/status', views.get_connection_status, name='api-connection-status'),
 ]

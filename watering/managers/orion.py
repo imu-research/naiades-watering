@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 
 from naiades_watering.settings import KSI_ENDPOINT, KSI_SECRET
@@ -284,6 +286,24 @@ class OrionEntity(object):
 
         # return list
         return response.json()
+
+    def get_connection_status(self):
+        response = requests.get(
+            f'http://{self.endpoint}/v2/entities/urn:ngsi-ld:Device:Truck',
+            headers=self.get_headers(service="carouge"),
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # parse & check if not more than a minute
+        # between current date & last observed date
+        data = response.json()
+        current_date = datetime.strptime(data["currentDate"]["value"].split("T")[0], "%Y-%m-%d")
+        date_observed = datetime.strptime(data["dateObserved"]["value"].split("T")[0], "%Y-%m-%d")
+
+        return abs((current_date - date_observed).total_seconds()) <= 60
 
     def truck_location_history(self, service, fromDate, to):
         # list entities

@@ -95,3 +95,23 @@ ul.errorlist {
 .text-color--red {
     color: red;
 }
+
+/* Connection status */
+#connection-status {
+    text-align: center;
+    color: white;
+    display: block;
+    padding: 10px 0;
+}
+
+#connection-status.loading {
+    background: lightslategray;
+}
+
+#connection-status.connected {
+    background: #54b947;
+}
+
+#connection-status.disconnected {
+    background: #ee1f25;
+}

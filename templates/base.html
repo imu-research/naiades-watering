@@ -29,7 +29,7 @@
 
     <div class="docs-header header--noBackground">
       <!--nav-->
-      <nav class="navbar navbar-default navbar-custom" role="navigation">
+      <nav class="navbar navbar-default navbar-custom" role="navigation" style="background: white;">
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -102,6 +102,8 @@
           </div>
         </div>
       </nav>
+
+      <div id="connection-status" class="unknown">&nbsp;</div>
       <div id="main-container" style="min-height: calc(100vh - 175px); padding: 100px 0;background-color: #edf2f2;">
         <div class="container" style="min-height: 70vh;">
             <div class="row">
@@ -142,9 +144,11 @@
         crossorigin=""></script>
 
     {% include 'util/js-translations.html' %}
+
     {% block js %}
     {% endblock %}
 
+    <script src="{% static 'js/connection.js' %}"></script>
     {% block post_js %}
     {% endblock %}
   </body>

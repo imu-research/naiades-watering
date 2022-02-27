@@ -41,6 +41,9 @@ urlpatterns = [
     # app
     path('watering/', include('watering.urls')),
 
+    # test errors
+    path('watering/error', views.error, name='error'),
+
     # / redirect
     path('', views.home_redirect, name='home-redirect'),
 ]
