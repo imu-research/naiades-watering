@@ -1,6 +1,8 @@
 from datetime import datetime
 
+import dateutil
 import requests
+from django.utils.timezone import now
 
 from naiades_watering.settings import KSI_ENDPOINT, KSI_SECRET
 
@@ -300,10 +302,13 @@ class OrionEntity(object):
         # parse & check if not more than a minute
         # between current date & last observed date
         data = response.json()
-        current_date = datetime.strptime(data["currentDate"]["value"].split("T")[0], "%Y-%m-%d")
-        date_observed = datetime.strptime(data["dateObserved"]["value"].split("T")[0], "%Y-%m-%d")
+        current_date = dateutil.parser.isoparse(data["currentDate"]["value"])
+        date_observed = dateutil.parser.isoparse(data["dateObserved"]["value"])
 
-        return abs((current_date - date_observed).total_seconds()) <= 60
+        return (
+            abs((current_date - date_observed).total_seconds()) <= 60 and
+            abs((now() - current_date).total_seconds()) <= 60
+        )
 
     def truck_location_history(self, service, fromDate, to):
         # list entities
