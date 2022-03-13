@@ -41,3 +41,19 @@ def is_gardener(user):
 @register.filter
 def is_backoffice(user):
     return in_group(user, GROUP_BACKOFFICE)
+
+
+@register.filter
+def display_seconds(seconds):
+    # convert to int
+    seconds = int(seconds)
+
+    if seconds < 60:
+        return "00:%02d" % seconds
+
+    minutes = seconds // 60
+
+    if minutes < 60:
+        return "%02d:%02d" % (minutes, seconds % 60)
+
+    return "%02d:%02d:%02d" % (minutes // 60, minutes % 60, seconds % 60)

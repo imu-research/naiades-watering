@@ -81,7 +81,7 @@
                 <div class="panel-heading">{% trans "Today's Watering Time" %}</div>
                 <div class="panel-body">
                     <div class="recommended-value">
-                        {{ total_time }} s
+                        {{ total_time|display_seconds }}
                     </div>
                 </div>
             </div>
@@ -109,8 +109,8 @@
                           <td>{{ box.boxId }}</td>
                           <td>{{ box.soilMoisture }} {{ box.moistureUnit }}</td>
                           <td> {{ box.consumption }} </td>
-                          <td> {{ box.duration }} s</td>
-                          <td> {{ box.time_spent }} s</td>
+                          <td> {{ box.duration|display_seconds }}</td>
+                          <td> {{ box.time_spent|display_seconds }}</td>
                           <td>{{ box.nextWateringAmountAdvice }} lt </td>
                       </tr>
                   {% endif %}
