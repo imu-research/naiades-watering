@@ -192,9 +192,40 @@ $(function () {
                 .scrollIntoView();
         },
 
-        renderMap: function(flowerbeds) {
-            const map = this.map;
+        createSensorLocationPoint: function(flowerbed, sensorLocation, color) {
 
+            if (!sensorLocation) {
+                return
+            }
+
+            const that = this;
+            const point = L.marker([sensorLocation[0], sensorLocation[1]], {
+                icon: this.getIcon(color),
+                color: '#555',
+                fillColor: color,
+                fillOpacity: 0.8,
+                radius: 30,
+                title:`${flowerbed.boxId}`
+            }).addTo(this.map).on("click", function(e) {
+                const clickedCircle = e.target;
+                if (!clickedCircle._popup) {
+                    clickedCircle
+                        .bindPopup(that.getPopupContent(flowerbed))
+                        .openPopup();
+                }
+
+                // set as selected & scroll
+                window.NaiadesRender.setSelected(flowerbed.boxId);
+            });
+
+            // add to items
+            this.items.push(point);
+
+            //add to points
+            this.points.push(point)
+        },
+
+        renderMap: function(flowerbeds) {
             // get max consumption
             //const maxConsumption = this.getMaxConsumption();
 
@@ -205,31 +236,15 @@ $(function () {
 
                 // create point if sensor data is provided
                 if (flowerbed.sensor) {
-                    const sensorLocation = flowerbed.sensor.location.coordinates || flowerbed.sensor.location;
+                    const sensorLocation = (
+                        flowerbed.sensor.location && flowerbed.sensor.location.coordinates ?
+                            flowerbed.sensor.location.coordinates :
+                            flowerbed.sensor.location
+                        );
 
-                    const point = L.marker([sensorLocation[0], sensorLocation[1]], {
-                        icon: that.getIcon(color),
-                        color: '#555',
-                        fillColor: color,
-                        fillOpacity: 0.8,
-                        radius: 30,
-                        title:`${flowerbed.boxId}`
-                    }).addTo(map).on("click", function(e) {
-                        const clickedCircle = e.target;
-                        if (!clickedCircle._popup) {
-                            clickedCircle
-                                .bindPopup(that.getPopupContent(flowerbed))
-                                .openPopup();
-                        }
-
-                        // set as selected & scroll
-                        window.NaiadesRender.setSelected(flowerbed.boxId);
-                    });
-
-                    // add to items
-                    that.items.push(point);
-                    //add to points
-                    that.points.push(point)
+                    that.createSensorLocationPoint(
+                        flowerbed, sensorLocation, color
+                    );
                 }
 
                 // create flowerbed polygon
@@ -246,7 +261,7 @@ $(function () {
                 }], {
                     color: color,
                     fillOpacity: 0.8,
-                }).addTo(map);
+                }).addTo(that.map);
 
                 // add to items
                 that.items.push(polygon);
