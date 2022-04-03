@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import dateutil
 import requests
 from django.utils.timezone import now
@@ -59,11 +57,7 @@ class OrionEntity(object):
         raise OrionError(response)
 
     @staticmethod
-    def add_signature(data):
-        # temporarily disable KSI
-        # TODO: remove once KSI works properly
-        return data
-
+    def get_signed_data(data):
         # post request to KSI service
         response = requests.post(
             f"{KSI_ENDPOINT}/sign/",
@@ -76,10 +70,8 @@ class OrionEntity(object):
         if response.status_code != 200:
             raise KSIError()
 
-        # add signature
-        data["ksiSignature"] = response.json()["signature"]
-
-        return data
+        # return signed data
+        return response.json()["signed_data"]
 
     def list(self, service):
         # list entities
@@ -99,7 +91,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/entities/?options=keyValues',
             headers=self.get_headers(service=service),
-            json=self.add_signature(data),
+            data=self.get_signed_data(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -120,7 +112,7 @@ class OrionEntity(object):
         response = requests.patch(
             f'http://{self.endpoint}/v2/entities/{entity_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
-            json=self.add_signature(data),
+            data=self.get_signed_data(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -422,7 +414,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/subscriptions/',
             headers=self.get_headers(service=service),
-            json=self.add_signature({
+            data=self.get_signed_data({
                 "description": "Naiades Watering App Subscription to `FlowerBed.consumption`.",
                 "subject": {
                     "entities": [
