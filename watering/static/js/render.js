@@ -133,7 +133,7 @@ $(function () {
 
             return $("<div />")
                 .addClass("popup-content")
-                .append($(`<div class="prop-label">${window.MESSAGES.boxId}:</div><div class="prop-value">${meter.boxId}</></div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.box}:</div><div class="prop-value">${meter.name}</></div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${this.formatDate(meter.dateLastWatering, true)}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${this.formatDate(meter.nextWateringDeadline, false)}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${window.MESSAGES.soilTypes[meter.soil_type || "empty"]}</div><br>`))
@@ -323,7 +323,7 @@ $(function () {
                                 append(
                                     $('<a />')
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                        .text(window.MESSAGES.box+` #${meter.boxId}`)
+                                        .text(window.MESSAGES.box+` ${meter.name}`)
                                 )
                         )
                         .append(
