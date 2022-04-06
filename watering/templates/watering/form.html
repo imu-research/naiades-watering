@@ -104,7 +104,7 @@
                 <label for="id_refDevice">{% trans "Sensor ID" %}:</label>
                 <select name="refDevice" id="id_refDevice" class="form-control{% if request.user|is_gardener %} disabled{% endif %}" {% if request.user|is_gardener %}disabled{% endif %}>
                   <option value="{{ form.data.refDevice }}" {% if form.data.refDevice %}selected{% endif %}>{{ form.data.refDevice }}</option>
-                  <option value="None" {% if form.data.refDevice == "None" %}selected{% endif %}>{% trans "None" %}</option>
+                  <option value="None" {% if form.data.refDevice == "None"%}selected{% endif %}>{% trans "None" %}</option>
                 </select>
                 {% if form.errors.refDevice %}
                     <span class="o-red">{{ form.errors.refDevice }}</span>

@@ -33,7 +33,10 @@ class BoxForm(Form):
         data = box.data
 
         # get device status from remote call
-        device_status = WateringBox.get_device_status(device_id=data["sensor"]["id"])
+        try:
+            device_status = WateringBox.get_device_status(device_id=data["sensor"]["id"])
+        except:
+            device_status = "disabled"
 
         form_data = {
             "flowers_type": data.get("flowerType"),
@@ -56,7 +59,7 @@ class BoxForm(Form):
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
             "refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
-            # "refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
+            #"refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
             "category": [
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
