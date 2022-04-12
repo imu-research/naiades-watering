@@ -48,7 +48,7 @@ urlpatterns = [
     path('consumptions/', views.consumptions_create, name='consumptions-create'),
 
     # Sensors API
-    path('api/sensor/<str:refDevice>/details', views.sensor_api_details, name='sensor-api-details'),
+    path('api/sensor/<str:refNewDevice>/details', views.sensor_api_details, name='sensor-api-details'),
 
     # Weather API
     path('api/weather/', views.weather, name='api-weather'),

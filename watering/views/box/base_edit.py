@@ -19,9 +19,9 @@ def base_box_edit(request, box):
 
     data = form.as_box()
 
-    if "refDevice" not in data:
+    if "refNewDevice" not in data:
         data.update({
-            "refDevice": box.data["refDevice"],
+            "refNewDevice": box.data["refNewDevice"],
         })
 
     # update box

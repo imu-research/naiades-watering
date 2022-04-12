@@ -164,7 +164,7 @@ class WateringBox(Model):
                 # add dates & setup
                 WateringBox.prepare(
                     flowerbed,
-                    sensor=sensors_idx.get(flowerbed.get("refDevice", ""))
+                    sensor=sensors_idx.get(flowerbed.get("refNewDevice", ""))
                 )
 
                 # add instance
@@ -188,7 +188,7 @@ class WateringBox(Model):
         # set device status
         if "device_status" in data:
             WateringBox.set_device_status(
-                device_id=f"urn:ngsi-ld:Device:Device-{data['refDevice'][-4:]}",
+                device_id=f"urn:ngsi-ld:Device:Device-{data['refNewDevice'][-4:]}",
                 status=data.pop("device_status")
             )
 
@@ -223,12 +223,12 @@ class WateringBox(Model):
         )
 
     @staticmethod
-    def history(refDevice, attr, fromDate, to):
-        # get humidity history of refDevice
+    def history(refNewDevice, attr, fromDate, to):
+        # get humidity history of refNewDevice
         try:
             response = OrionEntity().history(
                 service=WateringBox.service,
-                entity_id=refDevice,
+                entity_id=refNewDevice,
                 attr=attr,
                 fromDate=fromDate,
                 to=to
@@ -443,14 +443,14 @@ class WateringBox(Model):
             flowerbed = WateringBox.extract_values_from_dicts(data=flowerbed)
 
             # get sensor Id
-            ref_device = flowerbed.get("refDevice")
+            ref_new_device = flowerbed.get("refNewDevice")
 
             # link with flowerbed
-            if ref_device is not None:
+            if ref_new_device is not None:
                 try:
-                    sensors[ref_device] = str(int(flowerbed["id"].split("-")[-1]))
+                    sensors[ref_new_device] = str(int(flowerbed["id"].split("-")[-1]))
                 except ValueError:
-                    sensors[ref_device] = flowerbed["id"]
+                    sensors[ref_new_device] = flowerbed["id"]
 
         return sensors
 
@@ -503,12 +503,12 @@ class Sensor(Model):
         return sensors
 
     @staticmethod
-    def get_device(refDevice):
+    def get_device(refNewDevice):
         try:
             return [
                 sensor
                 for sensor in Sensor.list()
-                if sensor["serialNumber"] == refDevice
+                if sensor["serialNumber"] == refNewDevice
             ][0]
         except IndexError:
             raise Sensor.DoesNotExist()

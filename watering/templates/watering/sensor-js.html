@@ -2,16 +2,16 @@
     const sensors = {{ sensors|safe }};
     const connected_sensors = {{ connected_sensors|safe }};
 
-    const $refDevice = $('#id_refDevice');
-    const refDeviceValue = $refDevice.val();
+    const $refNewDevice = $('#id_refNewDevice');
+    const refNewDeviceValue = $refNewDevice.val();
 
     // remove default options
-    $refDevice
+    $refNewDevice
         .find('option')
         .remove();
 
     // add no sensor value
-    $refDevice.append($('<option />')
+    $refNewDevice.append($('<option />')
         .attr("value", "none")
         .text("Select a sensor")
     );
@@ -32,17 +32,17 @@
             );
 
         // mark as selected
-        if (sensor.serialNumber === refDeviceValue) {
+        if (sensor.serialNumber === refNewDeviceValue) {
             $option.attr("selected", "selected");
         }
 
         // add option
-        $refDevice.append($option);
+        $refNewDevice.append($option);
     });
 
     /*
     // Popup to notify on already attached sensor
-    $refDevice.change(function()
+    $refNewDevice.change(function()
     {
         console.log(connected_sensors)
         if(connected_sensors.includes($(this).val())) {

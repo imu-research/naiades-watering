@@ -136,7 +136,7 @@ function exportReport(box_data, watering_logs) {
                 //[{ text: 'Date', style: 'tableHeader'}, { text: 'Amount of water', style: 'tableHeader' }, { text: 'Comments', style: 'tableHeader' }],
                 [window.MESSAGES.boxId+':', data.boxId, window.MESSAGES.soilType2+':', 'Terrau'],
                 [window.MESSAGES.flowerType2+':', data.flowerType, window.MESSAGES.sunExposure2+':', data.sunExposure],
-                [window.MESSAGES.sensorId+':', data.refDevice, window.MESSAGES.humidity+':', data.soilMoisture]
+                [window.MESSAGES.sensorId+':', data.refNewDevice, window.MESSAGES.humidity+':', data.soilMoisture]
             ]
         },
       layout: 'noBorders'

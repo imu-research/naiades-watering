@@ -178,7 +178,7 @@ def box_history(box_id, ref_device_attr, attr, fromdate, to):
     box = WateringBox.get(box_id)
 
     historic_data = WateringBox.history(
-        refDevice=box.data[ref_device_attr][-4:],
+        refNewDevice=box.data[ref_device_attr][-4:],
         attr=attr,
         fromDate=fromdate,
         to=to

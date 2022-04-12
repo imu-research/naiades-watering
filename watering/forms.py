@@ -59,7 +59,7 @@ class BoxForm(Form):
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
             "refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
-            #"refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
+            "refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
             "category": [
                 self.data["soil_type"],
                 "numberOfInstances: %d" % int(self.data["number_of_boxes"])
@@ -73,7 +73,7 @@ class BoxSetupForm(BoxForm):
     box_id = CharField(required=True, label=_('Box ID'))
 
     # Sensor ID
-    refDevice = CharField(required=True, label=_('Sensor ID'), widget=Select)
+    refNewDevice = CharField(required=True, label=_('Sensor ID'), widget=Select)
 
     # Array of points (Cluster Polygon coordinates)
     location = CharField(required=True)

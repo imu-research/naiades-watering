@@ -235,9 +235,9 @@ def consumptions_create(request):
     return JsonResponse({})
 
 
-def sensor_api_details(request, refDevice):
+def sensor_api_details(request, refNewDevice):
     return JsonResponse({
-        "sensor":  Sensor.get_device(refDevice)
+        "sensor":  Sensor.get_device(refNewDevice)
     })
 
 
