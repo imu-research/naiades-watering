@@ -49,7 +49,7 @@ class OrionEntity(object):
                     response.get("description", "").lower() == "already exists":
                 exception_class = BoxAlreadyExists
         except:
-            response = response.content
+            response = response if type(response) == str else response.content
 
         # raise specific exception if detected
         if exception_class:
