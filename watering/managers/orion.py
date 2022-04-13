@@ -1,3 +1,5 @@
+import json
+
 import dateutil
 import requests
 from django.utils.timezone import now
@@ -38,20 +40,20 @@ class OrionEntity(object):
 
     @staticmethod
     def handle_error(response):
-        exception = None
+        exception_class = None
 
         # check if known error type must be thrown
         try:
             response = response.json()
             if response.get("error", "").lower() == "unprocessable" and \
                     response.get("description", "").lower() == "already exists":
-                exception = BoxAlreadyExists()
+                exception_class = BoxAlreadyExists
         except:
             response = response.content
 
         # raise specific exception if detected
-        if exception:
-            raise exception
+        if exception_class:
+            raise exception_class()
 
         # raise generic exception
         raise OrionError(response)
@@ -91,7 +93,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/entities/?options=keyValues',
             headers=self.get_headers(service=service),
-            data=self.get_signed_data(data),
+            json=self.get_signed_data(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -112,7 +114,7 @@ class OrionEntity(object):
         response = requests.patch(
             f'http://{self.endpoint}/v2/entities/{entity_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
-            data=self.get_signed_data(data),
+            json=self.get_signed_data(data),
         )
 
         # raise exception if response code is in 4xx, 5xx
@@ -414,7 +416,7 @@ class OrionEntity(object):
         response = requests.post(
             f'http://{self.endpoint}/v2/subscriptions/',
             headers=self.get_headers(service=service),
-            data=self.get_signed_data({
+            json=self.get_signed_data({
                 "description": "Naiades Watering App Subscription to `FlowerBed.consumption`.",
                 "subject": {
                     "entities": [
