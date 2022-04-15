@@ -294,8 +294,7 @@ def box_api_dry_plants_feedback(request, box_id):
         data={
             "feedback": {
                 "type": "Text",
-                "value": "Dry plants",
-                "metadata": {}
+                "value": "Dry plants"
             },
         }
     )
@@ -316,8 +315,7 @@ def box_api_no_watering_feedback(request, box_id):
         data={
             "feedback": {
                 "type": "Text",
-                "value": "No watering required",
-                "metadata": {}
+                "value": "No watering required"
             },
         }
     )

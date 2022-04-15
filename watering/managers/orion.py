@@ -73,7 +73,7 @@ class OrionEntity(object):
             raise KSIError()
 
         # return signed data
-        return response.json()["signed_data"]
+        return json.loads(response.json()["signed_data"])
 
     def list(self, service):
         # list entities
@@ -111,10 +111,11 @@ class OrionEntity(object):
             self.handle_error(response)
 
     def update(self, service, entity_id, data):
+        body = self.get_signed_data(data)
         response = requests.patch(
-            f'http://{self.endpoint}/v2/entities/{entity_id}/attrs?options=keyValues',
+            f'http://{self.endpoint}/v2/entities/{entity_id}/attrs',
             headers=self.get_headers(service=service),
-            json=self.get_signed_data(data),
+            json=body,
         )
 
         # raise exception if response code is in 4xx, 5xx
