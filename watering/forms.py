@@ -58,7 +58,7 @@ class BoxForm(Form):
         return {
             "flowerType": self.data["flowers_type"],
             "sunExposure": self.data["sun_exposure"],
-            "refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
+            #"refDevice": self.data["refDevice"] if self.data["refDevice"] != "none" else None,
             "refNewDevice": self.data["refNewDevice"] if self.data["refNewDevice"] != "none" else None,
             "category": [
                 self.data["soil_type"],

@@ -73,7 +73,7 @@ class OrionEntity(object):
             raise KSIError()
 
         # return signed data
-        return json.loads(response.json()["signed_data"])
+        return response.json()["signed_data"]
 
     def list(self, service):
         # list entities
