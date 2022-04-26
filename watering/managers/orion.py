@@ -22,6 +22,7 @@ class BoxAlreadyExists(OrionError):
 class OrionEntity(object):
     endpoint = '5.53.108.182:1026'
     history_endpoint = '5.53.108.182:8668'
+    dmv_endpoint = 'test.naiades-project.eu:5002'
 
     def get_headers(self, service):
         headers = {}
@@ -113,7 +114,7 @@ class OrionEntity(object):
     def update(self, service, entity_id, data):
         body = self.get_signed_data(data)
         response = requests.patch(
-            f'http://{self.endpoint}/v2/entities/{entity_id}/attrs',
+            f'http://{self.dmv_endpoint}/validation/v2/entities/{entity_id}/attrs',
             headers=self.get_headers(service=service),
             json=body,
         )
