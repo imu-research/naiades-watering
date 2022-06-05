@@ -16,6 +16,15 @@
             <div id="weather-container"></div>
         </div>
     </div>
+<!-- If precipitationProbability(0-0 or 0-1 or 0-2 or 0-3) is over 2mm display the notification (precipitationProbability is the amount of precipitation in mm)-->
+    <div class="row" style="margin: 5px 0 15px 0;">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
+            <div id="rain-notification" class="alert alert-success alert-dismissable" style="text-align: center;display: none">
+                {% trans "It is possible to rain today. Ignore watering recommendations." %}
+            </div>
+        </div>
+    </div>
 
     <div class="row" style="margin: 20px;">
          <div class="col-md-6">
@@ -117,7 +126,7 @@
     <script>
         window.RENDERING_MODE = "{{ mode }}";
     </script>
-    <script src="{% static 'js/render.js' %}?v=20220330.1"></script>
+    <script src="{% static 'js/render.js' %}?v=20220605.1"></script>
     {% if "route" in mode %}
         <script src="{% static 'js/show-route.js' %}?v=20210131.1"></script>
     {% endif %}

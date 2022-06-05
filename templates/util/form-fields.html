@@ -1,3 +1,5 @@
+{% load i18n %}
+
 {% if form.non_field_errors %}
     {% for err in form.non_field_errors %}
         <div class="o-red">{{ err }}</div>

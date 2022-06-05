@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-25 23:04+0300\n"
+"POT-Creation-Date: 2022-06-05 22:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: .\templates\base.html:121
+#: .\templates\base.html:123
 msgid "of ICCS"
 msgstr "de l' ICCS"
 
-#: .\templates\base.html:122
+#: .\templates\base.html:124
 msgid "All rights reserved – developed in the NAIADES project"
 msgstr "Tous droits réservés - développé dans le cadre du projet NAIADES"
 
@@ -31,17 +31,17 @@ msgid "Please login to continue"
 msgstr "Merci de vous authentifier pour continuer"
 
 #: .\templates\util\js-translations.html:5
-#: .\watering\templates\watering\view.html:29
+#: .\watering\templates\watering\view.html:39
 msgid "Today"
 msgstr "Aujourd'hui"
 
 #: .\templates\util\js-translations.html:6
-#: .\watering\templates\watering\view.html:30
+#: .\watering\templates\watering\view.html:40
 msgid "Tomorrow"
 msgstr "Demain"
 
 #: .\templates\util\js-translations.html:7
-#: .\watering\templates\watering\view.html:31
+#: .\watering\templates\watering\view.html:41
 msgid "Day after tomorrow"
 msgstr "Après-demain"
 
@@ -54,7 +54,7 @@ msgid "Later than tomorrow"
 msgstr "Plus tard que demain"
 
 #: .\templates\util\js-translations.html:10
-#: .\watering\templates\watering\view.html:35
+#: .\watering\templates\watering\view.html:45
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -80,17 +80,18 @@ msgid "Report new problem"
 msgstr "Reporter un problème"
 
 #: .\templates\util\js-translations.html:16
-#: .\watering\templates\watering\cluster-details.html:75
+#: .\watering\templates\watering\cluster-details.html:37
+#: .\watering\templates\watering\issues\index.html:12
 msgid "Issues"
 msgstr "Problèmes"
 
 #: .\templates\util\js-translations.html:17
-#: .\watering\templates\watering\cluster-details.html:77
+#: .\watering\templates\watering\cluster-details.html:39
 msgid "Report new issue"
 msgstr "Signaler un problème"
 
 #: .\templates\util\js-translations.html:18
-#: .\watering\templates\watering\form.html:12
+#: .\watering\templates\watering\form.html:14
 msgid "Cluster ID"
 msgstr "Identifiant de la zone"
 
@@ -171,23 +172,23 @@ msgstr "Le graphique ne contient pas de données"
 msgid "Water Consumption Report"
 msgstr "Rapport de consommation d'eau"
 
-#: .\templates\util\js-translations.html:39 .\watering\forms.py:15
-#: .\watering\templates\watering\form.html:27
+#: .\templates\util\js-translations.html:39 .\watering\forms.py:24
+#: .\watering\templates\watering\form.html:29
 msgid "Type of soil"
 msgstr "Type de sol"
 
-#: .\templates\util\js-translations.html:40 .\watering\forms.py:16
-#: .\watering\templates\watering\form.html:41
+#: .\templates\util\js-translations.html:40 .\watering\forms.py:25
+#: .\watering\templates\watering\form.html:43
 msgid "Type of flowers"
 msgstr "Type de fleurs"
 
-#: .\templates\util\js-translations.html:41 .\watering\forms.py:17
-#: .\watering\templates\watering\form.html:59
+#: .\templates\util\js-translations.html:41 .\watering\forms.py:26
+#: .\watering\templates\watering\form.html:61
 msgid "Exposure to sun"
 msgstr "Exposition au soleil"
 
-#: .\templates\util\js-translations.html:42 .\watering\forms.py:59
-#: .\watering\templates\watering\form.html:102
+#: .\templates\util\js-translations.html:42 .\watering\forms.py:76
+#: .\watering\templates\watering\form.html:104
 msgid "Sensor ID"
 msgstr "ID capteur"
 
@@ -196,8 +197,8 @@ msgid "Watering Logs"
 msgstr "Historique d'arrosage"
 
 #: .\templates\util\js-translations.html:44
-#: .\watering\templates\watering\details.html:107
-#: .\watering\templates\watering\monthly-report.html:185
+#: .\watering\templates\watering\details.html:109
+#: .\watering\templates\watering\monthly-report.html:216
 msgid "Date"
 msgstr "Date"
 
@@ -210,7 +211,6 @@ msgid "Comments"
 msgstr "Remarques"
 
 #: .\templates\util\js-translations.html:47
-#: .\watering\templates\watering\cluster-details.html:57
 msgid "Next Cluster"
 msgstr "Prochain zone"
 
@@ -223,22 +223,27 @@ msgid "Predicted Watering amount"
 msgstr "Quantité d'eau préconisée"
 
 #: .\templates\util\js-translations.html:50
+#: .\watering\templates\watering\cluster-details.html:93
 msgid "Dry"
 msgstr "Insuffisant"
 
 #: .\templates\util\js-translations.html:51
+#: .\watering\templates\watering\cluster-details.html:94
 msgid "Reduced"
 msgstr "Peu"
 
 #: .\templates\util\js-translations.html:52
+#: .\watering\templates\watering\cluster-details.html:95
 msgid "Recommended"
 msgstr "Optimal"
 
 #: .\templates\util\js-translations.html:53
+#: .\watering\templates\watering\cluster-details.html:96
 msgid "Excessive"
 msgstr "Trop"
 
 #: .\templates\util\js-translations.html:54
+#: .\watering\templates\watering\cluster-details.html:97
 msgid "Overwhelming"
 msgstr "Excessif"
 
@@ -247,40 +252,40 @@ msgid "No clusters need watering"
 msgstr "Aucune zone ne requiert d'arrosage"
 
 #: .\templates\util\js-translations.html:56
-#: .\watering\templates\watering\monthly-report.html:178
+#: .\watering\templates\watering\monthly-report.html:209
 msgid "Reported Issues"
 msgstr "Rapport"
 
 #: .\templates\util\js-translations.html:57
-#: .\watering\templates\watering\monthly-report.html:182
+#: .\watering\templates\watering\monthly-report.html:213
 msgid "Issue"
 msgstr "Problème"
 
 #: .\templates\util\js-translations.html:58
 #: .\watering\templates\watering\issues\report.html:136
-#: .\watering\templates\watering\monthly-report.html:183
+#: .\watering\templates\watering\monthly-report.html:214
 msgid "Description"
 msgstr "Description"
 
 #: .\templates\util\js-translations.html:59
-#: .\watering\templates\watering\monthly-report.html:184
+#: .\watering\templates\watering\monthly-report.html:215
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: .\templates\util\js-translations.html:60
 #: .\watering\templates\watering\daily-report.html:99
-#: .\watering\templates\watering\details.html:108
+#: .\watering\templates\watering\details.html:110
 msgid "Amount of watering"
 msgstr "Quantité d'eau"
 
 #: .\templates\util\js-translations.html:61
 #: .\watering\templates\watering\daily-report.html:100
-#: .\watering\templates\watering\details.html:109
+#: .\watering\templates\watering\details.html:111
 msgid "Time of watering"
 msgstr "Heure d'arrosage"
 
 #: .\templates\util\js-translations.html:62
-#: .\watering\templates\watering\daily-report.html:101
+#: .\watering\templates\watering\daily-report.html:102
 msgid "Next watering amount"
 msgstr "Prochain arrosage"
 
@@ -297,28 +302,28 @@ msgid "Compost"
 msgstr "Compost"
 
 #: .\templates\util\js-translations.html:70 .\watering\lists.py:11
-#: .\watering\templates\watering\form.html:44
+#: .\watering\templates\watering\form.html:46
 msgid "Annual"
 msgstr "Annuelle"
 
 #: .\templates\util\js-translations.html:71 .\watering\lists.py:12
-#: .\watering\templates\watering\form.html:45
+#: .\watering\templates\watering\form.html:47
 msgid "Perennial"
 msgstr "Vivace"
 
 #: .\templates\util\js-translations.html:75 .\watering\lists.py:17
-#: .\watering\templates\watering\form.html:63
+#: .\watering\templates\watering\form.html:65
 msgid "Sunny"
 msgstr "Ensoleillé"
 
 #: .\templates\util\js-translations.html:76 .\watering\lists.py:18
-#: .\watering\templates\watering\form.html:64
+#: .\watering\templates\watering\form.html:66
 msgid "Mid shadow"
 msgstr "Partiellement ombragé"
 
 #: .\templates\util\js-translations.html:77 .\watering\lists.py:19
-#: .\watering\templates\watering\form.html:65
-#: .\watering\templates\watering\form.html:105
+#: .\watering\templates\watering\form.html:67
+#: .\watering\templates\watering\form.html:107
 msgid "None"
 msgstr "Aucun"
 
@@ -374,66 +379,103 @@ msgstr "Dernier arrosage"
 msgid "Previous watering"
 msgstr "arrosage précédent"
 
-#: .\watering\forms.py:18 .\watering\templates\watering\form.html:75
-msgid "Number of boxes"
-msgstr "Nombre de cluster"
+#: .\templates\util\js-translations.html:94
+msgid "Water flow connected successfully"
+msgstr ""
 
-#: .\watering\forms.py:19
-msgid "Box Name"
-msgstr "Nom de la zone"
+#: .\templates\util\js-translations.html:95
+msgid "Water flow disconnected"
+msgstr "Pas de connextion avec le boîtier"
 
-#: .\watering\forms.py:20 .\watering\templates\watering\form.html:115
+#: .\templates\util\js-translations.html:96
+msgid "Water flow connection status could not be retrieved"
+msgstr "Boîtier connecté"
+
+#: .\watering\forms.py:15 .\watering\forms.py:29
+#: .\watering\templates\watering\form.html:117
 msgid "Device Status"
 msgstr "Etat du périphérique"
 
-#: .\watering\forms.py:56
+#: .\watering\forms.py:27 .\watering\templates\watering\form.html:77
+msgid "Number of boxes"
+msgstr "Nombre de cluster"
+
+#: .\watering\forms.py:28
+msgid "Box Name"
+msgstr "Nom de la zone"
+
+#: .\watering\forms.py:73
 msgid "Box ID"
 msgstr "Identifiant de la zone"
 
-#: .\watering\lists.py:28 .\watering\templates\watering\form.html:119
+#: .\watering\lists.py:28 .\watering\templates\watering\form.html:121
 msgid "Active"
 msgstr "Active"
 
-#: .\watering\lists.py:29 .\watering\templates\watering\form.html:120
+#: .\watering\lists.py:29 .\watering\templates\watering\form.html:122
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: .\watering\lists.py:30 .\watering\templates\watering\form.html:121
+#: .\watering\lists.py:30 .\watering\templates\watering\form.html:123
 msgid "Disabled"
 msgstr "Désactivée"
 
-#: .\watering\templates\watering\cluster-details.html:52
+#: .\watering\templates\watering\cluster-details.html:14
 #: .\watering\templates\watering\details.html:30
 msgid "Cluster "
 msgstr "Zone "
 
-#: .\watering\templates\watering\cluster-details.html:66
-#: .\watering\templates\watering\cluster-details.html:91
+#: .\watering\templates\watering\cluster-details.html:28
+#: .\watering\templates\watering\cluster-details.html:53
 #: .\watering\templates\watering\issues\report.html:109
 msgid "Dry plants"
 msgstr "Plantes sèches"
 
-#: .\watering\templates\watering\cluster-details.html:68
-#: .\watering\templates\watering\cluster-details.html:95
+#: .\watering\templates\watering\cluster-details.html:30
+#: .\watering\templates\watering\cluster-details.html:57
 #: .\watering\templates\watering\issues\report.html:113
 msgid "No watering required"
 msgstr "Arrosage pas nécessaire"
 
-#: .\watering\templates\watering\cluster-details.html:87
+#: .\watering\templates\watering\cluster-details.html:49
 msgid "Feedback"
 msgstr "Retour d'information"
 
-#: .\watering\templates\watering\cluster-details.html:104
+#: .\watering\templates\watering\cluster-details.html:66
 msgid "Predicted Required  Water Amount (Avg. per Box)"
 msgstr "Quantité d'eau suggérée (moyenne par bac)"
 
-#: .\watering\templates\watering\cluster-details.html:114
+#: .\watering\templates\watering\cluster-details.html:76
 msgid "Predicted Required  Water Amount (Cluster)"
 msgstr "Quantité d'eau suggérée (toute la zone)"
 
-#: .\watering\templates\watering\cluster-details.html:126
+#: .\watering\templates\watering\cluster-details.html:88
 msgid "Water used (cluster)"
 msgstr "Eau utilisée (zone)"
+
+#: .\watering\templates\watering\cluster-details.html:93
+msgid "It seems that the box is dry."
+msgstr "La zone semble sèche"
+
+#: .\watering\templates\watering\cluster-details.html:94
+msgid "It seems that the box needs more watering."
+msgstr "La zone semble avoir besoin de davantage d'eau"
+
+#: .\watering\templates\watering\cluster-details.html:95
+msgid ""
+"It seems that the box humidity is within the recommended levels, no more "
+"watering required."
+msgstr ""
+"L'humidité de la zone semble optimale, il n'est pas nécessaire d'ajouter "
+"davantage d'eau"
+
+#: .\watering\templates\watering\cluster-details.html:96
+msgid "It seems that the box watered more than necessary."
+msgstr "L'humidité de la zone semble plus élévée que nécessaire"
+
+#: .\watering\templates\watering\cluster-details.html:97
+msgid "It seems that you watered too much."
+msgstr "Il semble que l'humidité est excessive"
 
 #: .\watering\templates\watering\create.html:14
 msgid "New Cluster setup - Info"
@@ -448,12 +490,13 @@ msgid "Today's Report"
 msgstr "Rapport"
 
 #: .\watering\templates\watering\daily-report.html:46
-#: .\watering\templates\watering\monthly-report.html:66
+#: .\watering\templates\watering\issues\index.html:19
+#: .\watering\templates\watering\monthly-report.html:67
 msgid "Back"
 msgstr "Prochain"
 
 #: .\watering\templates\watering\daily-report.html:63
-#: .\watering\templates\watering\monthly-report.html:83
+#: .\watering\templates\watering\monthly-report.html:84
 msgid "Overall "
 msgstr "Globalement"
 
@@ -473,6 +516,27 @@ msgstr "Arrosé aujourd'hui"
 msgid "Box Id"
 msgstr "No du bac"
 
+#: .\watering\templates\watering\daily-report.html:101
+msgid "Time spent"
+msgstr "Temps utilisé"
+
+#: .\watering\templates\watering\details-menu.html:3
+msgid "History"
+msgstr "Historique"
+
+#: .\watering\templates\watering\details-menu.html:6
+msgid "Predictions"
+msgstr "Prévisions"
+
+#: .\watering\templates\watering\details-menu.html:9
+msgid "Edit"
+msgstr "Modifier"
+
+#: .\watering\templates\watering\details-menu.html:12
+#: .\watering\templates\watering\details.html:105
+msgid "Watering logs"
+msgstr "Historique arrosages"
+
 #: .\watering\templates\watering\details.html:41
 msgid "Delete cluster"
 msgstr "Eliminer zone"
@@ -481,39 +545,35 @@ msgstr "Eliminer zone"
 msgid "Date Filter"
 msgstr "Filtre par date"
 
-#: .\watering\templates\watering\details.html:51
+#: .\watering\templates\watering\details.html:52
 msgid "Start Watering"
 msgstr "Commencer arrosage"
 
-#: .\watering\templates\watering\details.html:58
+#: .\watering\templates\watering\details.html:60
 msgid "Cluster Details"
 msgstr "Détails de la zone"
-
-#: .\watering\templates\watering\details.html:103
-msgid "Watering logs"
-msgstr "Historique arrosages"
 
 #: .\watering\templates\watering\edit.html:11
 msgid "Cluster #"
 msgstr "Zone #"
 
-#: .\watering\templates\watering\form.html:5
+#: .\watering\templates\watering\form.html:7
 msgid " Cluster details"
 msgstr "Détails de la zone"
 
-#: .\watering\templates\watering\form.html:18
+#: .\watering\templates\watering\form.html:20
 msgid "Cluster Name"
 msgstr "Nom de la zone"
 
-#: .\watering\templates\watering\form.html:30
+#: .\watering\templates\watering\form.html:32
 msgid "Normal soil"
 msgstr "Sol normal"
 
-#: .\watering\templates\watering\form.html:31
+#: .\watering\templates\watering\form.html:33
 msgid "Compost soil"
 msgstr "Compost"
 
-#: .\watering\templates\watering\form.html:135
+#: .\watering\templates\watering\form.html:137
 msgid "Update Cluster"
 msgstr "Mettre à jour la zone"
 
@@ -573,6 +633,10 @@ msgstr "Retour à la zone"
 msgid "issues"
 msgstr "problèmes"
 
+#: .\watering\templates\watering\issues\report.html:100
+msgid "Issue Type:"
+msgstr "Type de problème:"
+
 #: .\watering\templates\watering\issues\report.html:105
 msgid "Broken sensor"
 msgstr "Senseur cassé"
@@ -594,7 +658,7 @@ msgid "Other"
 msgstr "Autre"
 
 #: .\watering\templates\watering\issues\report.html:146
-#: .\watering\templates\watering\view.html:46
+#: .\watering\templates\watering\view.html:56
 msgid "Report"
 msgstr "Rapport"
 
@@ -607,56 +671,73 @@ msgid "Move to next position"
 msgstr "Aller à la position suivante"
 
 #: .\watering\templates\watering\monthly-report.html:57
+#: .\watering\templates\watering\view.html:63
 msgid "Periodic Report"
 msgstr "Rapport périodique"
 
-#: .\watering\templates\watering\monthly-report.html:91
+#: .\watering\templates\watering\monthly-report.html:92
 msgid "Total Periodic Water Consumption"
 msgstr "Consommation totale d'eau pour la période"
 
-#: .\watering\templates\watering\monthly-report.html:101
+#: .\watering\templates\watering\monthly-report.html:102
 msgid "Total Periodic Watering Time"
 msgstr "Temps d'arrosage totale d'eau pour la période"
 
-#: .\watering\templates\watering\monthly-report.html:130
+#: .\watering\templates\watering\monthly-report.html:112
+msgid "Total Time Spent"
+msgstr "Temps total"
+
+#: .\watering\templates\watering\monthly-report.html:141
 msgid "Periodic Report of the Cluster "
 msgstr "Rapport périodique de la zone"
 
-#: .\watering\templates\watering\monthly-report.html:139
+#: .\watering\templates\watering\monthly-report.html:150
 msgid "Total Periodic Water Consumption (Cluster)"
 msgstr "Consommation totale d'eau pour la période (moyenne par zone)"
 
-#: .\watering\templates\watering\monthly-report.html:147
+#: .\watering\templates\watering\monthly-report.html:158
 msgid "Total Periodic Water Consumption (Avg. per Box)"
 msgstr "Consommation totale d'eau pour la période (moyenne par bac)"
 
-#: .\watering\templates\watering\view.html:23
+#: .\watering\templates\watering\monthly-report.html:168
+msgid "Total Time Spent (Cluster)"
+msgstr "Temps total utilisé (Zone)"
+
+#: .\watering\templates\watering\monthly-report.html:178
+msgid "Total Time Spent (Avg. per Box)"
+msgstr "Temps total utilisé (moyenne par bac)"
+
+#: .\watering\templates\watering\view.html:24
+msgid "It is possible to rain today. Ignore watering recommendations."
+msgstr ""
+"Attention à la probabilité élevée de pluie, arrosage peut-être pas nécessaire"
+
+#: .\watering\templates\watering\view.html:33
 msgid "Suggested watering day"
 msgstr "Jour d'arrosage suggeré"
 
-#: .\watering\templates\watering\view.html:26
+#: .\watering\templates\watering\view.html:36
 msgid "All"
 msgstr "Tous"
 
-#: .\watering\templates\watering\view.html:34
+#: .\watering\templates\watering\view.html:44
 msgid "Later in the future"
 msgstr "Ultérieurement"
 
-#: .\watering\templates\watering\view.html:52
+#: .\watering\templates\watering\view.html:62
 msgid "Daily Report"
 msgstr "Rapport journalier"
 
-#: .\watering\templates\watering\view.html:53
-msgid "Monthly Report"
-msgstr "Rapport mensuel"
-
-#: .\watering\templates\watering\view.html:73
+#: .\watering\templates\watering\view.html:84
 msgid "Configure a new Cluster"
 msgstr "Ajouter une nouvelle zone"
 
-#: .\watering\templates\watering\view.html:79
+#: .\watering\templates\watering\view.html:91
 msgid "View suggested route"
 msgstr "Voir le trajet suggéré"
+
+#~ msgid "Monthly Report"
+#~ msgstr "Rapport mensuel"
 
 #, fuzzy
 #~| msgid "Setup a new box"

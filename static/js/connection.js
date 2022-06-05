@@ -12,17 +12,17 @@ $(function() {
                 if (data.connection_status) {
                     $connectionStatus
                         .addClass("connected")
-                        .text("Water flow connected successfully");
+                        .text(window.MESSAGES.waterFlowConnected);
                 }
                 else if (data.connection_status === false) {
                     $connectionStatus
                         .addClass("disconnected")
-                        .text("Water flow disconnected");
+                        .text(window.MESSAGES.waterFlowDisconnected);
                 }
                 else {
                     $connectionStatus
                         .addClass("unknown")
-                        .text("Water flow connection status could not be retrieved");
+                        .text(window.MESSAGES.waterFlowStatusUnavailable);
                 }
             }
         });

@@ -3,9 +3,9 @@ import ast
 from django.core.exceptions import ValidationError
 from django.forms import Form, ModelForm
 from django.forms.widgets import Select
-from django.forms.fields import CharField, DateField, ChoiceField, IntegerField
+from django.forms.fields import CharField, ChoiceField, IntegerField
 
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from watering.models import Issue, WateringBox
 from .lists import *

@@ -149,6 +149,11 @@ $(function() {
             return
         }
 
+        // trigger UI update on initial location
+        if (LocationManager.locationInfo && LocationManager.locationInfo.position) {
+            onLocationUpdate(LocationManager.locationInfo);
+        }
+
         // subscribe to location manager
         LocationManager.subscribe(onLocationUpdate);
 

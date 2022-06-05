@@ -100,7 +100,7 @@ $(function() {
             this.stop();
 
             // change mode
-            this.mode = mode;
+            this.mode = "normal";  // mode;
 
             // start
             this.start();

@@ -135,7 +135,7 @@ $(function () {
                 .addClass("popup-content")
                 .append($(`<div class="prop-label">${window.MESSAGES.box}:</div><div class="prop-value">${meter.name}</></div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${this.formatDate(meter.dateLastWatering, true)}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${this.formatDate(meter.nextWateringDeadline, false)}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${meter.nextWatering}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${window.MESSAGES.soilTypes[meter.soil_type || "empty"]}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.flowerType}:</div><div class="prop-value">${window.MESSAGES.flowerTypes[meter.flowerType || "empty"]}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.sunExposure}:</div><div class="prop-value"> ${window.MESSAGES.sunExposures[meter.sunExposure || "empty"]}</div><br>`))
@@ -359,12 +359,12 @@ $(function () {
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
                                     meter.nextWateringAmountRecommendation &&
-                                    //meter.nextWateringAmountRecommendation.indexOf("1970-") !== 0 &&
+                                    String(meter.nextWateringAmountRecommendation).indexOf("1970-") !== 0 ?
                                     $('<div />')
                                         .text(
                                             window.MESSAGES.amount+`: ` +
-                                            `${meter.nextWateringAmountRecommendation} lt`
-                                        )
+                                            `${Math.round(meter.nextWateringAmountRecommendation * 100) / 100} lt`
+                                        ) : ''
                                 )
                         )
                         .append(
