@@ -381,7 +381,7 @@ msgstr "arrosage précédent"
 
 #: .\templates\util\js-translations.html:94
 msgid "Water flow connected successfully"
-msgstr ""
+msgstr "Boîtier connecté"
 
 #: .\templates\util\js-translations.html:95
 msgid "Water flow disconnected"
