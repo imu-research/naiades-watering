@@ -380,6 +380,20 @@ class WateringBox(Model):
         return WateringBox.format_list_response(response)
 
     @staticmethod
+    def _format_truck_location_history(response):
+        values = [{
+            "entity_id": response["entityId"],
+            "results": []
+        }]
+        for idx, index in enumerate(response["index"]):
+            values[0]["results"].append({
+                "date": index,
+                "value": response["values"][idx],
+            })
+
+        return values
+
+    @staticmethod
     def truck_location_history(fromDate, to):
         # get truck location history of box id
         try:
@@ -390,22 +404,8 @@ class WateringBox(Model):
             )
         except OrionError:
             return []
-        '''print(response)
-        values = []
-        value_item = {
-            "entity_id": response["entityId"],
-            "results": []
-        }
-        for idx, index in enumerate(response["index"]):
-            value_item["results"].append({
-                "date": index,
-                "value": response["values"][idx],
-            })
 
-        values.append(value_item)
-        print(values)
-        return values'''
-        return WateringBox.format_list_response(response)
+        return WateringBox._format_truck_location_history(response=response)
 
     @staticmethod
     def consumption_history_list():

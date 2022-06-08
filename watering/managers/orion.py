@@ -309,8 +309,7 @@ class OrionEntity(object):
     def truck_location_history(self, service, fromDate, to):
         # list entities
         response = requests.get(
-            #f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/location?fromDate={fromDate}&toDate={to}',
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/truckLocation/value?fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/location?fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
