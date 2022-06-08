@@ -390,7 +390,21 @@ class WateringBox(Model):
             )
         except OrionError:
             return []
+        '''print(response)
+        values = []
+        value_item = {
+            "entity_id": response["entityId"],
+            "results": []
+        }
+        for idx, index in enumerate(response["index"]):
+            value_item["results"].append({
+                "date": index,
+                "value": response["values"][idx],
+            })
 
+        values.append(value_item)
+        print(values)
+        return values'''
         return WateringBox.format_list_response(response)
 
     @staticmethod
