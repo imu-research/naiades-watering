@@ -34,10 +34,31 @@ $(function () {
                 }
             ).addTo(this.map);
 
-            // on map click, capture position
-            this.map.on('click', function(e){
-                console.log(e.latlng);
-            });
+            // add center button
+            $(`#${this.containerId}`)
+                .parent()
+                .prepend(
+                    $("<button />")
+                        .attr("id", "center-location-btn")
+                        .attr("type", "button")
+                        .addClass("btn btn-primary")
+                        .css("position", "absolute")
+                        .css("top", "-45px")
+                        .append(
+                            $("<i />")
+                                .addClass("glyphicon glyphicon-map-marker")
+                        )
+                        .on("click", function() {
+                            if (LocationManager.locationInfo.position) {
+                                NaiadesRender.map.panTo(
+                                    L.latLng(
+                                        LocationManager.locationInfo.position.lat,
+                                        LocationManager.locationInfo.position.lng
+                                    )
+                                );
+                            }
+                        })
+                );
         },
 
         initializeRoute: function() {
