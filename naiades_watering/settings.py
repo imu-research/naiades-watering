@@ -186,6 +186,8 @@ DEFAULT_GROUPS = [GROUP_GARDENER, GROUP_BACKOFFICE, ]
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     import dj_database_url
 
+    DEBUG = False
+
     DATABASES = {
         'default': dj_database_url.config()
     }
