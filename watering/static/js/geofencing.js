@@ -42,7 +42,6 @@ $(function() {
 
     const notificationUI = {
         $container: $('#geofencing-notification-container'),
-        automaticRedirect: true,
 
         clear() {
             this.$container.empty();
@@ -73,8 +72,8 @@ $(function() {
                 return
             }
 
-            // automatically redirect if only one is present
-            if ((localMeasurements.length === 1) && this.automaticRedirect) {
+            // redirect if only one is present & functionality is not disabled
+            if ((localMeasurements.length === 1) && (!window.SETTINGS.disableAutomaticClusterRedirect)) {
                 return redirectTo(localMeasurements[0]);
             }
 

@@ -3,6 +3,7 @@ $(function () {
         mode: window.RENDERING_MODE,
         containerId: 'container',
         mapContainerId: 'map-container',
+        locationUpdateSubscriptionId: null,
 
         createMapContainer: function() {
             const $mapContainer = $('<div />')
@@ -35,6 +36,12 @@ $(function () {
             ).addTo(this.map);
 
             // add center button
+            this.addCenterLocationButton();
+        },
+
+        addCenterLocationButton: function() {
+            // add button to set map
+            // to automatically center in current GPS location
             $(`#${this.containerId}`)
                 .parent()
                 .prepend(
@@ -50,15 +57,43 @@ $(function () {
                         )
                         .on("click", function() {
                             if (LocationManager.locationInfo.position) {
-                                NaiadesRender.map.panTo(
-                                    L.latLng(
-                                        LocationManager.locationInfo.position.lat,
-                                        LocationManager.locationInfo.position.lng
-                                    )
+                                NaiadesRender.setMapLocation(LocationManager.locationInfo);
+                            }
+
+                            // subscribe for location updates
+                            // set map in new position when updated
+                            if (NaiadesRender.locationUpdateSubscriptionId === null) {
+                                NaiadesRender.locationUpdateSubscriptionId = LocationManager.subscribe(
+                                    NaiadesRender.setMapLocation
                                 );
                             }
                         })
                 );
+
+            // stop automatically update map location
+            // if map was moved manually by user
+            this.map.on("moveend", function() {
+                // if (NaiadesRender.locationUpdateSubscriptionId) {
+                //     LocationManager.unsubscribe(NaiadesRender.locationUpdateSubscriptionId);
+                //     NaiadesRender.locationUpdateSubscriptionId = null;
+                // }
+            });
+        },
+
+        setMapLocation: function(locationInfo) {
+            if (!locationInfo) {
+                return
+            }
+
+            // set map position
+            setTimeout(function() {
+                NaiadesRender.map.panTo(
+                    L.latLng(
+                        LocationManager.locationInfo.position.lat,
+                        LocationManager.locationInfo.position.lng
+                    )
+                );
+            }, 100);
         },
 
         initializeRoute: function() {

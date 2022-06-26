@@ -82,9 +82,9 @@
     margin-left: 0;
 }
 
-#main-container{
-    padding: 50px !important;
-}
+/*#main-container{*/
+/*    padding: 50px !important;*/
+/*}*/
 
 #map-container {
     height: 500px;
@@ -93,6 +93,16 @@
 
 #StatusTable {
     background: white;
+}
+
+#container-parent {
+    margin: 10px;
+}
+
+@media screen and (max-width: 990px) {
+    #container-parent {
+        padding-top: 50px;
+    }
 }
 
 @media screen and (min-height: 440px) and (min-width: 360px) {
