@@ -86,6 +86,9 @@
             <a href="{% url 'list-issues' box_id=box_id %}" class="btn btn-sm btn-default">
                 ‹ {% trans "Back to Cluster" %} #{{ box_id }} {% trans "issues" %}
             </a>
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-sm btn-secondary">
+                <i class="glyphicon glyphicon-chevron-left"></i> {% trans "Back" %}
+            </a>
         </div>
     </div>
 

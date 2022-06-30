@@ -14,10 +14,14 @@
             <h3 style="margin-top:0%; margin-left: 14px;">{% trans "Cluster " %}{{ box.data.name}} </h3>
         </div>
         <div class="col-xs-12 col-sm-3" style="text-align: right">
-{#            <a href="/watering" id="back-box"#}
-{#                    class="btn btn-primary" style="margin-right: 12px;">#}
-{#                {% trans "Next Cluster" %}: 1#}
-{#            </a>#}
+            <a href="/watering/details/?id=1" id="back-box"
+                     class="btn btn-primary" style="margin-right: 12px;">
+                  {% trans "Cluster Details" %}
+            </a>
+            <a href="/watering/route" id="back-box"
+                     class="btn btn-primary" style="margin-right: 12px;">
+                  {% trans "View suggested route" %}
+            </a>
         </div>
     </div>
 
