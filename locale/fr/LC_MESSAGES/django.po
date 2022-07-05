@@ -708,9 +708,8 @@ msgid "Total Time Spent (Avg. per Box)"
 msgstr "Temps total utilisé (moyenne par bac)"
 
 #: .\watering\templates\watering\view.html:24
-msgid "It is possible to rain today. Ignore watering recommendations."
-msgstr ""
-"Attention à la probabilité élevée de pluie, arrosage peut-être pas nécessaire"
+msgid "Possibility of rain today. Watering might be unnecessary."
+msgstr "Possibilité de pluie aujourd'hui, arrosage peut-être pas nécessaire"
 
 #: .\watering\templates\watering\view.html:33
 msgid "Suggested watering day"
