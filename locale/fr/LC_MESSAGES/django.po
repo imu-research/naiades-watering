@@ -380,16 +380,16 @@ msgid "Previous watering"
 msgstr "arrosage précédent"
 
 #: .\templates\util\js-translations.html:94
-msgid "Water flow connected successfully"
+msgid "Waterflow connected"
 msgstr "Boîtier connecté"
 
 #: .\templates\util\js-translations.html:95
-msgid "Water flow disconnected"
-msgstr "Pas de connextion avec le boîtier"
+msgid "Waterflow disconnected"
+msgstr "Boîtier déconnecté"
 
 #: .\templates\util\js-translations.html:96
-msgid "Water flow connection status could not be retrieved"
-msgstr "Boîtier connecté"
+msgid "Waterflow status unknown"
+msgstr "Etat boîtier inconnu"
 
 #: .\watering\forms.py:15 .\watering\forms.py:29
 #: .\watering\templates\watering\form.html:117
