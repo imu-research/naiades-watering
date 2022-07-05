@@ -53,7 +53,7 @@ $(function () {
                         .css("top", "-45px")
                         .append(
                             $("<i />")
-                                .addClass("glyphicon glyphicon-map-marker")
+                                .addClass("glyphicon glyphicon-screenshot")
                         )
                         .on("click", function() {
                             if (LocationManager.locationInfo.position) {
