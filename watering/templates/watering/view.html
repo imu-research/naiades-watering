@@ -86,7 +86,7 @@
         <div class="col-md-6"></div>
         <div class="row" style="margin: 20px">
              <div class="col-md-3">
-                 {% if not request.user|is_gardener %}
+                 {% if not request.user|is_gardener %}<!-- FIXME: maybe reverse condition? -->
                      <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
                          <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}
                      </button>
@@ -112,6 +112,34 @@
 
     <div id="container-parent" class="row">
         <div class="col-xs-12">
+            <style>/* FIXME: move to stylesheet */
+            #map-container {
+                width: calc(75% - 15px) !important;
+            }
+            #StatusTable {
+                width: 25% !important;
+            }
+            #StatusTable > .entry {
+                padding: 10px;
+            }
+            #StatusTable > .entry .title {
+                font-size: 14px;
+            }
+            #StatusTable > .entry .infoItem {
+                padding: 5px 0;
+            }
+            .measurement {
+                font-size:14px;
+                padding: 3px;
+                color: yellow;
+                background-color:#0b859c;
+                border-radius: 6px;
+            }
+            .measurement.water {
+                color:darkblue;
+                background-color: #7cd1ef;
+            }
+            </style>
              <div id="container"></div>
         </div>
     </div>

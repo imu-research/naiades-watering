@@ -315,7 +315,7 @@ $(function () {
                         ]
                     }
                 }], {
-                    color: color,
+                    color: '#8a6d3b',
                     fillOpacity: 0.8,
                 }).addTo(that.map);
 
@@ -379,50 +379,62 @@ $(function () {
                                 append(
                                     $('<a />')
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                        .text(window.MESSAGES.box+` ${meter.name}`)
+                                        .text(`${meter.name}`)
                                 )
-                        )
-                        .append(
-                            $('<div />').text(window.MESSAGES.humidityLevel+` : ${meter.soilMoisture.toFixed(2) || '-'}`)
                         )
                         .append(
                             $('<div />')
-                                .append($('<span />').text(
-                                    meter.lastWatering !== "TODAY"
-                                        ? window.MESSAGES.date+": "
-                                        : ""
-                                ))
+                                .addClass("infoItem")
+                                .text(window.MESSAGES.humidityLevel+': ')
+                                .append(
+                                    $('<span />')
+                                    .addClass('measurement')
+                                    .text(`${meter.soilMoisture.toFixed(2) || '-'}`+'%')
+                                )
+                        )
+                        .append(
+                            $('<div />')
+                                .addClass("infoItem")
+                                .text(
+                                        meter.lastWatering !== "TODAY" ? window.MESSAGES.suggestedWateringDate+": " : ""
+                                    )
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
                                     ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
-                                    $('<span />').text(meter.nextWateringDeadline.split("T")[0] || "-")
+                                    $('<span />')
+                                        .addClass('measurement')
+                                        .text(meter.nextWateringDeadline.split("T")[0] || "-")
                                 )
                                 .append(
-                                    $('<div />')
-                                        .addClass(
-                                            `next-watering-label ` +
-                                            `${meter.nextWatering === "TODAY" && "watered-today"}`
-                                        )
-                                        .css('background-color', color)
-                                        .text((
-                                            meter.lastWatering !== "TODAY"
-                                                ? `${nextWateringMessages[meter.nextWatering]}`
-                                                : window.MESSAGES.watered+" ✓"
-                                        )+ (
-                                            !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
-                                        ))
-                                )
-                                .append(
-                                    meter.lastWatering !== "TODAY" &&
-                                    meter.nextWateringAmountRecommendation &&
-                                    String(meter.nextWateringAmountRecommendation).indexOf("1970-") !== 0 ?
-                                    $('<div />')
-                                        .text(
-                                            window.MESSAGES.amount+`: ` +
-                                            `${Math.round(meter.nextWateringAmountRecommendation * 100) / 100} lt`
-                                        ) : ''
+                                    $('<span />')
+                                    .addClass(
+                                        `next-watering-label ` +
+                                        `${meter.nextWatering === "TODAY" && "watered-today"}`
+                                    )
+                                    .css('background-color', color)
+                                    .text((
+                                        meter.lastWatering !== "TODAY"
+                                            ? `${nextWateringMessages[meter.nextWatering]}`
+                                            : window.MESSAGES.watered+" ✓"
+                                    )+ (
+                                        !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
+                                    ))
                                 )
                         )
+                        .append(
+                            meter.lastWatering !== "TODAY" &&
+                            meter.nextWateringAmountRecommendation &&
+                            String(meter.nextWateringAmountRecommendation).indexOf("1970-") !== 0 ?
+                            $('<div />')
+                                .text(window.MESSAGES.amount+`: `)
+                                .append(
+                                    $('<span />')
+                                        .addClass('measurement water')
+                                        .text(`${Math.round(meter.nextWateringAmountRecommendation * 100) / 100} ℓ`)
+                                )
+                            : ''
+                        )
+
                         .append(
                             $('<div />')
                                 .addClass("actions")
