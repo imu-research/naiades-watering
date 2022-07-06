@@ -16,7 +16,6 @@
             <div id="weather-container"></div>
         </div>
     </div>
-<!-- If precipitationProbability(0-0 or 0-1 or 0-2 or 0-3) is over 2mm display the notification (precipitationProbability is the amount of precipitation in mm)-->
 
 
     <div class="row" style="margin-bottom: 15px;">
@@ -46,6 +45,8 @@
 
          {% if "route" not in mode %}
              <div class="col-md-6">
+                 <!-- If precipitationProbability(0-0 or 0-1 or 0-2 or 0-3) is over 2mm display the notification (precipitationProbability is the amount of precipitation in mm)-->
+
                  <div id="rain-notification" style="display: none">
                      <style> /* FIXME: move to stylesheet */
                          #rain-notification {
@@ -84,7 +85,7 @@
 
     {% if "route" not in mode %}
         <div class="col-md-6"></div>
-        <div class="row" style="margin: 20px">
+        <div class="row" style="margin: 12px">
              <div class="col-md-3">
 
              </div>
