@@ -88,6 +88,12 @@
                     <ul class="dropdown-menu dropdown-user">
 
                         {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'box-create' %}"><i class="fa fa-fw"></i><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}</a>
+                                <li>
+                                    ---------- <!-- TODO: add clean divider via CSS -->
+                                </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
