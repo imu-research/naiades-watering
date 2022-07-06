@@ -92,7 +92,7 @@ class OrionEntity(object):
 
     def create(self, service, data):
         response = requests.post(
-            f'http://{self.endpoint}/v2/entities/?options=keyValues',
+            f'http://{self.dmv_endpoint}/v2/entities/?options=keyValues',
             headers=self.get_headers(service=service),
             json=self.get_signed_data(data),
         )
@@ -374,7 +374,7 @@ class OrionEntity(object):
     def put_device_status(self, service, device_id, status):
         # change device status
         response = requests.post(
-            f'http://{self.endpoint}/v2/entities/{device_id}/attrs?options=keyValues',
+            f'http://{self.dmv_endpoint}/v2/entities/{device_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
             json={
                 "deviceState": status,
@@ -416,7 +416,7 @@ class OrionEntity(object):
     def subscribe(self, service, watering_server):
         # create subscription
         response = requests.post(
-            f'http://{self.endpoint}/v2/subscriptions/',
+            f'http://{self.dmv_endpoint}/v2/subscriptions/',
             headers=self.get_headers(service=service),
             json=self.get_signed_data({
                 "description": "Naiades Watering App Subscription to `FlowerBed.consumption`.",
