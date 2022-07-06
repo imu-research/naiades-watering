@@ -20,7 +20,7 @@ $(function () {
             this.createMapContainer();
 
             // initialize map
-            this.map = L.map(this.mapContainerId).setView([46.1838136, 6.138625], 15);
+            this.map = L.map(this.mapContainerId).setView([46.185726, 6.145177], 15.35);
 
             L.tileLayer(
                 //'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
