@@ -11,23 +11,15 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row" style="margin: 5px 0 15px 0;">
+    <div class="row" style="margin: 0px 0 0px 0;">
         <div class="col-xs-12">
             <div id="weather-container"></div>
         </div>
     </div>
 <!-- If precipitationProbability(0-0 or 0-1 or 0-2 or 0-3) is over 2mm display the notification (precipitationProbability is the amount of precipitation in mm)-->
-    <div class="row" style="margin: 5px 0 15px 0;">
-        <div class="col-xs-3"></div>
-        <div class="col-xs-6">
-            <div id="rain-notification" class="alert alert-success alert-dismissable" style="text-align: center;display: none">
-                {% trans "It is possible to rain today. Ignore watering recommendations." %}
-            </div>
-        </div>
-    </div>
 
-    <div class="row" style="margin: 20px;">
-         <div class="col-md-6">
+     <div class="row" style="margin-bottom: 15px;">
+         <div class="col-md-4">
              <form class="form-inline">
                  <div class="form-group">
                      <label for="next-watering">{% trans "Suggested watering day" %} </label>
@@ -51,7 +43,20 @@
 
 
          {% if "route" not in mode %}
-             <div class="col-md-4"></div>
+             <div class="col-md-6">
+                 <div id="rain-notification" style="display: none">
+                     <style> /* FIXME: move to stylesheet */
+                         #rain-notification {
+                             background-color:lime;
+                             color:#3c763d;
+                             padding:6px;
+                             border-radius:15px;
+                             text-align: center;
+                         }
+                     </style>
+                     {% trans "Possibility of rain today. Watering might be unnecessary." %}
+                 </div>
+             </div>
              <div class="btn-group col-md-2">
               <button type="button" class="btn btn-primary">{% trans "Report" %}</button>
               <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -77,13 +82,9 @@
 
     {% if "route" not in mode %}
         <div class="col-md-6"></div>
-        <div class="row" style="margin: 20px">
+        <div class="row" style="margin: 12px">
              <div class="col-md-3">
-                 {% if not request.user|is_gardener %}
-                     <button type="button" class="btn btn-default btn-block" onclick="location.href='{% url 'box-create' %}'">
-                         <span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}
-                     </button>
-                 {% endif %}
+
              </div>
 
              <div class="col-md-3">
@@ -105,6 +106,34 @@
 
     <div id="container-parent" class="row">
         <div class="col-xs-12">
+             <style>/* FIXME: move to stylesheet */
+            #map-container {
+                width: calc(75% - 15px) !important;
+            }
+            #StatusTable {
+                width: 25% !important;
+            }
+            #StatusTable > .entry {
+                padding: 10px;
+            }
+            #StatusTable > .entry .title {
+                font-size: 14px;
+            }
+            #StatusTable > .entry .infoItem {
+                padding: 5px 0;
+            }
+            .measurement {
+                font-size:14px;
+                padding: 3px;
+                color: yellow;
+                background-color:#0b859c;
+                border-radius: 6px;
+            }
+            .measurement.water {
+                color:darkblue;
+                background-color: #7cd1ef;
+            }
+            </style>
              <div id="container"></div>
         </div>
     </div>

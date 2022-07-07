@@ -20,7 +20,7 @@ $(function () {
             this.createMapContainer();
 
             // initialize map
-            this.map = L.map(this.mapContainerId).setView([46.1838136, 6.138625], 15);
+            this.map = L.map(this.mapContainerId).setView([46.185726, 6.145177], 15.35);
 
             L.tileLayer(
                 //'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -379,26 +379,34 @@ $(function () {
                                 append(
                                     $('<a />')
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                        .text(window.MESSAGES.box+` ${meter.name}`)
+                                        .text(` ${meter.name}`)
                                 )
                         )
                         .append(
-                            $('<div />').text(window.MESSAGES.humidityLevel+` : ${meter.soilMoisture.toFixed(2) || '-'}`)
+                             $('<div />')
+                                .addClass("infoItem")
+                                .text(window.MESSAGES.humidityLevel+': ')
+                                .append(
+                                    $('<span />')
+                                    .addClass('measurement')
+                                    .text(`${meter.soilMoisture.toFixed(2) || '-'}`+'%')
+                                )
                         )
                         .append(
                             $('<div />')
-                                .append($('<span />').text(
-                                    meter.lastWatering !== "TODAY"
-                                        ? window.MESSAGES.date+": "
-                                        : ""
-                                ))
+                                .addClass("infoItem")
+                                .text(
+                                        meter.lastWatering !== "TODAY" ? window.MESSAGES.suggestedWateringDate+": " : ""
+                                    )
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
                                     ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
-                                    $('<span />').text(meter.nextWateringDeadline.split("T")[0] || "-")
+                                     $('<span />')
+                                        .addClass('measurement')
+                                        .text(meter.nextWateringDeadline.split("T")[0] || "-")
                                 )
                                 .append(
-                                    $('<div />')
+                                    $('<span />')
                                         .addClass(
                                             `next-watering-label ` +
                                             `${meter.nextWatering === "TODAY" && "watered-today"}`

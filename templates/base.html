@@ -41,8 +41,6 @@
             <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" height="40"></a>
           </div>
           <div class="collapse navbar-collapse">
-            {% block navigation %}
-            {% endblock %}
             <!--<ul class="nav navbar-nav navbar-right">
               <li><a class="nav-link" href="getting-started.html">Getting Started</a></li>
               <li><a class="nav-link" href="documentation.html">Documentation</a></li>
@@ -51,6 +49,9 @@
             </ul> -->
               <ul class="nav navbar-nav navbar-right">
                 <li>
+                    <div id="connection-status" class="unknown">&nbsp;</div>
+                  </li>
+                  <li>
                     {% get_current_language as LANGUAGE_CODE %}
 
                     <div id="language-picker">
@@ -86,6 +87,12 @@
                     <ul class="dropdown-menu dropdown-user">
 
                         {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'box-create' %}"><i class="fa fa-fw"></i><span style="margin: 2px;" class="glyphicon glyphicon-plus"></span>{% trans "Configure a new Cluster" %}</a>
+                                <li>
+                                    ---------- <!-- TODO: add clean divider via CSS -->
+                                </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                             </li>
@@ -101,10 +108,11 @@
             </ul>
           </div>
         </div>
+        {% block navigation %}
+            {% endblock %}
       </nav>
 
-      <div id="connection-status" class="unknown">&nbsp;</div>
-      <div id="main-container" style="min-height: calc(100vh - 175px); padding: 100px 0;background-color: #edf2f2;">
+      <div id="main-container" style="min-height: calc(100vh - 175px); padding: 10px 0;background-color: #edf2f2;">
         <div class="container" style="min-height: 70vh; width: 100%;">
             <div class="row">
                 <div class="col col-xs-12">
@@ -120,8 +128,7 @@
       <div class="site-footer">
         <div class="container">
           <div class="copyright clearfix">
-              <p><b>IMU</b> {% trans "of ICCS" %}
-                  <p>© 2020 {% trans "All rights reserved – developed in the NAIADES project" %}</p>
+              <p><b>IMU</b> {% trans "of ICCS" %} &nbsp;&nbsp;&nbsp;&nbsp;© 2020-2022 {% trans "All rights reserved – developed in the NAIADES project" %}</p>
               <div>
                   <input type="checkbox" id="id-automatic-cluster-redirect" {% if AUTOMATIC_CLUSTER_REDIRECT %}checked="checked"{% endif %}>
                   <label for="id-automatic-cluster-redirect">{% trans "Automatically move to cluster page" %}</label>
