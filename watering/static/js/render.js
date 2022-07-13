@@ -379,11 +379,11 @@ $(function () {
                                 append(
                                     $('<a />')
                                         .attr('href', `/watering/details/?id=${meter.boxId}`)
-                                        .text(`${meter.name}`)
+                                        .text(` ${meter.name}`)
                                 )
                         )
                         .append(
-                            $('<div />')
+                             $('<div />')
                                 .addClass("infoItem")
                                 .text(window.MESSAGES.humidityLevel+': ')
                                 .append(
@@ -401,24 +401,24 @@ $(function () {
                                 .append(
                                     meter.lastWatering !== "TODAY" &&
                                     ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
-                                    $('<span />')
+                                     $('<span />')
                                         .addClass('measurement')
                                         .text(meter.nextWateringDeadline.split("T")[0] || "-")
                                 )
                                 .append(
                                     $('<span />')
-                                    .addClass(
-                                        `next-watering-label ` +
-                                        `${meter.nextWatering === "TODAY" && "watered-today"}`
-                                    )
-                                    .css('background-color', color)
-                                    .text((
-                                        meter.lastWatering !== "TODAY"
-                                            ? `${nextWateringMessages[meter.nextWatering]}`
-                                            : window.MESSAGES.watered+" ✓"
-                                    )+ (
-                                        !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
-                                    ))
+                                        .addClass(
+                                            `next-watering-label ` +
+                                            `${meter.nextWatering === "TODAY" && "watered-today"}`
+                                        )
+                                        .css('background-color', color)
+                                        .text((
+                                            meter.lastWatering !== "TODAY"
+                                                ? `${nextWateringMessages[meter.nextWatering]}`
+                                                : window.MESSAGES.watered+" ✓"
+                                        )+ (
+                                            !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
+                                        ))
                                 )
                         )
                         .append(
