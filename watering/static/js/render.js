@@ -39,6 +39,13 @@ $(function () {
             this.addCenterLocationButton();
         },
 
+        stopCentering: function() {
+            if (NaiadesRender.locationUpdateSubscriptionId) {
+                LocationManager.unsubscribe(NaiadesRender.locationUpdateSubscriptionId);
+                NaiadesRender.locationUpdateSubscriptionId = null;
+            }
+        },
+
         addCenterLocationButton: function() {
             // add button to set map
             // to automatically center in current GPS location
@@ -72,11 +79,8 @@ $(function () {
 
             // stop automatically update map location
             // if map was moved manually by user
-            this.map.on("moveend", function() {
-                // if (NaiadesRender.locationUpdateSubscriptionId) {
-                //     LocationManager.unsubscribe(NaiadesRender.locationUpdateSubscriptionId);
-                //     NaiadesRender.locationUpdateSubscriptionId = null;
-                // }
+            this.map.on("mousedown", function() {
+                NaiadesRender.stopCentering();
             });
         },
 
@@ -246,6 +250,10 @@ $(function () {
                 .addClass("selected")
                 .get(0)
                 .scrollIntoView();
+
+            // now that we have selected a specific box
+            // stop centering map around our current position
+            this.stopCentering();
         },
 
         createSensorLocationPoint: function(flowerbed, sensorLocation, color) {
