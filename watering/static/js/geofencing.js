@@ -11,7 +11,7 @@ $(function() {
 
         if (!controller.currentPositionMarker) {
             controller.currentPositionMarker = new google.maps.Marker({
-                icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
                 position: mapsPosition,
                 title: window.MESSAGES.currentLocation,
                 map: controller.map,
