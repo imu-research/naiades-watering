@@ -96,7 +96,7 @@ $(function() {
                 .addClass('notification')
                 .append($('<div />')
                     .addClass('message')
-                    .text("Please select the box you're about to start watering.")
+                    .text(window.MESSAGES.selectBoxAboutToStartWatering)
                 );
 
             // show an option for each local measurement
@@ -105,7 +105,7 @@ $(function() {
                     .append($('<button />')
                         .addClass('btn btn-success')
                         .css("margin-right", "10px")
-                        .text(`Box ${localMeasurement.boxId}`)
+                        .text(localMeasurement.name || `Box #${localMeasurement.id}`)
                         .on('click', function () {
                             notificationUI.redirectTo(localMeasurement);
                         })
