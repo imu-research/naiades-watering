@@ -59,7 +59,16 @@ window.ClusterDetailsGauge = {
                 return this.grades[i];
             }
         }
-        return null;
+
+        // lower than min
+        if (lookupScore < this.grades[0].lowScore) {
+            return this.grades[0];
+        }
+
+        // higher than max
+        if (lookupScore > this.grades[this.grades.length - 1].highScore) {
+            return this.grades[this.grades.length - 1];
+        }
     },
 
     initialize: function(recommendedConsumption) {

@@ -47,16 +47,25 @@ $(function() {
             this.$container.empty();
         },
 
+        redirectTo(measurement) {
+            // construct cluster's URL
+            const clusterUrl = `/watering/cluster/?id=${measurement.boxId}`;
+
+            // no need to actually redirect if we're already in cluster
+            if (window.location.href.includes(clusterUrl)) {
+                return
+            }
+
+            // perform redirect
+            window.location.href = `${clusterUrl}&return=event-log`;
+        },
+
         notify(localMeasurements) {
             // clear old notifications
             this.clear();
 
             // get container
             const $container  = this.$container;
-
-            const redirectTo = function(measurement) {
-                window.location.href = `/watering/cluster/?id=${measurement.boxId}&return=event-log`
-            };
 
             // no options
             if (localMeasurements.length === 0) {
@@ -74,9 +83,14 @@ $(function() {
 
             // redirect if only one is present & functionality is not disabled
             if ((localMeasurements.length === 1) && (!window.SETTINGS.disableAutomaticClusterRedirect)) {
-                return redirectTo(localMeasurements[0]);
+                return this.redirectTo(localMeasurements[0]);
             }
 
+            // show notifications for different points
+            this.showNotifications($container, localMeasurements);
+        },
+
+        showNotifications($container, localMeasurements) {
             // show dialog to select from many
             const $notification = $('<div />')
                 .addClass('notification')
@@ -93,7 +107,7 @@ $(function() {
                         .css("margin-right", "10px")
                         .text(`Box ${localMeasurement.boxId}`)
                         .on('click', function () {
-                            redirectTo(localMeasurement);
+                            notificationUI.redirectTo(localMeasurement);
                         })
                     );
             });
