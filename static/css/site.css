@@ -251,7 +251,8 @@ body {
     border-top: 1px solid #50c1e9;
     background: url(../img/wild_flowers.png) repeat 0 0;
 }
-pagenav-header {
+
+.pagenav-header {
     padding-top:2px;
     border-top: 1px solid #50c1e9;
 }

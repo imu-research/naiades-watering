@@ -69,7 +69,7 @@ msgstr "Inconnu"
 #: .\templates\util\js-translations.html:11
 #: .\watering\templates\watering\daily-report.html:98
 msgid "Humidity Level"
-msgstr "Taux d'humidité"
+msgstr "Humidité"
 
 #: .\templates\util\js-translations.html:12
 msgid "Suggested watering date"

@@ -150,3 +150,31 @@
     color: #aaa;
     padding: 10px;
 }
+
+/* User feedback-based overrides */
+#map-container {
+    width: calc(75% - 15px) !important;
+}
+#StatusTable {
+    width: 25% !important;
+}
+#StatusTable > .entry {
+    padding: 10px;
+}
+#StatusTable > .entry .title {
+    font-size: 14px;
+}
+#StatusTable > .entry .infoItem {
+    padding: 5px 0;
+}
+.measurement {
+    font-size:14px;
+    padding: 3px;
+    color: yellow;
+    background-color:#0b859c;
+    border-radius: 6px;
+}
+.measurement.water {
+    color:darkblue;
+    background-color: #7cd1ef;
+}

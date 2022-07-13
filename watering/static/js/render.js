@@ -315,7 +315,7 @@ $(function () {
                         ]
                     }
                 }], {
-                    color: color,
+                    color: '#8a6d3b',
                     fillOpacity: 0.8,
                 }).addTo(that.map);
 
@@ -420,17 +420,21 @@ $(function () {
                                             !meter.isSetup ? ' - '+window.MESSAGES.setup+'' : ''
                                         ))
                                 )
-                                .append(
-                                    meter.lastWatering !== "TODAY" &&
-                                    meter.nextWateringAmountRecommendation &&
-                                    String(meter.nextWateringAmountRecommendation).indexOf("1970-") !== 0 ?
-                                    $('<div />')
-                                        .text(
-                                            window.MESSAGES.amount+`: ` +
-                                            `${Math.round(meter.nextWateringAmountRecommendation * 100) / 100} lt`
-                                        ) : ''
-                                )
                         )
+                        .append(
+                            meter.lastWatering !== "TODAY" &&
+                            meter.nextWateringAmountRecommendation &&
+                            String(meter.nextWateringAmountRecommendation).indexOf("1970-") !== 0 ?
+                            $('<div />')
+                                .text(window.MESSAGES.amount+`: `)
+                                .append(
+                                    $('<span />')
+                                        .addClass('measurement water')
+                                        .text(`${Math.round(meter.nextWateringAmountRecommendation * 100) / 100} ℓ`)
+                                )
+                            : ''
+                        )
+
                         .append(
                             $('<div />')
                                 .addClass("actions")
