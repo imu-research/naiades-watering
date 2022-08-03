@@ -16,8 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from watering.forms import BoxSetupForm, IssueForm
 from watering.models import WateringBox, Issue, Sensor, Weather, Event, EventParseError, LocationEvent
-from watering.managers import ReportDataManager, BoxAlreadyExists
-
+from watering.managers import ReportDataManager, BoxAlreadyExists, WeatherForecastManager
 
 from naiades_watering.settings import DEBUG
 
@@ -47,6 +46,10 @@ def home(request):
     return render(request, 'watering/view.html', {
         'boxes': boxes,
         'mode': "map-list",
+        "will_rain": any([
+            item["value"] >= 2
+            for item in WeatherForecastManager().get_daily_values(prop="precipitationProbability")
+        ]),
     })
 
 

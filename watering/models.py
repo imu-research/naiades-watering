@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.postgres.fields import JSONField
 from django.db.models import Model, CharField, DateTimeField, BooleanField, SET_NULL, ForeignKey, TextField, \
-    DecimalField, Q, CASCADE
+    DecimalField, Q, CASCADE, SmallIntegerField, DateField
 from django.utils.timezone import now
 
 from watering.managers import OrionEntity, OrionError
@@ -637,3 +637,14 @@ class Event(Model):
             }
             for event in events
         ]
+
+
+class WeatherForecast(Model):
+    # weather information from forecast model
+    date = DateField()
+    hour = SmallIntegerField()
+    data = JSONField()
+    updated_at = DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("date", "hour", )

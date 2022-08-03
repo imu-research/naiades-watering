@@ -178,3 +178,11 @@
     color:darkblue;
     background-color: #7cd1ef;
 }
+
+#rain-notification {
+    padding: 6px;
+    font-weight: 700;
+    color: #368fcd;
+    border-radius: 15px;
+    text-align: center;
+}

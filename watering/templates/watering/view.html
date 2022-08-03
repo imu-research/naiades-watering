@@ -6,7 +6,7 @@
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
-    <link href="{% static 'css/view.css' %}?v=20220713.1" rel="stylesheet">
+    <link href="{% static 'css/view.css' %}?v=20220803.1" rel="stylesheet">
     <link href="{% static 'css/weather.css' %}?v=20220206.1" rel="stylesheet">
 {% endblock %}
 
@@ -46,16 +46,7 @@
              <div class="col-md-6">
                  <!-- If precipitationProbability(0-0 or 0-1 or 0-2 or 0-3) is over 2mm display the notification (precipitationProbability is the amount of precipitation in mm)-->
 
-                 <div id="rain-notification" style="display: none">
-                     <style> /* FIXME: move to stylesheet */
-                         #rain-notification {
-                             background-color:lime;
-                             color:#3c763d;
-                             padding:6px;
-                             border-radius:15px;
-                             text-align: center;
-                         }
-                     </style>
+                 <div id="rain-notification" style="{% if not will_rain %}display: none{% endif %}">
                      {% trans "Possibility of rain today. Watering might be unnecessary." %}
                  </div>
              </div>
