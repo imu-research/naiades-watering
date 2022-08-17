@@ -75,7 +75,10 @@ class ReportDataManager:
 
     @staticmethod
     def parse_date(value):
-        return datetime.strptime(value.split("T")[0], "%Y-%m-%d")
+        try:
+            return datetime.strptime(value.split("T")[0], "%Y-%m-%d")
+        except AttributeError:
+            datetime.utcfromtimestamp(value / 1000)
 
     @staticmethod
     def _rounded(value):
