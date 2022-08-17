@@ -84,7 +84,7 @@ class WeatherForecastManager(object):
 
             if updated_at < now() - timedelta(minutes=self.UPDATE_INTERVAL_MINUTES):
                 raise AttributeError()
-        except AttributeError():
+        except AttributeError:
             self.run()
 
         return [

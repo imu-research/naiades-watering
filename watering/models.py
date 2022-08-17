@@ -32,7 +32,7 @@ class WateringBox(Model):
             return [
                 box
                 for box in WateringBox.list()
-                if box.id == box_id
+                if box.id == box_id or box_id == f'urn:ngsi-ld:FlowerBed:FlowerBed-{box.id}'
             ][0]
         except IndexError:
             raise WateringBox.DoesNotExist()
@@ -246,6 +246,31 @@ class WateringBox(Model):
         return results
 
     @staticmethod
+    def box_last_watering_date_history(box_id, fromDate, to):
+        # find box
+        box = WateringBox.get(box_id)
+
+        historic_data = WateringBox.last_watering_date_history(
+            box_id=box.data["id"],
+            fromDate=fromDate,
+            to=to
+        )
+
+        # render
+        return historic_data
+
+    @staticmethod
+    def get_watering_dates(box_id, fromDate, to):
+        last_watering_date_history = WateringBox.box_last_watering_date_history(
+            box_id, fromDate, to
+        )
+
+        return list(set([
+            f"{datetime.fromtimestamp(item['value'] // 1000).strftime('%Y-%m-%d')}T00:00:00.000"
+            for item in last_watering_date_history
+        ]))
+
+    @staticmethod
     def consumption_history(box_id, fromDate, to):
         # get humidity history of box id
         try:
@@ -258,12 +283,20 @@ class WateringBox(Model):
         except OrionError:
             return []
 
+        watering_dates = WateringBox.get_watering_dates(box_id, fromDate, to)
+
         results = []
         for idx, index in enumerate(response["index"]):
-            results.append({
-                "date": index,
-                "value": response["values"][idx],
-            })
+            if index in watering_dates:
+                results.append({
+                    "date": index,
+                    "value": response["values"][idx],
+                })
+            else:
+                results.append({
+                    "date": index,
+                    "value": 0,
+                })
 
         return results
 

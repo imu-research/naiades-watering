@@ -389,8 +389,8 @@ $(function() {
 
             $tr
                 .append($("<td />").text(log.date))
-                .append($("<td />").text(log.value_old !== null ? log.value_old : "-"))
-                .append($("<td />").text(log.value_new !== null ? log.value_new : "-"));
+                .append($("<td />").text(log.value_old !== null ? Math.round(log.value_old * 10) / 10 : "-"))
+                .append($("<td />").text(log.value_new !== null ? Math.round(log.value_new * 10) / 10 : "-"));
 
             $table
                 .find("tbody")

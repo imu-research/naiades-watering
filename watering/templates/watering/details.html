@@ -113,7 +113,7 @@
                   <tr>
                     <th style="min-width: 400px;">{% trans "Date" %}</th>
                     <th>{% trans "Amount of watering" %}</th>
-                    <th>{% trans "Time of watering" %}</th>
+                    <th>{% trans "Watering duration (seconds)" %}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -142,7 +142,7 @@
         window.BOX_ID = "{{ id }}";
     </script>
     {% include 'watering/sensor-js.html' %}
-    <script src="{% static 'js/box-details-graphs.js' %}?v=20220209.1"></script>
+    <script src="{% static 'js/box-details-graphs.js' %}?v=20220817.1"></script>
     <script src="{% static 'js/report.js' %}"></script>
     <script>
         $(function() {
