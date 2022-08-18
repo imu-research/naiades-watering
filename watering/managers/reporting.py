@@ -78,7 +78,7 @@ class ReportDataManager:
         try:
             return datetime.strptime(value.split("T")[0], "%Y-%m-%d")
         except AttributeError:
-            datetime.utcfromtimestamp(value / 1000)
+            return datetime.utcfromtimestamp(value / 1000)
 
     @staticmethod
     def _rounded(value):
@@ -89,13 +89,15 @@ class ReportDataManager:
 
     def _process_entity_data(self, datum, box_id, entity_id, watering_dates_by_entity):
         # get watering dates for this entity
-        watering_dates = watering_dates_by_entity.get(entity_id, set())
+        watering_dates = [
+            watering_time.date() for watering_time in watering_dates_by_entity.get(entity_id, set())
+        ]
 
         # only k
         datum["date"] = datum["date"].split("T")[0]
 
         # parse date
-        parsed_date = self.parse_date(value=datum["date"])
+        parsed_date = self.parse_date(value=datum["date"]).date()
 
         # get consumption, filter by date
         datum["consumption"] = (
