@@ -157,6 +157,27 @@ $(function() {
         });
     }
 
+    function getDividedData(data, divideBy) {
+        // copy to new list to avoid updated original data
+        const updatedData = [];
+        $.each(data, function(idx, datum) {
+            // copy object
+            const updatedDatum = JSON.parse(JSON.stringify(datum));
+
+            // divide all properties
+            $.each(["consumption", "prediction", "duration"], function(jdx, prop) {
+                if (updatedDatum[prop]) {
+                    updatedDatum[prop] /= (divideBy || 1);
+                }
+            });
+
+            // add to list
+            updatedData.push(updatedDatum);
+        });
+
+        return updatedData;
+    }
+
     function renderChartData(boxId, data, divideBy) {
         const title = (
             divideBy
@@ -164,21 +185,12 @@ $(function() {
             : window.MESSAGES.periodicConsCluster
         );
 
-        // divide all properties
-        $.each(data, function(idx, datum) {
-            $.each(["consumption", "prediction", "duration"], function(jdx, prop) {
-                if (datum[prop]) {
-                    datum[prop] /= (divideBy || 1);
-                }
-            })
-        });
-
         // show related chart
         showChart(
             `chart-data${divideBy ? "-per-box" : ""}-${boxId}`,
             "report-data",
             title,
-            data
+            getDividedData(data, divideBy)
         );
     }
 
@@ -240,7 +252,8 @@ $(function() {
 
         // calculate total consumption
         const totalConsumption = calculateTotal(boxData.data);
-        const totalTimeSpent = calculateTotal(boxData.data, "time_spent");
+        //const totalTimeSpent = calculateTotal(boxData.data, "time_spent");
+        const totalTimeSpent = calculateTotal(boxData.data, "duration");
 
         // show values
         $container
