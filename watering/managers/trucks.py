@@ -28,8 +28,9 @@ class TruckDistanceManager:
 
         # call the OSMR API
         response = requests.get(
-            f"http://router.project-osrm.org/route/v1/car/{';'.join(formatted_points)}?overview=false"
-        )
+            f"https://routing.openstreetmap.de/routed-foot/route/v1/driving/{';'.join(formatted_points)}?overview=false"
+    )
+        '''print(f"http://router.project-osrm.org/route/v1/car/{';'.join(formatted_points)}?overview=false")'''
 
         if response.status_code != 200:
             raise ValueError(response.content)
@@ -46,7 +47,7 @@ class TruckDistanceManager:
             return 0
 
         # add parking at beginning & end
-        points = [self.parking] + points + [self.parking]
+        '''points = [self.parking] + points + [self.parking]'''
 
         # process points in fixed-size batches
         # this is because requests to external service
