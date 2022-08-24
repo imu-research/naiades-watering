@@ -373,12 +373,15 @@ class OrionEntity(object):
 
     def put_device_status(self, service, device_id, status):
         # change device status
-        response = requests.post(
-            f'http://{self.dmv_endpoint}/v2/entities/{device_id}/attrs?options=keyValues',
-            headers=self.get_headers(service=service),
-            json={
+        data = {
                 "deviceState": status,
-            },
+            }
+        body = self.get_signed_data(data)
+        print(body)
+        response = requests.post(
+            f'http://{self.dmv_endpoint}/validation/v2/entities/{device_id}/attrs?options=keyValues',
+            headers=self.get_headers(service=service),
+            json=body,
         )
 
         # raise exception if response code is in 4xx, 5xx
