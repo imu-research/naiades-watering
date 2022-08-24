@@ -377,7 +377,6 @@ class OrionEntity(object):
                 "deviceState": status,
             }
         body = self.get_signed_data(data)
-        print(body)
         response = requests.post(
             f'http://{self.dmv_endpoint}/validation/v2/entities/{device_id}/attrs?options=keyValues',
             headers=self.get_headers(service=service),
