@@ -2,9 +2,9 @@ version: "3.3"
 
 services:
   watering_db:
-    image: postgres
+    image: naiades_watering
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=naiades_watering
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   watering_migrate:
@@ -12,7 +12,7 @@ services:
     command: python manage.py migrate --noinput
     environment:
         - POSTGRES_HOST=watering_db
-        - POSTGRES_DB=postgres
+        - POSTGRES_DB=naiades_watering
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
     depends_on:
@@ -27,7 +27,7 @@ services:
      # - "80"
     environment:
         - POSTGRES_HOST=watering_db
-        - POSTGRES_DB=postgres
+        - POSTGRES_DB=naiades_watering
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
     depends_on:
