@@ -235,7 +235,11 @@ $(function() {
     function formatTime(nSeconds) {
         const nSecondsInt = Math.floor(nSeconds);
 
-        if (nSeconds > 60) {
+        if (nSeconds >= 3600) {
+            return `${Math.floor(nSecondsInt / 3600)} hr ${Math.floor((nSecondsInt % 3600) / 60)} min ${(nSecondsInt % 60)} s`;
+        }
+
+        if (nSeconds >= 60) {
             return `${Math.floor(nSecondsInt / 60)} min ${(nSecondsInt % 60)} s`;
         }
 
@@ -252,8 +256,7 @@ $(function() {
 
         // calculate total consumption
         const totalConsumption = calculateTotal(boxData.data);
-        //const totalTimeSpent = calculateTotal(boxData.data, "time_spent");
-        const totalTimeSpent = calculateTotal(boxData.data, "duration");
+        const totalTimeSpent = calculateTotal(boxData.data, "time_spent");
 
         // show values
         $container

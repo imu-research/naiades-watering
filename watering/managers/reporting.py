@@ -87,6 +87,19 @@ class ReportDataManager:
 
         return round(value, 2)
 
+    def _calculate_time_spent(self, event_times):
+        event_times = sorted(event_times)
+
+        current_time = None
+        time_spent_by_date = {}
+        for event_time in event_times:
+            if (current_time is None) or (current_time.date() != event_time.date()):
+                current_time = event_time
+            else:
+                time_spent_by_date[event_time.date()] = (event_time - current_time).total_seconds()
+
+        return sum(time_spent_by_date.values())
+
     def _process_entity_data(self, datum, box_id, entity_id, watering_dates_by_entity):
         # get watering dates for this entity
         watering_dates = [
@@ -118,11 +131,16 @@ class ReportDataManager:
             )
         ) if datum["duration"] is not None else None
 
-        datum["time_spent"] = ReportDataManager(date_range={
-            "from": parsed_date,
-            "to": parsed_date + timedelta(days=1),
-        }). \
-            get_time_spent(box_id=box_id)
+        datum["time_spent"] = max(
+            self._calculate_time_spent(
+                event_times=[
+                    event_time
+                    for event_time in watering_dates_by_entity.get(entity_id, set())
+                    if event_time.date().strftime("%Y-%m-%d") == datum["date"]
+                ]
+            ) or 0,
+            datum["duration"] or 0
+        )
 
     def get_entities_data(self):
         # check if data have been loaded
