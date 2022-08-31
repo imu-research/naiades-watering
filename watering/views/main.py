@@ -391,17 +391,7 @@ def cluster_details(request):
     })
 
 
-def get_report_range(request):
-    try:
-        to_date = datetime.datetime.strptime(request.GET["to"], "%d%m%Y")
-    except (KeyError, ValueError):
-        to_date = datetime.datetime.now()
-
-    try:
-        from_date = datetime.datetime.strptime(request.GET["from"], "%d%m%Y")
-    except (KeyError, ValueError):
-        from_date = to_date - datetime.timedelta(30)
-
+def get_report_range_from_dates(from_date, to_date):
     return {
         "from": from_date,
         "to": to_date,
@@ -412,8 +402,25 @@ def get_report_range(request):
     }
 
 
+def get_report_range_from_request(request):
+    try:
+        to_date = datetime.datetime.strptime(request.GET["to"], "%d%m%Y")
+    except (KeyError, ValueError):
+        to_date = datetime.datetime.now()
+
+    try:
+        from_date = datetime.datetime.strptime(request.GET["from"], "%d%m%Y")
+    except (KeyError, ValueError):
+        from_date = to_date - datetime.timedelta(30)
+
+    return get_report_range_from_dates(
+        from_date=from_date,
+        to_date=to_date,
+    )
+
+
 def box_monthly_report_data(request):
-    date_range = get_report_range(request=request)
+    date_range = get_report_range_from_request(request=request)
 
     manager = ReportDataManager(date_range=date_range)
 
@@ -424,7 +431,7 @@ def box_monthly_report_data(request):
 
 
 def box_monthly_report_distances(request):
-    date_range = get_report_range(request=request)
+    date_range = get_report_range_from_request(request=request)
 
     manager = ReportDataManager(date_range=date_range)
 
@@ -435,7 +442,7 @@ def box_monthly_report_distances(request):
 
 
 def box_monthly_report(request):
-    date_range = get_report_range(request=request)
+    date_range = get_report_range_from_request(request=request)
 
     # get boxes for this user
     boxes = WateringBox.list()
@@ -458,64 +465,27 @@ def box_monthly_report(request):
 
 
 def box_daily_report(request):
-    # get boxes for this user
-    boxes = WateringBox.list()
+
 
     _now = datetime.datetime.now().isoformat()
 
     # since the beginning of the day
-    start_date_raw = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    start_date = start_date_raw.isoformat()
+    date_range = get_report_range_from_dates(
+        from_date=datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
+        to_date=datetime.datetime.now(),
+    )
 
-    # get consumption historic data
-    try:
-        consumption_history = WateringBox.consumption_history_list_values(from_date=start_date, to=_now)
-    except ReadTimeout:
-        consumption_history = []
-    # Get the last watering value
-    cons = []
-    for box in consumption_history:
-        try:
-            results = [item for item in reversed(box['results']) if item["value"] is not None][0]
-        except IndexError:
-            results = None
-        if results:
-            value = results['value']
-            cons.append({'entity_id': box['entity_id'], 'value': value})
+    manager = ReportDataManager(date_range=date_range)
 
-    # calculate total watering consumption and time
-    total_consumption = 0
-    total_time = 0
-    data = []
-    for box in boxes:
-        if box.data['lastWatering'] == "TODAY":
-            total_consumption = total_consumption + box.data['consumption']
-            total_time = total_time + box.data['duration']
-
-            last_watering = 0
-            for c in cons:
-                if c["entity_id"] == box.data['id']:
-                    last_watering = round(c["value"], 2)
-
-            box.data["time_spent"] = ReportDataManager(date_range={
-                "from": start_date_raw,
-                "to": start_date_raw + datetime.timedelta(days=1) - datetime.timedelta(microseconds=1)
-            }).\
-                get_time_spent(box.data["id"])
-
-            data.append({
-                "box": f"Box{box.data['boxId']}",
-                "this_watering": box.data['consumption'],
-                "last_watering": last_watering,
-            })
+    daily_report_data = manager.get_daily_report_data()
 
     # render
     return render(request, 'watering/daily-report.html', {
         'boxes': [
             box.data
-            for box in boxes
+            for box in daily_report_data["boxes"]
         ],
-        'total_consumption': total_consumption,
-        'total_time': total_time,
-        'graph_data': json.dumps(data),
+        'total_consumption': daily_report_data["total_consumption"],
+        'total_time': daily_report_data["total_watering_time"],
+        'graph_data': json.dumps(daily_report_data["data"]),
     })

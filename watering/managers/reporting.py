@@ -14,28 +14,6 @@ class ReportDataManager:
     def __init__(self, date_range):
         self.date_range = date_range
 
-    def get_time_spent(self, box_id):
-        from watering.models import LocationEvent
-
-        # get time spent
-        time_spent = 0
-
-        try:
-            box_id = int(box_id.split("-")[-1])
-        except (IndexError, ValueError, TypeError):
-            box_id = box_id
-
-        location_events = LocationEvent.objects. \
-            filter(box_id=box_id).\
-            filter(exited__gte=self.date_range["from"]). \
-            filter(exited__lte=self.date_range["to"]). \
-            exclude(entered=None)
-
-        for location_event in location_events:
-            time_spent += location_event.duration
-
-        return time_spent
-
     def load_history_data(self):
         from watering.models import WateringBox
 
@@ -281,3 +259,79 @@ class ReportDataManager:
             ])
             for last_watering_date_history in last_watering_date_history_list
         }
+
+    def _get_daily_report_consumptions(self):
+        consumptions = []
+        for consumption_history_item in self.consumption_history:
+            try:
+                results = [item for item in reversed(consumption_history_item['results']) if item["value"] is not None][0]
+            except IndexError:
+                results = None
+            if results:
+                value = results['value']
+                consumptions.append({'entity_id': consumption_history_item['entity_id'], 'value': value})
+
+        return consumptions
+
+    def _prepare_daily_report_response_data(self, response, consumptions, watering_dates_by_entity):
+        # initialize response
+        response["total_consumption"] = 0
+        response["total_watering_time"] = 0
+        response["data"] = []
+
+        # update for each box
+        for box in response["boxes"]:
+            if box.data['lastWatering'] == "TODAY":
+                # update totals
+                response["total_consumption"] = response["total_consumption"] + box.data['consumption']
+                response["total_watering_time"] = response["total_watering_time"] + box.data['duration']
+
+                # measure last watering
+                last_watering = 0
+                for consumption in consumptions:
+                    if consumption["entity_id"] == box.data['id']:
+                        last_watering = round(consumption["value"], 2)
+
+                # calculate time spent
+                box.data["time_spent"] = self._calculate_time_spent(event_times=[
+                    event_time
+                    for event_time in watering_dates_by_entity.get(box.data["id"], set())
+                    if self.date_range["from"].date() <= event_time.date() <= self.date_range["to"].date()
+                ])
+
+                # add to response data
+                response["data"].append({
+                    "box": f"Box{box.data['boxId']}",
+                    "this_watering": box.data['consumption'],
+                    "last_watering": last_watering,
+                })
+
+        return response
+
+    def get_daily_report_data(self):
+        from watering.models import WateringBox
+
+        # get boxes for this user
+        boxes = WateringBox.list()
+
+        # check if data have been loaded
+        if self.consumption_history is None:
+            self.load_history_data()
+
+        # load watering dates by entity
+        watering_dates_by_entity = self.preprocessing_duration_data()
+
+        # Get the last watering value
+        consumptions = self._get_daily_report_consumptions()
+
+        # prepare daily response data
+        response = {
+            "boxes": boxes,
+        }
+
+        # calculate total watering consumption and time spend
+        return self._prepare_daily_report_response_data(
+            response=response,
+            consumptions=consumptions,
+            watering_dates_by_entity=watering_dates_by_entity,
+        )
