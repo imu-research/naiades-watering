@@ -46,7 +46,10 @@ def is_backoffice(user):
 @register.filter
 def display_seconds(seconds):
     # convert to int
-    seconds = int(seconds)
+    try:
+        seconds = int(seconds)
+    except TypeError:
+        return seconds
 
     if seconds < 60:
         return "00:%02d" % seconds

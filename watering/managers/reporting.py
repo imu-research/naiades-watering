@@ -10,6 +10,7 @@ class ReportDataManager:
     prediction_history = None
     watering_duration = None
     truck_location_history = None
+    truck_total_time_spent = None
 
     def __init__(self, date_range):
         self.date_range = date_range
@@ -39,6 +40,12 @@ class ReportDataManager:
             self.watering_duration = WateringBox.watering_duration_history_list(*params)
         except ReadTimeout:
             self.watering_duration = []
+
+        # get total time spent by trucks
+        try:
+            self.truck_total_time_spent = WateringBox.get_truck_total_time_spent(*params)
+        except ReadTimeout:
+            self.truck_total_time_spent = 0
 
     def load_location_history(self):
         from watering.models import WateringBox
@@ -120,7 +127,7 @@ class ReportDataManager:
             datum["duration"] or 0
         )
 
-    def get_entities_data(self):
+    def get_monthly_response_data(self):
         # check if data have been loaded
         if self.consumption_history is None:
             self.load_history_data()
@@ -172,7 +179,10 @@ class ReportDataManager:
                 "data": data_by_date,
             })
 
-        return entities_data
+        return {
+            "data": entities_data,
+            "truck_total_time_spent": self.truck_total_time_spent,
+        }
 
     @staticmethod
     def _get_locations_by_date(location_entries):
@@ -327,6 +337,7 @@ class ReportDataManager:
         # prepare daily response data
         response = {
             "boxes": boxes,
+            "truck_total_time_spent": self.truck_total_time_spent,
         }
 
         # calculate total watering consumption and time spend

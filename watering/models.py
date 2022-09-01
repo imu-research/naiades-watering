@@ -413,6 +413,17 @@ class WateringBox(Model):
         return WateringBox.format_list_response(response)
 
     @staticmethod
+    def get_truck_total_time_spent(from_date, to):
+        try:
+            return OrionEntity().get_truck_total_time_spent(
+                service=WateringBox.service,
+                from_date=from_date,
+                to=to
+            )
+        except OrionError:
+            return 0
+
+    @staticmethod
     def _format_truck_location_history(response):
         values = [{
             "entity_id": response["entityId"],

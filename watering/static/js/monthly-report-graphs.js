@@ -276,7 +276,7 @@ $(function() {
             .text(formatTime(totalTimeSpent / nBoxes));
     }
 
-    function renderOverall(overallByDate) {
+    function renderOverall(overallByDate, truckTotalTimeSpent) {
         // prepare values by date by reformatting into flat list
         const overallData = [];
         for (const date of Object.keys(overallByDate)) {
@@ -297,7 +297,7 @@ $(function() {
         // calculate total consumption & duration
         const totalConsumption = calculateTotal(overallData);
         const totalDuration = calculateTotal(overallData, "duration");
-        const totalTimeSpent = calculateTotal(overallData, "time_spent");
+        const totalTimeSpent = truckTotalTimeSpent;  // calculateTotal(overallData, "time_spent");
 
         // show values
         const $container = $("#overall-values");
@@ -318,7 +318,7 @@ $(function() {
     // get monthly report data
     $.get({
         url: `/watering/monthlyReport/data/?from=${window.PERIOD_START}&to=${window.PERIOD_END}`,
-        success: function({data}) {
+        success: function({data, truck_total_time_spent}) {
             const overallByDate = {};
 
             $.each(data, function(idx, boxData) {
@@ -331,7 +331,7 @@ $(function() {
                 addToOverall(overallByDate, boxData.data);
             });
 
-            renderOverall(overallByDate);
+            renderOverall(overallByDate, truck_total_time_spent);
         }
     });
 

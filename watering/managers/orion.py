@@ -249,6 +249,42 @@ class OrionEntity(object):
         # return list
         return response.json()
 
+    @staticmethod
+    def _calculate_total_time_spent(event_times):
+        total_time_spent = 0  # in seconds
+        previous_event_time = None
+        for event_time in sorted(event_times):
+            # increase if within the same day
+            if previous_event_time and event_time.date() == previous_event_time.date():
+                total_time_spent += (event_time - previous_event_time).total_seconds()
+
+            previous_event_time = event_time
+
+        return total_time_spent
+
+    def get_truck_total_time_spent(self, service, from_date, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/dateObserved?fromDate={from_date}&toDate={to}',
+            headers={
+                'Fiware-Service': service or 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # parse event times
+        event_times = [
+            dateutil.parser.isoparse(event_time_raw)
+            for event_time_raw in response.json()["index"]
+        ]
+
+        return self._calculate_total_time_spent(event_times=event_times)
+
     def prediction_history_list(self, service, fromDate, to):
         # list entities
         response = requests.get(

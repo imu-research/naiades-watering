@@ -425,9 +425,7 @@ def box_monthly_report_data(request):
     manager = ReportDataManager(date_range=date_range)
 
     # return as json response
-    return JsonResponse({
-        "data": manager.get_entities_data(),
-    })
+    return JsonResponse(manager.get_monthly_response_data())
 
 
 def box_monthly_report_distances(request):
@@ -487,5 +485,6 @@ def box_daily_report(request):
         ],
         'total_consumption': daily_report_data["total_consumption"],
         'total_time': daily_report_data["total_watering_time"],
+        'truck_total_time_spent': daily_report_data["truck_total_time_spent"],
         'graph_data': json.dumps(daily_report_data["data"]),
     })
