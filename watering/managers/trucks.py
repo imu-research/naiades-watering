@@ -13,7 +13,7 @@ class TruckDistanceManager:
 
     def _calculate_batch_distance(self, points):
         # no distance driven
-        if not points:
+        if len(points or []) <= 1:
             return 0
 
         # validate number of points
