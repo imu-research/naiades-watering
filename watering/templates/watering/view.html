@@ -6,7 +6,7 @@
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
-    <link href="{% static 'css/view.css' %}?v=20220803.1" rel="stylesheet">
+    <link href="{% static 'css/view.css' %}?v=20220921.1" rel="stylesheet">
     <link href="{% static 'css/weather.css' %}?v=20220206.1" rel="stylesheet">
 {% endblock %}
 
@@ -123,7 +123,7 @@
     <script>
         window.RENDERING_MODE = "{{ mode }}";
     </script>
-    <script src="{% static 'js/render.js' %}?v=20220713.1"></script>
+    <script src="{% static 'js/render.js' %}?v=20220921.1"></script>
     {% if "route" in mode %}
         <script src="{% static 'js/show-route.js' %}?v=20210131.1"></script>
     {% endif %}

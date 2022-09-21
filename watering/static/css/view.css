@@ -73,13 +73,13 @@
     display: inline-block;
     padding: 2px 5px;
     color: white;
-    border-radius: 4px;
+    border-radius: 6px;
     margin-top: 10px;
     margin-left: 5px;
+    font-size: 13px;
 }
-
-#StatusTable > .entry .next-watering-label.watered-today {
-    margin-left: 0;
+#StatusTable > .entry .infoItem .next-watering-label {
+    margin-top: 0;
 }
 
 /*#main-container{*/
@@ -168,11 +168,14 @@
     padding: 5px 0;
 }
 .measurement {
-    font-size:14px;
-    padding: 3px;
-    color: yellow;
-    background-color:#0b859c;
+    font-size: 13px;
+    padding: 4px;
+    color: white;
+    background-color: #0b859c;
     border-radius: 6px;
+}
+.measurement.measurement-unknown {
+    background-color: #AAB2BD;
 }
 .measurement.water {
     color:darkblue;

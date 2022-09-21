@@ -254,6 +254,7 @@ class ReportDataManager:
             self.date_range["formatted"]["from"],
             self.date_range["formatted"]["to"],
         )
+        print(params)
 
         # get last watering date historic data
         try:

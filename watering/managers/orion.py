@@ -162,7 +162,7 @@ class OrionEntity(object):
     def prediction_history(self, service, entity_id, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountAdvice/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountRecommendation/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -229,6 +229,7 @@ class OrionEntity(object):
             self.handle_error(response)
 
         # return list
+        print(response.json())
         return response.json()
 
     def last_watering_date_history_list_values(self, service, from_date, to):
@@ -247,6 +248,7 @@ class OrionEntity(object):
             self.handle_error(response)
 
         # return list
+        print(response.json())
         return response.json()
 
     @staticmethod
@@ -288,7 +290,7 @@ class OrionEntity(object):
     def prediction_history_list(self, service, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/nextWateringAmountAdvice/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/nextWateringAmountRecommendation/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',

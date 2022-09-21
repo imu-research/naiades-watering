@@ -1,6 +1,9 @@
 {% load i18n %}
 
 <script>
+    {% get_current_language as LANGUAGE_CODE %}
+    window.LANGUAGE = '{{ LANGUAGE_CODE }}';
+
     window.MESSAGES = {
         today: "{% trans "Today" %}",
         tomorrow: "{% trans "Tomorrow" %}",
@@ -90,7 +93,7 @@
         lastvsprev: "{% trans "Last watering vs previous watering" %}",
         last: "{% trans "This watering" %}",
         prev: "{% trans "Previous watering" %}",
-
+        daysAgo: "{% trans "days ago" %}",
         waterFlowConnected: "{% trans "Waterflow connected" %}",
         waterFlowDisconnected: "{% trans "Waterflow disconnected" %}",
         waterFlowStatusUnavailable: "{% trans "Waterflow status unknown" %}",

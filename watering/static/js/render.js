@@ -177,6 +177,24 @@ $(function () {
             return `${day} ${hourParts[0]}:${hourParts[1]}`;
         },
 
+        getNextWateringMessage: function(nextWatering, lastWatering) {
+            // return next watering date if it's anything other than unknown
+            if (nextWatering.toUpperCase() !== 'UNKNOWN') {
+                return nextWatering
+            }
+
+            // when unknown is used, we want to show to the user
+            // the number of days that have passed since the last watering
+            const nDays = Math.floor((new Date() - (new Date(lastWatering))) / (24 * 3600 * 1000));
+
+            // special handling for FR, different syntax
+            if (window.LANGUAGE === 'fr') {
+                return `il y a ${nDays} jours`
+            }
+
+            return `${nDays} ${window.MESSAGES.daysAgo}`;
+        },
+
         getPopupContent: function(meter) {
             const that = this;
             if (!meter.isSetup) {
@@ -191,11 +209,15 @@ $(function () {
                     .get(0);
             }
 
+            // get next watering message
+            // which will show X days ago if unknown
+            const nextWateringMessage = this.getNextWateringMessage(meter.nextWatering, meter.dateLastWatering);
+
             return $("<div />")
                 .addClass("popup-content")
                 .append($(`<div class="prop-label">${window.MESSAGES.box}:</div><div class="prop-value">${meter.name}</></div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.lastWatering}:</div><div class="prop-value"> ${this.formatDate(meter.dateLastWatering, true)}</div><br>`))
-                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${meter.nextWatering}</div><br>`))
+                .append($(`<div class="prop-label">${window.MESSAGES.nextWatering}:</div><div class="prop-value"> ${nextWateringMessage}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.soil_type}:</div><div class="prop-value"> ${window.MESSAGES.soilTypes[meter.soil_type || "empty"]}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.flowerType}:</div><div class="prop-value">${window.MESSAGES.flowerTypes[meter.flowerType || "empty"]}</div><br>`))
                 .append($(`<div class="prop-label">${window.MESSAGES.sunExposure}:</div><div class="prop-value"> ${window.MESSAGES.sunExposures[meter.sunExposure || "empty"]}</div><br>`))
@@ -340,7 +362,6 @@ $(function () {
                 "TOMORROW": window.MESSAGES.tomorrow,
                 "DAY_AFTER_TOMORROW": window.MESSAGES.day_after_tomorrow,
                 "FUTURE": window.MESSAGES.future,
-                "UNKNOWN": window.MESSAGES.unknown
             };
 
             // empty message
@@ -404,17 +425,22 @@ $(function () {
                             $('<div />')
                                 .addClass("infoItem")
                                 .text(
-                                        meter.lastWatering !== "TODAY" ? window.MESSAGES.suggestedWateringDate+": " : ""
-                                    )
-                                .append(
-                                    meter.lastWatering !== "TODAY" &&
-                                    ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE'].indexOf(meter.nextWatering) >= 0 &&
-                                     $('<span />')
-                                        .addClass('measurement')
-                                        .text(meter.nextWateringDeadline.split("T")[0] || "-")
+                                    meter.lastWatering !== "TODAY" ? `${window.MESSAGES.suggestedWateringDate}: ` : ""
                                 )
                                 .append(
-                                    $('<span />')
+                                    meter.lastWatering !== "TODAY" &&
+                                    ['TODAY', 'TOMORROW', 'DAY_AFTER_TOMORROW', 'FUTURE', 'UNKNOWN'].indexOf(meter.nextWatering) >= 0 &&
+                                     $('<span />')
+                                         .addClass('measurement')
+                                         .addClass(meter.nextWatering === "UNKNOWN" && "measurement-unknown")
+                                         .text((
+                                             meter.nextWatering === "UNKNOWN"
+                                                 ? that.getNextWateringMessage(meter.nextWatering, meter.dateLastWatering)
+                                                 : meter.nextWateringDeadline
+                                         ).split("T")[0] || "-")
+                                )
+                                .append(
+                                    meter.nextWatering !== "UNKNOWN" && $('<span />')
                                         .addClass(
                                             `next-watering-label ` +
                                             `${meter.nextWatering === "TODAY" && "watered-today"}`
