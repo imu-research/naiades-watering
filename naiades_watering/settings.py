@@ -163,7 +163,7 @@ LOGOUT_URL = '/watering/logout'
 ADMIN_URL = '/watering/admin'
 
 # KeyRock Authentication
-OAUTH_SERVER_BASEURL = 'https://test.naiades-project.eu:3443'
+OAUTH_SERVER_BASEURL = 'https://idm.naiades-project.eu'
 SOCIALACCOUNT_ADAPTER = 'keyrock.adapter.KeyRockAdapter'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/watering/login'
 SITE_ID = 1
