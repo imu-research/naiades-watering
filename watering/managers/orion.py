@@ -235,7 +235,7 @@ class OrionEntity(object):
     def last_watering_date_history_list_values(self, service, from_date, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/dateLastWatering/value?fromDate={from_date}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/dateLastWatering/value?aggrMethod=avg&aggrPeriod=day&fromDate={from_date}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
