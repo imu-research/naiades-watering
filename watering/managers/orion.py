@@ -253,10 +253,16 @@ class OrionEntity(object):
 
     @staticmethod
     def _calculate_total_time_spent(event_times):
+        valid_truck_hours = list(range(5, 13 + 1))
+
         total_time_spent = 0  # in seconds
         previous_event_time = None
+        by_date = {}
         for event_time in sorted(event_times):
-            # increase if within the same day
+
+            if event_time.hour not in valid_truck_hours:
+                continue
+
             if previous_event_time and event_time.date() == previous_event_time.date():
                 total_time_spent += (event_time - previous_event_time).total_seconds()
 

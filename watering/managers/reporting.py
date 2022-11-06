@@ -18,6 +18,9 @@ class ReportDataManager:
     truck_location_history = None
     truck_total_time_spent = None
 
+    MAX_CONSUMPTION_PER_SECOND = 50  # watering records are invalid if flow is more than 50 lt/second
+    MAX_TIME_SPENT_PER_DURATION = 5  # total time spent should not be more than 5x the watering duration
+
     def __init__(self, date_range):
         self.date_range = date_range
 
@@ -122,16 +125,28 @@ class ReportDataManager:
             )
         ) if datum["duration"] is not None else None
 
-        datum["time_spent"] = max(
-            self._calculate_time_spent(
-                event_times=[
-                    event_time
-                    for event_time in watering_dates_by_entity.get(entity_id, set())
-                    if event_time.date().strftime("%Y-%m-%d") == datum["date"]
-                ]
-            ) or 0,
-            datum["duration"] or 0
+        datum["time_spent"] = min(
+            max(
+                self._calculate_time_spent(
+                    event_times=[
+                        event_time
+                        for event_time in watering_dates_by_entity.get(entity_id, set())
+                        if event_time.date().strftime("%Y-%m-%d") == datum["date"]
+                    ]
+                ) or 0,
+                datum["duration"] or 0
+            ),
+            (datum["duration"] or 0) * self.MAX_TIME_SPENT_PER_DURATION
         )
+
+    def _filter_out_invalid_consumptions(self, records):
+        return [
+            record
+            for record in records
+            if (not record.get("consumption")) or
+               (not record.get("duration")) or
+               ((record["consumption"] / record["duration"]) < self.MAX_CONSUMPTION_PER_SECOND)
+        ]
 
     def get_monthly_response_data(self):
         # check if data have been loaded
@@ -178,6 +193,9 @@ class ReportDataManager:
                     entity_id=entity["entity_id"],
                     watering_dates_by_entity=watering_dates_by_entity,
                 )
+
+            # filter out invalid consumption records
+            data_by_date = self._filter_out_invalid_consumptions(records=data_by_date)
 
             entities_data.append({
                 "entity_id": entity["entity_id"],
