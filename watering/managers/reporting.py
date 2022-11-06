@@ -1,7 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from requests import ReadTimeout
 
+from naiades_watering.settings import (
+    DISTANCES_MIN_LAT,
+    DISTANCES_MAX_LAT,
+    DISTANCES_MIN_LNG,
+    DISTANCES_MAX_LNG,
+)
 from watering.utils import merge, merge_by_date
 
 
@@ -185,6 +191,13 @@ class ReportDataManager:
         }
 
     @staticmethod
+    def _is_valid_location(latitude, longitude):
+        # only handle locations around Carouge
+        return \
+            (DISTANCES_MIN_LAT <= latitude <= DISTANCES_MAX_LAT) and \
+            (DISTANCES_MIN_LNG <= longitude <= DISTANCES_MAX_LNG)
+
+    @staticmethod
     def _get_locations_by_date(location_entries):
         # group by date
         locations_by_date = {}
@@ -212,6 +225,10 @@ class ReportDataManager:
                 locations_by_date[location_date][-1]["lat"] == point["lat"] and
                 locations_by_date[location_date][-1]["lng"] == point["lng"]
             ):
+                continue
+
+            # exclude invalid locations
+            if not ReportDataManager._is_valid_location(latitude=point["lat"], longitude=point["lng"]):
                 continue
 
             # add to locations for this date
@@ -254,7 +271,6 @@ class ReportDataManager:
             self.date_range["formatted"]["from"],
             self.date_range["formatted"]["to"],
         )
-        print(params)
 
         # get last watering date historic data
         try:

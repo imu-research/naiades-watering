@@ -182,6 +182,11 @@ GROUP_GARDENER = "GARDENER"
 GROUP_BACKOFFICE = "BACKOFFICE"
 DEFAULT_GROUPS = [GROUP_GARDENER, GROUP_BACKOFFICE, ]
 
+# Locations accepted in distance calculation
+DISTANCES_MIN_LAT = int(os.environ.get("DISTANCES_MIN_LAT") or "46")
+DISTANCES_MAX_LAT = int(os.environ.get("DISTANCES_MAX_LAT") or "47")
+DISTANCES_MIN_LNG = int(os.environ.get("DISTANCES_MIN_LNG") or "6")
+DISTANCES_MAX_LNG = int(os.environ.get("DISTANCES_MAX_LNG") or "7")
 
 if os.environ.get("ENVIRONMENT") == "PRODUCTION":
     import dj_database_url
