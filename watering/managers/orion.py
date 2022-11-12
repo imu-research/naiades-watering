@@ -1,7 +1,6 @@
-import json
-
 import dateutil
 import requests
+from geopy import distance
 from django.utils.timezone import now
 
 from naiades_watering.settings import KSI_ENDPOINT, KSI_SECRET
@@ -23,6 +22,9 @@ class OrionEntity(object):
     endpoint = '5.53.108.182:1026'
     history_endpoint = '5.53.108.182:8668'
     dmv_endpoint = 'test.naiades-project.eu:5002'
+
+    TRUCK_TOTAL_TIME_CALCULATED_FROM_DATE_OBSERVED = True
+    TRUCK_GARAGE_LOCATION = (46.18235, 6.15095)
 
     def get_headers(self, service):
         headers = {}
@@ -251,8 +253,7 @@ class OrionEntity(object):
         print(response.json())
         return response.json()
 
-    @staticmethod
-    def _calculate_total_time_spent(event_times):
+    def _calculate_total_time_spent(self, event_times):
         valid_truck_hours = list(range(5, 13 + 1))
 
         total_time_spent = 0  # in seconds
@@ -260,20 +261,47 @@ class OrionEntity(object):
         by_date = {}
         for event_time in sorted(event_times):
 
-            if event_time.hour not in valid_truck_hours:
+            if self.TRUCK_TOTAL_TIME_CALCULATED_FROM_DATE_OBSERVED and event_time.hour not in valid_truck_hours:
                 continue
 
             if previous_event_time and event_time.date() == previous_event_time.date():
                 total_time_spent += (event_time - previous_event_time).total_seconds()
 
+                if event_time.date().strftime("%Y-%m-%d") not in by_date:
+                    by_date[event_time.date().strftime("%Y-%m-%d")] = 0
+
+                by_date[event_time.date().strftime("%Y-%m-%d")] += (event_time - previous_event_time).total_seconds()
+
             previous_event_time = event_time
 
+        for date, time_spent in by_date.items():
+            print("%s: %d hr %d min" % (date, time_spent // 3600, (time_spent % 3600) // 60))
         return total_time_spent
 
+    def _filter_truck_event_times_by_location(self, response):
+        min_distance_from_garage = 50  # in meters
+
+        event_times = []
+        for idx, location in enumerate(response.json()["values"]):
+            if distance.geodesic(
+                    self.TRUCK_GARAGE_LOCATION , location["coordinates"]
+            ).meters >= min_distance_from_garage:
+                event_times.append(response.json()["index"][idx])
+
+        return event_times
+
     def get_truck_total_time_spent(self, service, from_date, to):
-        # list entities
+        # if specified, get total truck time spent from date observed
+        # otherwise, get based on truck location
+        # assuming far from the garage means truck is spending time watering
+        if self.TRUCK_TOTAL_TIME_CALCULATED_FROM_DATE_OBSERVED:
+            endpoint = f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/dateObserved?fromDate={from_date}&toDate={to}'
+        else:
+            endpoint = f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/location?fromDate={from_date}&toDate={to}&attrs=location'
+
+        # send request
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/dateObserved?fromDate={from_date}&toDate={to}',
+            endpoint,
             headers={
                 'Fiware-Service': service or 'carouge',
                 'Fiware-ServicePath': '/',
@@ -285,10 +313,17 @@ class OrionEntity(object):
         if response.status_code >= 400:
             self.handle_error(response)
 
+        if self.TRUCK_TOTAL_TIME_CALCULATED_FROM_DATE_OBSERVED:
+            # get all event times from date observed prop
+            event_times = response.json()["index"]
+        else:
+            # find event times when truck was outside of the garage
+            event_times = self._filter_truck_event_times_by_location(response=response)
+
         # parse event times
         event_times = [
             dateutil.parser.isoparse(event_time_raw)
-            for event_time_raw in response.json()["index"]
+            for event_time_raw in event_times
         ]
 
         return self._calculate_total_time_spent(event_times=event_times)
@@ -355,7 +390,7 @@ class OrionEntity(object):
         response = requests.get(
             f'http://{self.history_endpoint}/v2/entities/urn:ngsi-ld:Device:Truck/attrs/location?fromDate={fromDate}&toDate={to}',
             headers={
-                'Fiware-Service': 'carouge',
+                'Fiware-Service': service or 'carouge',
                 'Fiware-ServicePath': '/',
             },
             timeout=2

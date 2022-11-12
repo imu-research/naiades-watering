@@ -21,6 +21,7 @@ requests
 # utils
 tqdm
 python-dateutil
+geopy==2.2.0
 
 # settings
 python-dotenv
