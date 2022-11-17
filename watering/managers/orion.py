@@ -250,7 +250,6 @@ class OrionEntity(object):
             self.handle_error(response)
 
         # return list
-        print(response.json())
         return response.json()
 
     def _calculate_total_time_spent(self, event_times):

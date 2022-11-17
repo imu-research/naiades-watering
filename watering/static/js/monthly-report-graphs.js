@@ -261,7 +261,7 @@ $(function() {
         // show values
         $container
             .find("> .row > .metric:nth-of-type(1) .recommended-value")
-            .text(`${totalConsumption.toFixed(2)} lt`);
+            .text(`${Math.round(totalConsumption).toLocaleString('en-US')} lt`);
 
         $container
             .find("> .row > .metric:nth-of-type(2) .recommended-value")
@@ -304,7 +304,7 @@ $(function() {
 
         $container
             .find("> .metric:nth-of-type(1) .recommended-value")
-            .text(`${totalConsumption.toFixed(2)} lt`);
+            .text(`${Math.round(totalConsumption).toLocaleString('en-US')} lt`);
 
         $container
             .find("> .metric:nth-of-type(2) .recommended-value")

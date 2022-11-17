@@ -177,7 +177,7 @@ $(function () {
             return `${day} ${hourParts[0]}:${hourParts[1]}`;
         },
 
-        getNextWateringMessage: function(nextWatering, lastWatering) {
+        getNextWateringMessage: function(nextWatering, nextWateringDeadline) {
             // return next watering date if it's anything other than unknown
             if (nextWatering.toUpperCase() !== 'UNKNOWN') {
                 return nextWatering
@@ -185,7 +185,11 @@ $(function () {
 
             // when unknown is used, we want to show to the user
             // the number of days that have passed since the last watering
-            const nDays = Math.floor((new Date() - (new Date(lastWatering))) / (24 * 3600 * 1000));
+            const nDays = Math.floor((new Date() - (new Date(nextWateringDeadline))) / (24 * 3600 * 1000));
+
+            if (isNaN(nDays)) {
+                return `More than 90 ${window.MESSAGES.daysAgo}`
+            }
 
             // special handling for FR, different syntax
             if (window.LANGUAGE === 'fr') {
@@ -211,7 +215,7 @@ $(function () {
 
             // get next watering message
             // which will show X days ago if unknown
-            const nextWateringMessage = this.getNextWateringMessage(meter.nextWatering, meter.dateLastWatering);
+            const nextWateringMessage = this.getNextWateringMessage(meter.nextWatering, meter.nextWateringDeadline);
 
             return $("<div />")
                 .addClass("popup-content")
@@ -435,7 +439,7 @@ $(function () {
                                          .addClass(meter.nextWatering === "UNKNOWN" && "measurement-unknown")
                                          .text((
                                              meter.nextWatering === "UNKNOWN"
-                                                 ? that.getNextWateringMessage(meter.nextWatering, meter.dateLastWatering)
+                                                 ? that.getNextWateringMessage(meter.nextWatering, meter.nextWateringDeadline)
                                                  : meter.nextWateringDeadline
                                          ).split("T")[0] || "-")
                                 )

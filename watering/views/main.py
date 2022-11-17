@@ -404,7 +404,7 @@ def get_report_range_from_dates(from_date, to_date):
 
 def get_report_range_from_request(request):
     try:
-        to_date = datetime.datetime.strptime(request.GET["to"], "%d%m%Y")
+        to_date = datetime.datetime.strptime(request.GET["to"], "%d%m%Y") + datetime.timedelta(hours=23, minutes=59, seconds=59)
     except (KeyError, ValueError):
         to_date = datetime.datetime.now()
 
