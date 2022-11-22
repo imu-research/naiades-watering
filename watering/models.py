@@ -323,6 +323,24 @@ class WateringBox(Model):
         return results
 
     @staticmethod
+    def next_watering_dates(box_id, fromDate, to):
+        # get prediction history of box id
+        try:
+            response = OrionEntity().next_watering_dates(
+                service=WateringBox.service,
+                entity_id=box_id,
+                fromDate=fromDate,
+                to=to
+            )
+        except OrionError:
+            return []
+
+        return {
+            index.split("T")[0]: datetime.utcfromtimestamp(response["values"][idx] / 1000).date()
+            for idx, index in enumerate(response["index"])
+        }
+
+    @staticmethod
     def watering_duration_history(box_id, fromDate, to):
         # get watering duration history of box id
         try:

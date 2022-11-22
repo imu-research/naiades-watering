@@ -164,7 +164,25 @@ class OrionEntity(object):
     def prediction_history(self, service, entity_id, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountRecommendation/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringAmountRecommendation/value?aggrMethod=max&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
+            headers={
+                'Fiware-Service': 'carouge',
+                'Fiware-ServicePath': '/',
+            },
+            timeout=2
+        )
+
+        # raise exception if response code is in 4xx, 5xx
+        if response.status_code >= 400:
+            self.handle_error(response)
+
+        # return list
+        return response.json()
+
+    def next_watering_dates(self, service, entity_id, fromDate, to):
+        # list entities
+        response = requests.get(
+            f'http://{self.history_endpoint}/v2/entities/{entity_id}/attrs/nextWateringDeadline/value?aggrMethod=max&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',

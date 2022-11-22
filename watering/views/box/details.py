@@ -39,6 +39,23 @@ class InvalidMetricError(ValueError):
     pass
 
 
+def _filter_out_predictions_next_watering_date_in_past(prediction_history, next_watering_dates):
+    for prediction_value in prediction_history:
+
+        # get date for prediction
+        prediction_date = prediction_value["date"].split("T")[0]
+
+        # find in next watering dates
+        next_watering_date = next_watering_dates.get(prediction_date)
+
+        # set predicted value to zero
+        # if next watering date was before prediction date
+        if next_watering_date and next_watering_date >= datetime.datetime.strptime(prediction_date, "%Y-%m-%d").date():
+            pass
+        else:
+            prediction_value["value_new"] = 0
+
+
 def get_prediction_logs(box_id, start_date, end_date):
     # get consumption historic data
     try:
@@ -51,6 +68,12 @@ def get_prediction_logs(box_id, start_date, end_date):
         prediction_history = box_prediction_history(box_id, start_date, end_date)
     except ReadTimeout:
         prediction_history = []
+
+    # get next watering dates
+    try:
+        next_watering_dates = box_next_watering_dates(box_id, start_date, end_date)
+    except ReadTimeout:
+        next_watering_dates = {}
 
     # get watering duration historic data
     try:
@@ -78,9 +101,15 @@ def get_prediction_logs(box_id, start_date, end_date):
     except ReadTimeout:
         watering_logs_history = []
 
+    _filter_out_predictions_next_watering_date_in_past(
+        prediction_history=prediction_history,
+        next_watering_dates=next_watering_dates,
+    )
+
     return {
         "prediction": prediction_history,
         "logs": watering_logs_history,
+        "next_watering_dates": next_watering_dates,
     }
 
 
@@ -178,12 +207,24 @@ def box_prediction_history(box_id, fromDate, to):
     # find box
     box = WateringBox.get(box_id)
 
-    historic_data = WateringBox.prediction_history(
+    prediction_data = WateringBox.prediction_history(
         box_id=box.data["id"], fromDate=fromDate, to=to
     )
 
     # render
-    return historic_data
+    return prediction_data
+
+
+def box_next_watering_dates(box_id, fromDate, to):
+    # find box
+    box = WateringBox.get(box_id)
+
+    next_watering_dates = WateringBox.next_watering_dates(
+        box_id=box.data["id"], fromDate=fromDate, to=to
+    )
+
+    # render
+    return next_watering_dates
 
 
 def box_watering_duration_history(box_id, fromDate, to):
