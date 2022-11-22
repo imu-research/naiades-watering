@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-28 08:38+0300\n"
+"POT-Creation-Date: 2022-11-23 00:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,9 +67,8 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 #: .\templates\util\js-translations.html:14
-#: .\watering\templates\watering\daily-report.html:98
-msgid "Humidity Level"
-msgstr "Humidité"
+msgid "Moisture Level"
+msgstr ""
 
 #: .\templates\util\js-translations.html:15
 msgid "Suggested watering date"
@@ -129,8 +128,8 @@ msgid "Sun exposure"
 msgstr "Exposition au soleil"
 
 #: .\templates\util\js-translations.html:29
-msgid "Humidity"
-msgstr "Humidité"
+msgid "Moisture"
+msgstr ""
 
 #: .\templates\util\js-translations.html:30
 msgid "More Details"
@@ -406,6 +405,14 @@ msgstr "Etat boîtier inconnu"
 msgid "Please select the box you're about to start watering."
 msgstr ""
 
+#: .\templates\util\js-translations.html:101
+msgid "Volumetric sensor"
+msgstr ""
+
+#: .\templates\util\js-translations.html:102
+msgid "Tensiometric  sensor"
+msgstr ""
+
 #: .\watering\forms.py:15 .\watering\forms.py:29
 #: .\watering\templates\watering\form.html:117
 msgid "Device Status"
@@ -473,8 +480,8 @@ msgid "Predicted Required  Water Amount (Cluster)"
 msgstr "Quantité d'eau suggérée (toute la zone)"
 
 #: .\watering\templates\watering\cluster-details.html:92
-msgid "Water used (cluster)"
-msgstr "Eau utilisée (zone)"
+msgid "Suggested volume per box"
+msgstr "Volume suggéré (par bac)"
 
 #: .\watering\templates\watering\cluster-details.html:97
 msgid "It seems that the box is dry."
@@ -529,8 +536,6 @@ msgid "Today's Water Consumption"
 msgstr "Consommation d'eau aujourd'hui"
 
 #: .\watering\templates\watering\daily-report.html:81
-#, fuzzy
-#| msgid "Time spent"
 msgid "Time Spent Today"
 msgstr "Temps utilisé"
 
@@ -541,6 +546,10 @@ msgstr "Arrosé aujourd'hui"
 #: .\watering\templates\watering\daily-report.html:97
 msgid "Box Id"
 msgstr "No du bac"
+
+#: .\watering\templates\watering\daily-report.html:98
+msgid "Humidity Level"
+msgstr "Humidité"
 
 #: .\watering\templates\watering\daily-report.html:101
 msgid "Time spent"
@@ -576,14 +585,10 @@ msgid "Start Watering"
 msgstr "Commencer arrosage"
 
 #: .\watering\templates\watering\details.html:65
-#, fuzzy
-#| msgid "Watering time"
 msgid "Watering Details"
 msgstr "Temps d'arrosage"
 
 #: .\watering\templates\watering\details.html:116
-#, fuzzy
-#| msgid "Watering time"
 msgid "Watering duration (seconds)"
 msgstr "Temps d'arrosage"
 
@@ -760,6 +765,12 @@ msgstr "Possibilité de pluie aujourd'hui, arrosage peut-être pas nécessaire"
 #: .\watering\templates\watering\view.html:60
 msgid "Daily Report"
 msgstr "Rapport journalier"
+
+#~ msgid "Humidity"
+#~ msgstr "Humidité"
+
+#~ msgid "Water used (cluster)"
+#~ msgstr "Eau utilisée (zone)"
 
 #~ msgid "Today's Watering Time"
 #~ msgstr "Temps d'arrosage aujourd'hui"
