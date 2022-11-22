@@ -4,7 +4,7 @@ function exportMonthlyReport(box_data) {
   console.log("Starting export...");
 
   // Define IDs of the charts we want to include in the report
-  var ids = [ "chart-data-overall", "chart-km", "chart-data-1", "chart-data-2", "chart-data-3", "chart-data-4", "chart-data-5", "chart-data-6",  "chart-data-7", "chart-data-8", "chart-data-per-box-1", "chart-data-per-box-2", "chart-data-per-box-3", "chart-data-per-box-4", "chart-data-per-box-5", "chart-data-per-box-6", "chart-data-per-box-7", "chart-data-per-box-8" ];
+  var ids = [ "chart-data-overall", "chart-km", "chart-data-1", "chart-data-2", "chart-data-3", "chart-data-4", "chart-data-5", "chart-data-6",  "chart-data-7", "chart-data-8", "chart-data-9",  "chart-data-10", "chart-data-11", "chart-data-per-box-1", "chart-data-per-box-2", "chart-data-per-box-3", "chart-data-per-box-4", "chart-data-per-box-5", "chart-data-per-box-6", "chart-data-per-box-7", "chart-data-per-box-8", "chart-data-per-box-9", "chart-data-per-box-10", "chart-data-per-box-11" ];
   //"chart-km"
   // Collect actual chart objects out of the AmCharts.charts array
   var charts = {}
@@ -116,14 +116,28 @@ function exportMonthlyReport(box_data) {
                         text: 'Total Monthly Watering Time',
                         style: 'tableHeader'
                     },
+                ],
+                [
+                    $("#overall-values > .metric:nth-of-type(1) .recommended-value").text(),
+                    $("#overall-values > .metric:nth-of-type(2) .recommended-value").text()
+                ]
+            ]
+        },
+        layout: 'noBorders',
+    });
+    layout.content.push({
+        table: {
+            widths: [600],
+            heights: 200,
+            alignment: 'center',
+            body: [
+                [
                     {
                         text: 'Total Time Spent',
                         style: 'tableHeader'
                     }
                 ],
                 [
-                    $("#overall-values > .metric:nth-of-type(1) .recommended-value").text(),
-                    $("#overall-values > .metric:nth-of-type(2) .recommended-value").text(),
                     $("#overall-values > .metric:nth-of-type(3) .recommended-value").text()
                 ]
             ]
@@ -166,6 +180,24 @@ function exportMonthlyReport(box_data) {
                             text: 'Total Monthly Water Consumption (Avg. per Box)',
                             style: 'tableHeader'
                         },
+                    ],
+                    [
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(1) .recommended-value`).text(),
+                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(2) .recommended-value`).text()
+                    ]
+                ]
+            },
+            layout: 'noBorders'
+        });
+        layout.content.push({
+            table: {
+                widths: [250, 250 ],
+                heights: 200,
+                alignment: 'center',
+                margin: [5, 0, 5, 10],
+                body: [
+                    [
+
                         {
                             text: 'Total Time Spent (Cluster)',
                             style: 'tableHeader'
@@ -176,8 +208,7 @@ function exportMonthlyReport(box_data) {
                         }
                     ],
                     [
-                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(1) .recommended-value`).text(),
-                        $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(2) .recommended-value`).text(),
+
                         $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(3) .recommended-value`).text(),
                         $(`#box-container-${boxId} > .row:nth-of-type(2) > .metric:nth-of-type(4) .recommended-value`).text()
                     ]
