@@ -28,14 +28,14 @@ $(function() {
                 "axisThickness": 2,
                 "axisAlpha": 1,
                 "position": "left",
-                "title": "Water requirement (cb)",
+               "title": "Moisture (%)",
             }, {
                 "id":"v2",
                 "axisColor": "#FCD202",
                 "axisThickness": 2,
                 "axisAlpha": 1,
                 "position": "right",
-                "title": "Humidity (%)",
+                "title": "Water requirement (cb)",
             },
             ],
             "balloon": {

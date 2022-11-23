@@ -196,8 +196,7 @@ $(function() {
     }
     function renderChartDataOverall(boxId, data, divideBy) {
 
-        const title = "Total periodic water consumption";
-
+        const title = window.MESSAGES.totalPeriodicCons;
 
         // show related chart
         showChart(

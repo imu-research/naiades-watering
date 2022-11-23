@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 12:28+0200\n"
+"POT-Creation-Date: 2022-11-23 23:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -359,7 +359,7 @@ msgstr "Consommation d'eau"
 
 #: .\templates\util\js-translations.html:89
 msgid "Predicted Water Consumption"
-msgstr "Rapport de consommation d'eau"
+msgstr "Préconisations"
 
 #: .\templates\util\js-translations.html:90
 msgid "Distance driven"
@@ -412,6 +412,10 @@ msgstr ""
 #: .\templates\util\js-translations.html:102
 msgid "Tensiometric  sensor"
 msgstr ""
+
+#: .\templates\util\js-translations.html:103
+msgid "Total periodic water consumption"
+msgstr "Consommation totale d’eau pour la période"
 
 #: .\watering\forms.py:15 .\watering\forms.py:29
 #: .\watering\templates\watering\form.html:117
@@ -732,7 +736,7 @@ msgstr "Rapport périodique de la zone"
 
 #: .\watering\templates\watering\monthly-report.html:150
 msgid "Total Periodic Water Consumption (Cluster)"
-msgstr "Consommation totale d'eau pour la période (moyenne par zone)"
+msgstr "Consommation d’eau pour la période (zone)"
 
 #: .\watering\templates\watering\monthly-report.html:158
 msgid "Total Periodic Water Consumption (Avg. per Box)"
