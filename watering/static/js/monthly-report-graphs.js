@@ -185,6 +185,20 @@ $(function() {
             : window.MESSAGES.periodicConsCluster
         );
 
+
+        // show related chart
+        showChart(
+            `chart-data${divideBy ? "-per-box" : ""}-${boxId}`,
+            "report-data",
+            title,
+            getDividedData(data, divideBy)
+        );
+    }
+    function renderChartDataOverall(boxId, data, divideBy) {
+
+        const title = "Total periodic water consumption";
+
+
         // show related chart
         showChart(
             `chart-data${divideBy ? "-per-box" : ""}-${boxId}`,
@@ -292,7 +306,7 @@ $(function() {
         }
 
         // render overall chart
-        renderChartData("overall", overallData);
+        renderChartDataOverall("overall", overallData);
 
         // calculate total consumption & duration
         const totalConsumption = calculateTotal(overallData);

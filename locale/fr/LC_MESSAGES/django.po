@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-23 00:37+0200\n"
+"POT-Creation-Date: 2022-11-23 12:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,7 @@ msgstr "Inconnu"
 
 #: .\templates\util\js-translations.html:14
 msgid "Moisture Level"
-msgstr ""
+msgstr "Humidité"
 
 #: .\templates\util\js-translations.html:15
 msgid "Suggested watering date"
@@ -129,7 +129,7 @@ msgstr "Exposition au soleil"
 
 #: .\templates\util\js-translations.html:29
 msgid "Moisture"
-msgstr ""
+msgstr "Humidité"
 
 #: .\templates\util\js-translations.html:30
 msgid "More Details"
