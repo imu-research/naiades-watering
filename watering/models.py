@@ -323,22 +323,35 @@ class WateringBox(Model):
         return results
 
     @staticmethod
-    def next_watering_dates(box_id, fromDate, to):
+    def next_watering_dates(fromDate, to, box_id=None):
         # get prediction history of box id
         try:
             response = OrionEntity().next_watering_dates(
                 service=WateringBox.service,
-                entity_id=box_id,
                 fromDate=fromDate,
                 to=to
             )
         except OrionError:
             return []
 
-        return {
-            index.split("T")[0]: datetime.utcfromtimestamp(response["values"][idx] / 1000).date()
-            for idx, index in enumerate(response["index"])
-        }
+        # group by entity
+        watering_dates_by_entity_and_date = {}
+        for item in response["values"]:
+
+            # get box id for this item
+            item_box_id = item["entityId"].split("-")[-1]
+
+            # set watering dates for box and by date
+            watering_dates_by_entity_and_date[item_box_id] = {
+                index.split("T")[0]: datetime.utcfromtimestamp(item["values"][idx] / 1000).date()
+                for idx, index in enumerate(item["index"])
+                if item["values"][idx] is not None
+            }
+
+        if box_id:
+            return watering_dates_by_entity_and_date.get(box_id.split("-")[-1])
+
+        return watering_dates_by_entity_and_date
 
     @staticmethod
     def watering_duration_history(box_id, fromDate, to):

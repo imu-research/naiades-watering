@@ -15,10 +15,11 @@ class ReportDataManager:
     consumption_history = None
     prediction_history = None
     watering_duration = None
+    next_watering_dates = None
     truck_location_history = None
     truck_total_time_spent = None
 
-    MAX_CONSUMPTION_PER_SECOND = 50  # watering records are invalid if flow is more than 50 lt/second
+    MAX_CONSUMPTION_PER_SECOND = 0.5  # watering records are invalid if flow is more than 0,5 lt/second
     MAX_TIME_SPENT_PER_DURATION = 5  # total time spent should not be more than 5x the watering duration
 
     def __init__(self, date_range):
@@ -50,11 +51,44 @@ class ReportDataManager:
         except ReadTimeout:
             self.watering_duration = []
 
+        # get next watering dates
+        try:
+            self.next_watering_dates = WateringBox.next_watering_dates(*params)
+        except ReadTimeout:
+            self.next_watering_dates = []
+
+        # filter out invalid predictions
+        for prediction_history_item in self.prediction_history:
+
+            box_id = prediction_history_item["entity_id"].split("-")[-1]
+
+            self.filter_out_predictions_next_watering_date_in_past(
+                prediction_history=prediction_history_item["results"],
+                next_watering_dates=self.next_watering_dates[box_id],
+            )
+
         # get total time spent by trucks
         try:
             self.truck_total_time_spent = WateringBox.get_truck_total_time_spent(*params)
         except ReadTimeout:
             self.truck_total_time_spent = 0
+
+    @staticmethod
+    def filter_out_predictions_next_watering_date_in_past(prediction_history, next_watering_dates, value_key="value"):
+        for prediction_value in prediction_history:
+
+            # get date for prediction
+            prediction_date = prediction_value["date"].split("T")[0]
+
+            # find in next watering dates
+            next_watering_date = (next_watering_dates or {}).get(prediction_date)
+
+            # set predicted value to zero
+            # if next watering date was before prediction date
+            if next_watering_date and next_watering_date >= datetime.strptime(prediction_date, "%Y-%m-%d").date():
+                pass
+            else:
+                prediction_value[value_key] = 0
 
     def load_location_history(self):
         from watering.models import WateringBox
@@ -148,30 +182,9 @@ class ReportDataManager:
                ((record["consumption"] / record["duration"]) < self.MAX_CONSUMPTION_PER_SECOND)
         ]
 
-    def get_monthly_response_data(self):
-        # check if data have been loaded
-        if self.consumption_history is None:
-            self.load_history_data()
-
-        # load watering dates by entity
-        watering_dates_by_entity = self.preprocessing_duration_data()
-
-        # group by entity
-        by_entity = merge(
-            key_field="entity_id",
-            value_field="results",
-            results_lists=[
-                self.prediction_history,
-                self.consumption_history,
-                self.watering_duration,
-            ],
-            prop_names=["predictions", "consumptions", "durations"]
-        )
-
-        # for each entity, group by date
+    def _get_entities_data_by_date(self, by_entity, watering_dates_by_entity):
         entities_data = []
         for entity in by_entity:
-
             # get box ID
             box_id = entity["entity_id"].split("ld:FlowerBed:FlowerBed-")[-1]
 
@@ -203,8 +216,36 @@ class ReportDataManager:
                 "data": data_by_date,
             })
 
+        return entities_data
+
+    def get_monthly_response_data(self):
+        # check if data have been loaded
+        if self.consumption_history is None:
+            self.load_history_data()
+
+        # load watering dates by entity
+        watering_dates_by_entity = self.preprocessing_duration_data()
+
+        # group by entity
+        by_entity = merge(
+            key_field="entity_id",
+            value_field="results",
+            results_lists=[
+                self.prediction_history,
+                self.consumption_history,
+                self.watering_duration,
+            ],
+            prop_names=["predictions", "consumptions", "durations"]
+        )
+
+        # for each entity, group by date
+        entities_data_by_date = self._get_entities_data_by_date(
+            by_entity=by_entity,
+            watering_dates_by_entity=watering_dates_by_entity,
+        )
+
         return {
-            "data": entities_data,
+            "data": entities_data_by_date,
             "truck_total_time_spent": self.truck_total_time_spent,
         }
 

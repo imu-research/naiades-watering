@@ -284,6 +284,7 @@ def box_api_start_watering(request, box_id):
     # success response
     return JsonResponse({})
 
+
 def box_api_dry_plants_feedback(request, box_id):
     # only accept POST requests
     if request.method != "POST":
@@ -306,6 +307,7 @@ def box_api_dry_plants_feedback(request, box_id):
     # success response
     return JsonResponse({})
 
+
 def box_api_no_watering_feedback(request, box_id):
     # only accept POST requests
     if request.method != "POST":
@@ -327,7 +329,6 @@ def box_api_no_watering_feedback(request, box_id):
 
     # success response
     return JsonResponse({})
-
 
 
 def weather(request):

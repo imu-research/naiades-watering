@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from requests import ReadTimeout
 
+from watering.managers import ReportDataManager
 from watering.models import WateringBox, Sensor
 from watering.utils import merge_histories, preprocessed_history
 
@@ -37,23 +38,6 @@ def box_details(request):
 
 class InvalidMetricError(ValueError):
     pass
-
-
-def _filter_out_predictions_next_watering_date_in_past(prediction_history, next_watering_dates):
-    for prediction_value in prediction_history:
-
-        # get date for prediction
-        prediction_date = prediction_value["date"].split("T")[0]
-
-        # find in next watering dates
-        next_watering_date = next_watering_dates.get(prediction_date)
-
-        # set predicted value to zero
-        # if next watering date was before prediction date
-        if next_watering_date and next_watering_date >= datetime.datetime.strptime(prediction_date, "%Y-%m-%d").date():
-            pass
-        else:
-            prediction_value["value_new"] = 0
 
 
 def get_prediction_logs(box_id, start_date, end_date):
@@ -101,9 +85,10 @@ def get_prediction_logs(box_id, start_date, end_date):
     except ReadTimeout:
         watering_logs_history = []
 
-    _filter_out_predictions_next_watering_date_in_past(
+    ReportDataManager.filter_out_predictions_next_watering_date_in_past(
         prediction_history=prediction_history,
         next_watering_dates=next_watering_dates,
+        value_key="value_new",
     )
 
     return {
