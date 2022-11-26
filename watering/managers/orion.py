@@ -236,7 +236,7 @@ class OrionEntity(object):
     def consumption_history_list_values(self, service, from_date, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/consumption/value?aggrMethod=avg&aggrPeriod=hour&fromDate={from_date}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/consumption/value?aggrMethod=avg&aggrPeriod=day&fromDate={from_date}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -254,7 +254,7 @@ class OrionEntity(object):
     def last_watering_date_history_list_values(self, service, from_date, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/dateLastWatering/value?aggrMethod=max&aggrPeriod=hour&fromDate={from_date}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/dateLastWatering/value?aggrMethod=max&aggrPeriod=day&fromDate={from_date}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',
@@ -365,7 +365,7 @@ class OrionEntity(object):
     def watering_duration_history_list(self, service, fromDate, to):
         # list entities
         response = requests.get(
-            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/duration/value?aggrMethod=avg&aggrPeriod=hour&fromDate={fromDate}&toDate={to}',
+            f'http://{self.history_endpoint}/v2/types/FlowerBed/attrs/duration/value?aggrMethod=avg&aggrPeriod=day&fromDate={fromDate}&toDate={to}',
             headers={
                 'Fiware-Service': 'carouge',
                 'Fiware-ServicePath': '/',

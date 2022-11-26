@@ -19,7 +19,7 @@ class ReportDataManager:
     truck_location_history = None
     truck_total_time_spent = None
 
-    MAX_CONSUMPTION_PER_SECOND = 0.5  # watering records are invalid if flow is more than 0,5 lt/second
+    MAX_CONSUMPTION_PER_SECOND = 50  # watering records are invalid if flow is more than 0,5 lt/second
     MAX_TIME_SPENT_PER_DURATION = 5  # total time spent should not be more than 5x the watering duration
 
     def __init__(self, date_range):
