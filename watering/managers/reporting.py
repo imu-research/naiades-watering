@@ -11,6 +11,11 @@ from naiades_watering.settings import (
 from watering.utils import merge, merge_by_date
 
 
+# zero out predictions after this date
+# set to None to ignore
+MAXIMUM_PREDICTION_DATE = datetime(2022, 9, 30).date()
+
+
 class ReportDataManager:
     consumption_history = None
     prediction_history = None
@@ -62,7 +67,7 @@ class ReportDataManager:
 
             box_id = prediction_history_item["entity_id"].split("-")[-1]
 
-            self.filter_out_predictions_next_watering_date_in_past(
+            self.filter_out_invalid_predictions(
                 prediction_history=prediction_history_item["results"],
                 next_watering_dates=self.next_watering_dates[box_id],
             )
@@ -74,20 +79,26 @@ class ReportDataManager:
             self.truck_total_time_spent = 0
 
     @staticmethod
-    def filter_out_predictions_next_watering_date_in_past(prediction_history, next_watering_dates, value_key="value"):
+    def filter_out_invalid_predictions(prediction_history, next_watering_dates, value_key="value"):
         for prediction_value in prediction_history:
 
             # get date for prediction
-            prediction_date = prediction_value["date"].split("T")[0]
+            prediction_date_raw = prediction_value["date"].split("T")[0]
+
+            # parse prediction date
+            prediction_date = datetime.strptime(prediction_date_raw, "%Y-%m-%d").date()
 
             # find in next watering dates
-            next_watering_date = (next_watering_dates or {}).get(prediction_date)
+            next_watering_date = (next_watering_dates or {}).get(prediction_date_raw)
 
             # set predicted value to zero
             # if next watering date was before prediction date
-            if next_watering_date and next_watering_date >= datetime.strptime(prediction_date, "%Y-%m-%d").date():
-                pass
-            else:
+            # or if prediction date is after threshold
+            valid_prediction = \
+                (MAXIMUM_PREDICTION_DATE is None or prediction_date <= MAXIMUM_PREDICTION_DATE) and \
+                (next_watering_date and next_watering_date >= prediction_date)
+
+            if not valid_prediction:
                 prediction_value[value_key] = 0
 
     def load_location_history(self):

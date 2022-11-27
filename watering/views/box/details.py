@@ -85,7 +85,7 @@ def get_prediction_logs(box_id, start_date, end_date):
     except ReadTimeout:
         watering_logs_history = []
 
-    ReportDataManager.filter_out_predictions_next_watering_date_in_past(
+    ReportDataManager.filter_out_invalid_predictions(
         prediction_history=prediction_history,
         next_watering_dates=next_watering_dates,
         value_key="value_new",
