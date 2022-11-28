@@ -13,7 +13,7 @@ from watering.utils import merge, merge_by_date
 
 # zero out predictions after this date
 # set to None to ignore
-MAXIMUM_PREDICTION_DATE = datetime(2022, 9, 30).date()
+MAXIMUM_PREDICTION_DATE = None
 
 
 class ReportDataManager:
